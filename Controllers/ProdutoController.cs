@@ -10,4 +10,8 @@ public class ProdutoController: Controller
     {
         return View();
     }
+    public IActionResult Inicio()
+    {
+        return View("~/Views/Produto/Inicio.cshtml");
+    }
 }
