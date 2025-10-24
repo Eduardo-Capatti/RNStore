@@ -10,8 +10,7 @@ var app = builder.Build();
 
 app.UseStaticFiles();
 
-
-app.MapControllerRoute("default","{controller=Produto}/{action=Index}/{id?}");
+app.MapControllerRoute("default","{controller=Catalogo}/{action=Index}");
 
 
 app.Run();
