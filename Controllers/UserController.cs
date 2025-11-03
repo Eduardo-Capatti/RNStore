@@ -10,6 +10,10 @@ public class UserController : Controller
     {
         return View();
     }
+    public ActionResult Cadastro()
+    {
+        return View();
+    }
 
  
 
