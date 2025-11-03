@@ -74,20 +74,27 @@ create table Produtos(
 	promocao     money            null,
 	preco        money        not null,
 	qtd			 int		  not null   default 0,
-	tamanho		 int		  not null	 references Tamanhos(idTamanho)
+	tamanhoId	 int		  not null	 references Tamanhos(idTamanho)
 )	
+
+create table Cores(
+	idCor int not null primary key identity,
+	nomeCor varchar(100) not null,
+	produtoId int not null references Produtos(idProduto)
+)
 
 create table Imagens(
 	idImagem int not null primary key identity,
-	nome     varchar(100) not null,
-	idProduto int not null references Produtos(idProduto)
+	nomeImagem     varchar(100) not null,
+	statusImagem int not null check(statusImagem in(0,1)), -- 1 - imagemm principal
+	produtoId int not null references Produtos(idProduto)
 )
 
 create table Compras(
 	idCompra     int			not null     primary key identity,
 	dataCompra	 date			not null	 default GETDATE(),	  
 	totalCompra	 decimal(10,2)      null,
-	statusCompra int				null	 check(statusCompra in(0,1,2,3,4)) -- 0 = carrinho, 1 = aguardando pagamento, 2 = pago, 3 = enviado, 4 = entregue,
+	statusCompra int				null	 check(statusCompra in(0,1,2,3,4)), -- 0 = carrinho, 1 = aguardando pagamento, 2 = pago, 3 = enviado, 4 = entregue,
 	data_entrega date			not null,
 	idCliente int not null references Clientes(idPessoa),
 	idFuncionario int not null references Funcionarios(idPessoa)

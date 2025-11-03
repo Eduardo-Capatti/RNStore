@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Eduardo\\Desktop\\RNStore\\RNStore\\RNStore.csproj": {}
+    "C:\\Users\\Eduardo\\Desktop\\RNStore2\\RNStore\\RNStore.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Eduardo\\Desktop\\RNStore\\RNStore\\RNStore.csproj": {
+    "C:\\Users\\Eduardo\\Desktop\\RNStore2\\RNStore\\RNStore.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Eduardo\\Desktop\\RNStore\\RNStore\\RNStore.csproj",
+        "projectUniqueName": "C:\\Users\\Eduardo\\Desktop\\RNStore2\\RNStore\\RNStore.csproj",
         "projectName": "RNStore",
-        "projectPath": "C:\\Users\\Eduardo\\Desktop\\RNStore\\RNStore\\RNStore.csproj",
+        "projectPath": "C:\\Users\\Eduardo\\Desktop\\RNStore2\\RNStore\\RNStore.csproj",
         "packagesPath": "C:\\Users\\Eduardo\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Eduardo\\Desktop\\RNStore\\RNStore\\obj\\",
+        "outputPath": "C:\\Users\\Eduardo\\Desktop\\RNStore2\\RNStore\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Eduardo\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -43,6 +43,12 @@
       "frameworks": {
         "net9.0": {
           "targetAlias": "net9.0",
+          "dependencies": {
+            "Microsoft.Data.SqlClient": {
+              "target": "Package",
+              "version": "[6.1.2, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
