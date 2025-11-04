@@ -20,7 +20,7 @@ public class CatalogoDatabaseRepository: Connection, ICatalogoRepository{
 
         SqlCommand cmd = new SqlCommand();
         cmd.Connection = conn;
-        cmd.CommandText = "SELECT * FROM Produtos p LEFT JOIN Calcados c on p.calcadoId = c.idCalcado LEFT JOIN Marca m on c.marcaId = m.idMarca LEFT JOIN Imagens i on p.idProduto = i.produtoId WHERE statusImagem = 1";
+        cmd.CommandText = "SELECT * FROM v_produtos";
 
         SqlDataReader reader = cmd.ExecuteReader();
 
