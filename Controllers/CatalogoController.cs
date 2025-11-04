@@ -1,17 +1,25 @@
 using Microsoft.AspNetCore.Mvc;
+using RNStore.Repositories;
 
 namespace Catalogo.Controllers;
 
 public class CatalogoController : Controller
 {
 
+    private ICatalogoRepository repository;
+
+    public CatalogoController (ICatalogoRepository repository)
+    {
+        this.repository = repository;
+    }
     public ActionResult Index()
     {
-        return View();
+        return View(repository.Read());
     }
 
-    public ActionResult Produto(int id)
+
+    public ActionResult Produto(int idProduto, int idCalcado)
     {
-        return View();
+        return View(repository.Read(idProduto, idCalcado));
     }
 }

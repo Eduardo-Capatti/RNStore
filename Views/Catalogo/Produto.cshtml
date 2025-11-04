@@ -1,3 +1,6 @@
+
+@model RNStore.Models.Catalogo
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -15,32 +18,44 @@
     <!--Conteúdo da página-->
     <div class="container">
 
+    @{
+        var i = 0; 
+    }
+
         <div class="row" style="margin-top: 100px;">
             <div class="col-sm-5 col-md-5 col-lg-7  text-center">
-                <div class="text-center d-inline-block" id="foto-principal-produto">
-                    <img class="img-fluid" src="~/img/tenis-1.png">
-                </div>
-
+                @{foreach (var img in Model.img){
+                    if(i < 1){
+                        <div class="text-center d-inline-block" id="foto-principal-produto">
+                            <img class="img-fluid" src="~/img/@img.nomeImagem">
+                        </div>
+                        i++;
+                    }else{
+                        break;
+                    }
+                }
+                    i = 0;
+                }
+               
                 <div>
-                    <div class="mt-4 text-center d-inline-block foto-secundaria-produto" style="border: 2px solid #1E90FF;">
-                        <img class="img-fluid" src="~/img/tenis-1.png" >
-                    </div>
+        
+                    @{foreach (var img in Model.img){
+                        
 
-                    <div class="mt-4 text-center d-inline-block foto-secundaria-produto">
-                        <img class="img-fluid" src="~/img/tenis-2.png" >
-                    </div>
-
-                    <div class="mt-4 text-center d-inline-block foto-secundaria-produto">
-                        <img class="img-fluid" src="~/img/tenis-3.png" >
-                    </div>
-
-                    <div class="mt-4 text-center d-inline-block foto-secundaria-produto">
-                        <img class="img-fluid" src="~/img/tenis-4.png" >
-                    </div>
-
-                    <div class="mt-4 text-center d-inline-block foto-secundaria-produto">
-                        <img class="img-fluid" src="~/img/tenis-5.png" >
-                    </div>
+                        if (i == 0){
+                            <div class="mt-4 text-center d-inline-block foto-secundaria-produto" style="border: 2px solid #1E90FF;">
+                                <img class="img-fluid" src="~/img/@img.nomeImagem" >
+                            </div>
+                            i++;
+                        }else{
+                            <div class="mt-4 text-center d-inline-block foto-secundaria-produto">
+                                <img class="img-fluid" src="~/img/@img.nomeImagem" >
+                            </div>
+                        }
+                        
+                    }
+                     i = 0;
+                    }
                 </div>
 
             </div>
@@ -48,42 +63,36 @@
             <div class="col-sm-7 col-md-7 col-lg-5 ">
 
                 <div class="ms-5 mt-5 mt-sm-0 produto-conteudo">
-                    <h3>Tênis Olympikus Proof 3 Masculino</h3>
-                    <h2 class="my-4">R$ 169,99</h2>
-                    <h4>Cor: AZUL</h4>
+                    <h3>@Model.nomeCalcado</h3>
+                    <h2 class="my-4">R$ @Model.preco</h2>
+                    <h4>Cor: @Model.corPrincipal</h4>
 
                     <div class="my-4">
                         <div>
-
-                            <div class="text-center d-inline-block escolha-cor" style="border: 2px solid #1E90FF;">
-                                <img class="img-fluid" src="~/img/tenis-1.png" >
-                            </div>
-
-                            <div class="text-center d-inline-block escolha-cor">
-                                <img class="img-fluid" src="~/img/tenis-9.png" >
-                            </div>
-
+                            @foreach(var imgOutrasCores in Model.imgOutrasCores){
+                                if(i == 0){
+                                    <div class="text-center d-inline-block escolha-cor" style="border: 2px solid #1E90FF;">
+                                        <img class="img-fluid" src="~/img/@imgOutrasCores.nomeImagem" >
+                                    </div>
+                                    i++;
+                                }else{
+                                    <div class="text-center d-inline-block escolha-cor">
+                                        <img class="img-fluid" src="~/img/@imgOutrasCores.nomeImagem" >
+                                    </div>
+                                }
+                               
+                            }
                         </div>
                     </div>
 
                     <div>
-                        <h4>Tamanho:</h4>
+                        <h4>Tamanhos:</h4>
                         <div>
-                            <div class="text-center d-inline-block escolha-tamanho">
-                                <span>38</span>
-                            </div>
-
-                            <div class="text-center d-inline-block escolha-tamanho">
-                                <span>44</span>
-                            </div>
-
-                            <div class="text-center d-inline-block escolha-tamanho">
-                                <span>47</span>
-                            </div>
-
-                            <div class="text-center d-inline-block escolha-tamanho">
-                                <span>48</span>
-                            </div>
+                            @foreach(var tamanho in Model.tamanho){
+                                <div class="text-center d-inline-block escolha-tamanho">
+                                    <span>@tamanho.tamanho</span>
+                                </div>
+                            }
                         </div>
 
                     </div>

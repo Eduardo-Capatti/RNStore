@@ -123,7 +123,6 @@ C:\Users\Eduardo\Desktop\RNStore\RNStore\obj\Debug\net9.0\refint\RNStore.dll
 C:\Users\Eduardo\Desktop\RNStore\RNStore\obj\Debug\net9.0\RNStore.pdb
 C:\Users\Eduardo\Desktop\RNStore\RNStore\obj\Debug\net9.0\RNStore.genruntimeconfig.cache
 C:\Users\Eduardo\Desktop\RNStore\RNStore\obj\Debug\net9.0\ref\RNStore.dll
-C:\Users\Eduardo\Desktop\RNStore\RNStore\obj\Debug\net9.0\compressed\utdrh7odnd-xloccwey7x.gz
 C:\Users\Eduardo\Desktop\RNStore\RNStore\obj\Debug\net9.0\compressed\i9v3th65ft-p8sdrafcgr.gz
 C:\Users\Eduardo\Desktop\RNStore\RNStore\obj\Debug\net9.0\RNStore.csproj.AssemblyReference.cache
 C:\Users\Eduardo\Desktop\RNStore\RNStore\bin\Debug\net9.0\Azure.Core.dll
@@ -174,3 +173,4 @@ C:\Users\Eduardo\Desktop\RNStore\RNStore\bin\Debug\net9.0\runtimes\win-x86\nativ
 C:\Users\Eduardo\Desktop\RNStore\RNStore\bin\Debug\net9.0\runtimes\win\lib\net9.0\System.Diagnostics.EventLog.dll
 C:\Users\Eduardo\Desktop\RNStore\RNStore\bin\Debug\net9.0\runtimes\win\lib\net9.0\System.Security.Cryptography.Pkcs.dll
 C:\Users\Eduardo\Desktop\RNStore\RNStore\obj\Debug\net9.0\RNStore.csproj.Up2Date
+C:\Users\Eduardo\Desktop\RNStore\RNStore\obj\Debug\net9.0\compressed\utdrh7odnd-vgx0c3gfr9.gz

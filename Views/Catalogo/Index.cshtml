@@ -1,3 +1,5 @@
+@model List<RNStore.Models.Catalogo>
+
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -10,6 +12,12 @@
     <link rel="stylesheet" type="text/css" href="~/css/Produto.css" asp-append-version="true">
     <script src="https://kit.fontawesome.com/4550765f78.js" crossorigin="anonymous"></script>
 </head>
+
+<script>
+    function acessarProduto(idProduto, calcadoId){
+        window.location.href = "/Catalogo/Produto/" + idProduto + "/" + calcadoId
+    }
+</script>
 
 <body>
     @await Html.PartialAsync("_Menu")
@@ -33,98 +41,34 @@
                 <span class="visually-hidden">Next</span>
             </button>
         </div>
-        <div class="produtos">
-            <div class="tabela">
-                <div class="card" href="/Catalogo/Produto">
-                    <img class="card-img-top" src="~/img/tenis1.png" alt="">
-                    <div class="card-body">
-                        <h5 class="card-title">
-                        <a href="/Catalogo/Produto" class="stretched-link text-decoration-none text-dark">
-                            Tênis Nikke Gamma Force</a>
-                        </h5>
-                        <h4 class="card-title">R$599,99</h4>
-                        <p class="card-text">Olympikus</p>
-                    </div>
-                </div>
-                <div class="card" href="/Catalogo/Produto">
-                    <img class="card-img-top" src="~/img/tenis2.png" alt="">
-                    <div class="card-body">
-                        <h5 class="card-title">
-                        <a href="/Catalogo/Produto" class="stretched-link text-decoration-none text-dark">
-                            Tênis Nikke Court Vision Lo</a>
-                        </h5>
-                        <h4 class="card-title">R$299,79</h4>
-                        <p class="card-text">Nikke</p>
-                    </div>
-                </div>
-                <div class="card" href="/Catalogo/Produto">
-                    <img class="card-img-top" src="~/img/tenis3.png" alt="">
-                    <div class="card-body">
-                        <h5 class="card-title">
-                        <a href="/Catalogo/Produto" class="stretched-link text-decoration-none text-dark">
-                            Tênis Nikke Revolution 7</a>
-                        </h5>
-                        <h4 class="card-title">R$249,90</h4>
-                        <p class="card-text">Nikke</p>
-                    </div>
-                </div>
-                <div class="card" href="/Catalogo/Produto">
-                    <img class="card-img-top" src="~/img/tenis7.png" alt="">
-                    <div class="card-body">
-                        <h5 class="card-title">
-                        <a href="/Catalogo/Produto" class="stretched-link text-decoration-none text-dark">
-                            Tênis Olympikus Triunfo 3</a>
-                        </h5>
-                        <h4 class="card-title">R$149,99</h4>
-                        <p class="card-text">Olympikus</p>
-                    </div>
-                </div>
+
+
+        <div class="container">
+
+            <div class="row">
+            @foreach(var produto in Model){
+            <div class="col-3 mt-5" onclick="acessarProduto(@produto.idProduto, @produto.calcadoId)">
+                    <div class="card">
+                        <img class="card-img-top" src="~/img/@produto.ApenasImagemPrincipal.FirstOrDefault()" alt="">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                            <p class="stretched-link text-decoration-none text-dark mb-0">
+                                @produto.nomeCalcado
+                            </p>
+                            </h5>
+                            @if(produto.promocao > 0){
+                                <h4 class="card-title"><s>R$@produto.preco.ToString("F2")</s></h4>
+                                var valor = produto.preco - produto.promocao.Value;
+                                <h3 class="card-subtitle">R$@valor.ToString("F2")</h3>
+                            }else{
+                                <h4 class="card-title">R$@produto.preco.ToString("F2")</h4>
+                            }
+
+                            <p class="card-text">@produto.marcaCalcado</p>
+                        </div>
+                    </div>         
             </div>
-            <div class="tabela">
-                <div class="card" href="/Catalogo/Produto">
-                    <img class="card-img-top" src="~/img/tenis4.png" alt="">
-                    <div class="card-body">
-                        <h5 class="card-title">
-                        <a href="/Catalogo/Produto" class="stretched-link text-decoration-none text-dark">
-                            Tênis Olympikus Proof 3</a>
-                        </h5>
-                        <h4 class="card-title">R$169,99</h4>
-                        <p class="card-text">Olympikus</p>
-                    </div>
-                </div>
-                <div class="card" href="/Catalogo/Produto">
-                    <img class="card-img-top" src="~/img/tenis5.png" alt="">
-                    <div class="card-body">
-                        <h5 class="card-title">
-                        <a href="/Catalogo/Produto" class="stretched-link text-decoration-none text-dark">
-                            Tênis Olympikus Venum 34</a>
-                        </h5>
-                        <h4 class="card-title">R$149,90</h4>
-                        <p class="card-text">Olympikus</p>
-                    </div>
-                </div>
-                <div class="card" href="/Catalogo/Produto">
-                    <img class="card-img-top" src="~/img/tenis6.png" alt="">
-                    <div class="card-body">
-                        <h5 class="card-title">
-                        <a href="/Catalogo/Produto" class="stretched-link text-decoration-none text-dark">
-                            Tênis Adidas Run Falcon 3.0</a>
-                        </h5>
-                        <h4 class="card-title">R$249,90</h4>
-                        <p class="card-text">Adidas</p>
-                    </div>
-                </div>
-                <div class="card" href="/Catalogo/Produto">
-                    <img class="card-img-top" src="~/img/tenis8.png" alt="">
-                    <div class="card-body">
-                        <h5 class="card-title">
-                            <a href="/Catalogo/Produto" class="stretched-link text-decoration-none text-dark">
-                            Tênis Nikke Air Force</a>
-                        </h5>
-                        <h4 class="card-title">R$179,90</h4>
-                        <p class="card-text">Nikke</p>
-                    </div>
-                </div>
+            }
             </div>
         </div>
     </main>

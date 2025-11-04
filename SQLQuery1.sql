@@ -66,29 +66,28 @@ create table Tamanhos(
 )
 
 
+CREATE TABLE Cores (
+    idCor INT PRIMARY KEY IDENTITY,
+    calcadoId INT NOT NULL REFERENCES Calcados(idCalcado),
+    nomeCor VARCHAR(50) NOT NULL
+);
 
-create table Produtos(
-	idProduto	 int		  not null	  primary key identity,
-	calcadoId    int          not null    references Calcados(idCalcado),
-	cor          varchar(30)  not null,
-	promocao     money            null,
-	preco        money        not null,
-	qtd			 int		  not null   default 0,
-	tamanhoId	 int		  not null	 references Tamanhos(idTamanho)
-)	
+CREATE TABLE Variantes (
+    idVariante INT PRIMARY KEY IDENTITY,
+    calcadoId INT NOT NULL REFERENCES Calcados(idCalcado),
+    corId INT NOT NULL REFERENCES Cores(idCor),
+    tamanhoId INT NOT NULL REFERENCES Tamanhos(idTamanho),
+    preco MONEY NOT NULL,
+    promocao MONEY NULL,
+    qtd INT NOT NULL DEFAULT 0
+);
 
-create table Cores(
-	idCor int not null primary key identity,
-	nomeCor varchar(100) not null,
-	produtoId int not null references Produtos(idProduto)
-)
-
-create table Imagens(
-	idImagem int not null primary key identity,
-	nomeImagem     varchar(100) not null,
-	statusImagem int not null check(statusImagem in(0,1)), -- 1 - imagemm principal
-	produtoId int not null references Produtos(idProduto)
-)
+CREATE TABLE Imagens (
+    idImagem INT PRIMARY KEY IDENTITY,
+    corId INT NOT NULL REFERENCES Cores(idCor),
+    nomeImagem VARCHAR(100) NOT NULL,
+    statusImagem INT NOT NULL CHECK(statusImagem IN (0,1)) -- 1 = principal
+);
 
 create table Compras(
 	idCompra     int			not null     primary key identity,

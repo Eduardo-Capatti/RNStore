@@ -1578,11 +1578,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Eduardo\\Desktop\\RNStore2\\RNStore\\RNStore.csproj",
+      "projectUniqueName": "C:\\Users\\Eduardo\\Desktop\\RNstoreCopia\\RNStore\\RNStore.csproj",
       "projectName": "RNStore",
-      "projectPath": "C:\\Users\\Eduardo\\Desktop\\RNStore2\\RNStore\\RNStore.csproj",
+      "projectPath": "C:\\Users\\Eduardo\\Desktop\\RNstoreCopia\\RNStore\\RNStore.csproj",
       "packagesPath": "C:\\Users\\Eduardo\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Eduardo\\Desktop\\RNStore2\\RNStore\\obj\\",
+      "outputPath": "C:\\Users\\Eduardo\\Desktop\\RNstoreCopia\\RNStore\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Eduardo\\AppData\\Roaming\\NuGet\\NuGet.Config"

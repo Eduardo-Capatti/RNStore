@@ -4,7 +4,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddTransient<ICatalogoRepository>(_ => 
     new CatalogoDatabaseRepository(
-        builder.Configuration.GetConnectionString("default")));;
+        builder.Configuration.GetConnectionString("Default")));;
 
 builder.Services.AddSession();
 builder.Services.AddControllersWithViews();
@@ -15,7 +15,7 @@ app.UseStaticFiles();
 
 
 app.UseSession();
-app.MapControllerRoute("default","{controller=Catalogo}/{action=Index}/{id?}");
+app.MapControllerRoute("default","{controller=Catalogo}/{action=Index}/{idProduto?}/{idCalcado?}");
 
 
 app.Run();
