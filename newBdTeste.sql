@@ -86,6 +86,7 @@ CREATE TABLE Imagens (
     idImagem INT PRIMARY KEY IDENTITY,
     corId INT NOT NULL REFERENCES Cores(idCor),
     nomeImagem VARCHAR(100) NOT NULL,
+	produtoId int not null references Produtos(idProduto),
     statusImagem INT NOT NULL CHECK(statusImagem IN (0,1)) -- 1 = principal
 );
 
@@ -121,3 +122,4 @@ create table Itens_Entradas(
 	primary key(idProduto, idEntrada)
 
 )
+
