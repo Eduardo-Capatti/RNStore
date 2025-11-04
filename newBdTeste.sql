@@ -122,4 +122,11 @@ create table Itens_Entradas(
 	primary key(idProduto, idEntrada)
 
 )
+create view v_produtos
+as
+SELECT p.idProduto,c.nomeCalcado,m.nomeMarca, p.tamanhoId,p.corId,p.promocao,p.qtd,i.nomeImagem 
+FROM Produtos p LEFT JOIN Calcados c on p.calcadoId = c.idCalcado 
+LEFT JOIN Marca m on c.marcaId = m.idMarca 
+LEFT JOIN Imagens i on p.idProduto = i.produtoId WHERE statusImagem = 1
+go
 
