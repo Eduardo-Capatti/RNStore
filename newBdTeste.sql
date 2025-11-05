@@ -70,8 +70,9 @@ CREATE TABLE Cores (
 
 
 CREATE TABLE CoresCalcados (
-    idCor INT PRIMARY KEY IDENTITY,
-    calcadoId INT NOT NULL REFERENCES Calcados(idCalcado)
+	corId INT NOT NULL REFERENCES Cores(idCor),
+    calcadoId INT NOT NULL REFERENCES Calcados(idCalcado),
+	PRIMARY KEY (calcadoId, corId)
 );
 
 CREATE TABLE Produtos (
@@ -125,3 +126,4 @@ create table Itens_Entradas(
 
 
 )
+
