@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "TK/gtX7B6zI=",
+  "dgSpecHash": "Tjlqsgahljg=",
   "success": true,
-  "projectFilePath": "C:\\Users\\Eduardo\\Desktop\\RNstoreCopia\\RNStore\\RNStore.csproj",
+  "projectFilePath": "C:\\Users\\Eduardo\\Desktop\\RNStorePrincipal\\RNStore\\RNStore.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Eduardo\\.nuget\\packages\\azure.core\\1.47.1\\azure.core.1.47.1.nupkg.sha512",
     "C:\\Users\\Eduardo\\.nuget\\packages\\azure.identity\\1.14.2\\azure.identity.1.14.2.nupkg.sha512",

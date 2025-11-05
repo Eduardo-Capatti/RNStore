@@ -1,7 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using RNStore.Repositories;
+using RNStore.Models;
 
-namespace Catalogo.Controllers;
+namespace RNStore.Controllers;
 
 public class CatalogoController : Controller
 {

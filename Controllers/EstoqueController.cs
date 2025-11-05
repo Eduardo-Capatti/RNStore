@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace Estoque.Controllers;
+namespace RNStore.Controllers;
 
 public class EstoqueController: Controller
 {
@@ -8,5 +8,4 @@ public class EstoqueController: Controller
     {
         return View();
     }
-
 }
