@@ -87,6 +87,7 @@ CREATE TABLE Produtos (
 CREATE TABLE Imagens (
     idImagem INT PRIMARY KEY IDENTITY,
     corId INT NOT NULL REFERENCES Cores(idCor),
+	calcadoId INT NOT NULL REFERENCES Calcados(idCalcado),
     nomeImagem VARCHAR(100) NOT NULL,
     statusImagem INT NOT NULL CHECK(statusImagem IN (0,1)) -- 1 = principal
 );
@@ -121,5 +122,6 @@ create table Itens_Entradas(
 	valorIE money null,
 	qtdIE	int null,
 	primary key(idProduto, idEntrada)
+
 
 )
