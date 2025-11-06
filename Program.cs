@@ -13,10 +13,15 @@ builder.Services.AddTransient<ITamanhoRepository>(_ =>
 builder.Services.AddTransient<ICorRepository>(_ =>
     new CorDatabaseRepository(
         builder.Configuration.GetConnectionString("Default")));
-        
-builder.Services.AddTransient<IFuncionarioRepository>(_ => 
+
+builder.Services.AddTransient<IFuncionarioRepository>(_ =>
     new FuncionarioDatabaseRepository(
         builder.Configuration.GetConnectionString("Default")));
+
+builder.Services.AddTransient<IMarcaRepository>(_ => 
+    new MarcaDatabaseRepository(
+        builder.Configuration.GetConnectionString("Default")));
+
 
 
 builder.Services.AddSession();
