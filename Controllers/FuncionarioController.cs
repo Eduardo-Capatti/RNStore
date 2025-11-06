@@ -41,7 +41,7 @@ public class FuncionarioController: Controller
         if (TemCampoNulo(funcionario))
         {
             ViewBag.Error = "Preencha todas as informações!";
-            return RedirectToAction("Create", Create());
+            return View("Create", Create());
         }
 
         repository.Create(funcionario);
@@ -59,6 +59,23 @@ public class FuncionarioController: Controller
     [HttpPost]
     public ActionResult Update(Funcionario funcionario)
     {
+        bool TemCampoNulo(Funcionario funcionario)
+        {
+            if (funcionario == null) return true;
+
+            return funcionario.GetType()
+                .GetProperties()
+                .Where(p => p.CanRead && p.Name != "idPessoa") // ignora idPessoa
+                .Any(p => p.GetValue(funcionario) == null);
+        }
+
+        if (TemCampoNulo(funcionario))
+        {
+            ViewBag.Error = "Preencha todas as informações!";
+            var funcionario_escolhido = repository.Read(funcionario.idPessoa);
+            return View("Update", funcionario_escolhido);
+        }
+
         repository.Update(funcionario);
 
         return RedirectToAction("Index");

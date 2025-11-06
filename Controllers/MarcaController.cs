@@ -22,9 +22,19 @@ public class MarcaController: Controller
     [HttpPost]
     public ActionResult Create(Marca marca)
     {
-        repository.Create(marca);
+        if (marca.nomeMarca == null)
+        {
+            var marcas = repository.Read();
+            ViewBag.Error = "Preencha o nome da marca!";
+            return View("Index", marcas);
+        }
+        else
+        {
+            repository.Create(marca);
 
-        return RedirectToAction("Index");
+            return RedirectToAction("Index");
+        }
+        
     }
 
 

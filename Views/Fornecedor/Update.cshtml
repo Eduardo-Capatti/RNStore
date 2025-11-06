@@ -1,4 +1,4 @@
-@model RNStore.Models.Funcionario;
+@model RNStore.Models.Fornecedor;
 
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -43,64 +43,37 @@
     
     <div class="flex-grow-1">
         <div class="container">
+        
             @if (ViewBag.Error != null)
             {
                 <div class="alert alert-danger">@ViewBag.Error</div>
             }
 
-            <h1 class="text-center my-5">Atualizando Funcionário</h1>
-            <form action="/Funcionario/Update" method="POST">
+            <h1 class="text-center my-5">Atualizando Fornecedor</h1>
+            <form action="/Fornecedor/Update" method="POST">
                 <div class="mt-5">
                     <div class="row">
                     
                         <div class="col-6">
                             <div class="input-group">
-                                <label class="input-group-text" for="nomePessoa">Nome</label>
-                                <input class="form-control" name="nomePessoa" id="nomePessoa" type="text" placeholder="digite o nome do funcionário" value="@Model.nomePessoa"/>
+                                <label class="input-group-text" for="nomeFornecedor">Nome</label>
+                                <input class="form-control" name="nomeFornecedor" id="nomeFornecedor" type="text" placeholder="digite o nome do funcionário" value="@Model.nomeFornecedor"/>
                             </div>
                         </div>
 
                         <div class="col-6">
                             <div class="input-group">
-                                <label class="input-group-text" for="cpf">CPF</label>
-                                <input class="form-control" name="cpf" id="cpf" type="text" placeholder="digite o cpf" value="@Model.cpf"/>
-                            </div>
-                        </div>
-
-                        <div class="col-6">
-                            <div class="input-group">
-                                <label class="input-group-text" for="email">Email</label>
-                                <input class="form-control" name="email" id="email" type="text" placeholder="digite o email" value="@Model.email"/>
+                                <label class="input-group-text" for="cnpj">cnpj</label>
+                                <input class="form-control" name="cnpj" id="cnpj" type="text" placeholder="digite o cnpj" value="@Model.cnpj"/>
                             </div>
                         </div>
 
 
-                        <div class="col-6">
-                            <div class="input-group">
-                                <label class="input-group-text" for="senha">Senha</label>
-                                <input class="form-control" name="senha" id="senha" type="password" placeholder="digite a senha do funcionário para o sistema" value="@Model.senha"/>
-                            </div>
-                        </div>
-
-                        <div class="col-6">
-                            <div class="input-group">
-                                <label class="input-group-text" for="telefone">Telefone</label>
-                                <input class="form-control" name="telefone" id="telefone" type="text" placeholder="digite o telefone do funcionário" value="@Model.telefone"/>
-                            </div>
-                        </div>
-
-                        <div class="col-6">
-                            <div class="input-group">
-                                <label class="input-group-text" for="salario">Salário</label>
-                                <input class="form-control" name="salario" id="salario" type="number" placeholder="digite o salário" min="0" step="0.1" value="@Model.salario"/>
-                            </div>
-                        </div>
-
-                        <input type="hidden" name="idPessoa" id="idPessoa" value="@Model.idPessoa" />
+                        <input type="hidden" name="idFornecedor" id="idFornecedor" value="@Model.idFornecedor" />
 
                         <div class="col-12 mt-3">
                             <div class="col-6">
-                                <a href="/Funcionario/Index" class="btn btn-primary" >Voltar</a>
+                                <a href="/Fornecedor/Index" class="btn btn-primary" >Voltar</a>
                                 <button type="submit" class="btn btn-dark" >Atualizar</button>
                             </div>
                         </div>

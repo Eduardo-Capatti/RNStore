@@ -26,6 +26,10 @@ builder.Services.AddTransient<ICalcadoRepository>(_ =>
     new CalcadoDatabaseRepository(
         builder.Configuration.GetConnectionString("Default")));
 
+builder.Services.AddTransient<IFornecedorRepository>(_ => 
+    new FornecedorDatabaseRepository(
+        builder.Configuration.GetConnectionString("Default")));
+
 
 
 

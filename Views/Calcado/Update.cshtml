@@ -20,6 +20,16 @@
             width: 80px;
         }
     </style>
+
+    <script>
+        setTimeout(() => {
+            let alert = document.querySelector('.alert');
+            if (alert) {
+                let bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            }
+        }, 4000);
+    </script>
 <body class="d-flex flex-column vh-100">
 
     <nav class="navbar navbar-dark navbar-expand-md bg-dark">
@@ -39,6 +49,10 @@
     
     <div class="flex-grow-1">
         <div class="container">
+            @if (ViewBag.Error != null)
+            {
+                <div class="alert alert-danger">@ViewBag.Error</div>
+            }
 
             <h1 class="text-center my-5">Atualizando Funcionário</h1>
             <form action="/Calcado/Update" method="POST">

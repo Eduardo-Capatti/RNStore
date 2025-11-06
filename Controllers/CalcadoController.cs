@@ -52,6 +52,23 @@ public class CalcadoController: Controller
     [HttpPost]
     public ActionResult Update(Calcado calcado)
     {
+        bool TemCampoNulo(Calcado calcado)
+        {
+            if (calcado == null) return true;
+
+            return calcado.GetType()
+                .GetProperties()
+                .Where(p => p.CanRead && p.Name != "idCalcado") // ignora idPessoa
+                .Any(p => p.GetValue(calcado) == null);
+        }
+
+        if (TemCampoNulo(calcado))
+        {
+            ViewBag.Error = "Não deixe informações em branco!";
+            var calcado_escolhido = repository.Read(calcado.idCalcado);
+            return View("Update", calcado_escolhido);
+        }
+
         repository.Update(calcado);
 
         return RedirectToAction("Index");

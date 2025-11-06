@@ -20,11 +20,22 @@ public class CorController: Controller
     }
 
     [HttpPost]
-    public ActionResult Create(Cor Cor)
+    public ActionResult Create(Cor cor)
     {
-        repository.Create(Cor);
+        if (cor.nomeCor == null)
+        {
+            var cores = repository.Read();
+            ViewBag.Error = "Preencha a cor!";
+            return View("Index", cores);
+        }
+        else
+        {
+            repository.Create(cor);
 
-        return RedirectToAction("Index");
+            return RedirectToAction("Index");
+        }
+
+        
     }
 
 

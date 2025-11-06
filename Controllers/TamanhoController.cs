@@ -21,7 +21,13 @@ public class TamanhoController: Controller
 
     [HttpPost]
     public ActionResult Create(Tamanho tamanho)
-    {
+    {   
+        if (tamanho.tamanho == null)
+        {
+            var tamanhos = repository.Read();
+            ViewBag.Error = "Preencha o tamanho!";
+            return View("Index", tamanhos);
+        }
         repository.Create(tamanho);
 
         return RedirectToAction("Index");
