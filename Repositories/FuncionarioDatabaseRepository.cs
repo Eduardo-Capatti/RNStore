@@ -5,6 +5,8 @@ using System.Data.Common;
 using RNStore.Models;
 using Microsoft.Data.SqlClient;
 using System.ComponentModel.DataAnnotations;
+using System.Security.Cryptography;
+using System.Text;
 
 public class FuncionarioDatabaseRepository : Connection, IFuncionarioRepository
 {
@@ -17,6 +19,8 @@ public class FuncionarioDatabaseRepository : Connection, IFuncionarioRepository
     {
         int idPessoa = 0;
 
+        string senhaHash = Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(funcionario.senha)));
+
         SqlCommand cmd = new SqlCommand();
 
         cmd.Connection = conn;
@@ -28,7 +32,7 @@ public class FuncionarioDatabaseRepository : Connection, IFuncionarioRepository
         cmd.Parameters.AddWithValue("@nomePessoa", funcionario.nomePessoa);
         cmd.Parameters.AddWithValue("@cpf", funcionario.cpf);
         cmd.Parameters.AddWithValue("@email", funcionario.email);
-        cmd.Parameters.AddWithValue("@senha", funcionario.senha);
+        cmd.Parameters.AddWithValue("@senha", senhaHash);
         cmd.Parameters.AddWithValue("@telefone", funcionario.telefone);
 
         idPessoa = (int)cmd.ExecuteScalar();

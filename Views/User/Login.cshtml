@@ -11,42 +11,43 @@
 
     <meta name="color-scheme" content="dark">
 </head>
-<body class="bg-white d-flex justify-content-center align-items-center min-vh-100">
-    
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-sm-10 col-md-8 col-lg-5">
-                <div class="card p-4 shadow-lg border-0 bg-dark text-light">
-                    
-                    <div class="text-center mb-4">
-                        <img src="~/img/rnstore.png" alt="RN STORE Logo" class="logo img-fluid rounded-3">
+
+<body >
+    <div class="bg-white d-flex justify-content-center align-items-center min-vh-100">
+        <div class="container">
+            <div class="row justify-content-center">
+                
+                <div class="col-sm-10 col-md-8 col-lg-5">
+            
+                    <div class="card p-4 shadow-lg border-0 bg-dark text-light">
+                        
+                        <div class="text-center mb-4">
+                            <img src="~/img/rnstore.png" alt="RN STORE Logo" class="logo img-fluid rounded-3">
+                        </div>
+
+                        <h5 class="text-center mb-4 text-white">SEJA BEM-VINDO</h5>
+
+                        <form action="/User/Login" method="POST">
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Usuário</label>
+                                <input type="text" class="form-control" id="email" name="email" placeholder="Digite seu email" required>
+                            </div>
+
+                            <div class="mb-4">
+                                <label for="password" class="form-label">Senha</label>
+                                <input type="password" class="form-control" id="senha" name="senha" placeholder="Digite sua senha" required>
+                            </div>
+
+                            <button type="submit" class="btn btn-light w-100 mb-3">
+                                ENTRAR
+                            </button>
+                            @if (ViewBag.Error != null)
+                            {
+                            <div class="alert alert-danger text-center">@ViewBag.Error</div>
+                            }
+
+                        </form>
                     </div>
-
-                    <h5 class="text-center mb-4 text-white">SEJA BEM-VINDO</h5>
-
-                    <form>
-                        <div class="mb-3">
-                            <label for="email" class="form-label">E-mail ou Usuário</label>
-                            <input type="text" class="form-control" id="email" placeholder="Digite seu e-mail ou usuário" required>
-                        </div>
-
-                        <div class="mb-4">
-                            <label for="password" class="form-label">Senha</label>
-                            <input type="password" class="form-control" id="password" placeholder="Digite sua senha" required>
-                        </div>
-
-                        <a type="submit" class="btn btn-light w-100 mb-3" href="/Estoque/Index">
-                            ENTRAR
-                        </a>
-
-                        <div class="text-center">
-                            <a href="#" class="text-secondary text-decoration-none">Esqueci minha senha</a>
-                        </div>
-                        <div class="text-center">
-                            <a href="/User/Cadastro" class="text-secondary text-decoration-none">Já possui conta</a>
-                        </div>
-
-                    </form>
                 </div>
             </div>
         </div>
