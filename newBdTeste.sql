@@ -1,6 +1,6 @@
-create database RNStore
+create database RNStore2
 go
-use RNStore
+use RNStore2
 
 create table Pessoas(
 	idPessoa     int       not null   primary key  identity,
@@ -70,9 +70,8 @@ CREATE TABLE Cores (
 
 
 CREATE TABLE CoresCalcados (
-	corId INT NOT NULL REFERENCES Cores(idCor),
-    calcadoId INT NOT NULL REFERENCES Calcados(idCalcado),
-	PRIMARY KEY (calcadoId, corId)
+    corId INT not null references Cores(idCor),
+    calcadoId INT NOT NULL REFERENCES Calcados(idCalcado)
 );
 
 CREATE TABLE Produtos (
@@ -85,13 +84,19 @@ CREATE TABLE Produtos (
     qtd INT NOT NULL DEFAULT 0
 );
 
+
 CREATE TABLE Imagens (
     idImagem INT PRIMARY KEY IDENTITY,
     corId INT NOT NULL REFERENCES Cores(idCor),
-	calcadoId INT NOT NULL REFERENCES Calcados(idCalcado),
     nomeImagem VARCHAR(100) NOT NULL,
     statusImagem INT NOT NULL CHECK(statusImagem IN (0,1)) -- 1 = principal
 );
+
+Create Table ImagensProdutos (
+	corId int not null references Cores(idCor),
+	calcadoId int not null references Calcados(idCalcado),
+	imagemId int not null references Imagens(idImagem)
+)
 
 create table Compras(
 	idCompra     int			not null     primary key identity,
@@ -124,6 +129,4 @@ create table Itens_Entradas(
 	qtdIE	int null,
 	primary key(idProduto, idEntrada)
 
-
 )
-
