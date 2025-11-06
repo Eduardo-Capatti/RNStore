@@ -22,7 +22,6 @@ public class TamanhoController: Controller
     [HttpPost]
     public ActionResult Create(Tamanho tamanho)
     {
-        
         repository.Create(tamanho);
 
         return RedirectToAction("Index");

@@ -18,9 +18,14 @@ builder.Services.AddTransient<IFuncionarioRepository>(_ =>
     new FuncionarioDatabaseRepository(
         builder.Configuration.GetConnectionString("Default")));
 
-builder.Services.AddTransient<IMarcaRepository>(_ => 
+builder.Services.AddTransient<IMarcaRepository>(_ =>
     new MarcaDatabaseRepository(
         builder.Configuration.GetConnectionString("Default")));
+        
+builder.Services.AddTransient<ICalcadoRepository>(_ => 
+    new CalcadoDatabaseRepository(
+        builder.Configuration.GetConnectionString("Default")));
+
 
 
 
