@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using RNStore.Models;
 using RNStore.Repositories;
 
@@ -21,14 +22,7 @@ public class TamanhoController: Controller
     [HttpPost]
     public ActionResult Create(Tamanho tamanho)
     {
-        repository.Create(tamanho);
-
-        return RedirectToAction("Index");
-    }
-
-
-    public ActionResult Update(Tamanho tamanho)
-    {
+        
         repository.Create(tamanho);
 
         return RedirectToAction("Index");
@@ -37,9 +31,19 @@ public class TamanhoController: Controller
 
     public ActionResult Delete(int idTamanho)
     {
-        repository.Delete(idTamanho);
+        try
+        {
+            repository.Delete(idTamanho);
 
-        return RedirectToAction("Index");
+            return RedirectToAction("Index");
+        }
+        catch (SqlException)
+        {
+            ViewBag.Error = "Não foi possível excluir o tamanho, pois ele está sendo usado em algum produto!";
+
+            return View("Index", repository.Read());
+        }
+     
     }
 
 

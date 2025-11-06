@@ -166,8 +166,9 @@ public class CatalogoDatabaseRepository : Connection, ICatalogoRepository
 
         string coresIn = string.Join(",", listaCores);
         using (SqlCommand cmd = new SqlCommand(
-            $"SELECT idImagem, nomeImagem FROM Imagens WHERE corId IN (1,2) AND statusImagem = 1", conn))
+            "SELECT idImagem, nomeImagem FROM Imagens WHERE corId IN (1,2) AND statusImagem = 1", conn))
         {
+            //cmd.Parameters.AddWithValue("cores", coresIn);
             using (SqlDataReader reader = cmd.ExecuteReader())
             {
                 while (reader.Read())

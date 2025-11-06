@@ -1,4 +1,4 @@
-@model List<RNStore.Models.Tamanho>;
+@model List<RNStore.Models.Funcionario>;
 
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -46,42 +46,53 @@
             {
                 <div class="alert alert-danger">@ViewBag.Error</div>
             }
-            <div class="my-5">
-                <form action="/Tamanho/Create" method="POST">
-                    <label class="form-label" for="tamanho">Novo Tamanho</label>
-                    <div class="input-group">
-                        <input name="tamanho.tamanho" id="tamanho" class="form-control" type="text" placeholder="novo tamanho" />
-                        <button type="submit" class="btn btn-dark" >Adicionar</button>
-                    </div>
-                </form>
-            </div>
 
             <table class="table table-striped table-bordered table-hover mt-3">
                 <thead>
                     <tr>
                         <th scope="col" >COD</th>           
-                        <th scope="col" >Tamanho</th>         
+                        <th scope="col" >Nome</th>  
+                        <th scope="col" >Email</th>  
+                        <th scope="col" >Telefone</th>  
+                        <th scope="col" >Salário</th>         
                         
+                        <th scope="col" class="text-center"></th> 
                         <th scope="col" class="text-center"></th> 
                     </tr>
                 </thead>
 
                 <tbody>
-                     @foreach(var tamanho in Model){
+                     @foreach(var funcionario in Model){
                         <tr>
-                            <td>@tamanho.idTamanho</td>
-                            <td>@tamanho.tamanho</td>
+                            <td>@funcionario.idPessoa</td>
+                            <td>@funcionario.nomePessoa</td>
+                            <td>@funcionario.email</td>
+                            <td>@funcionario.telefone</td>
+                            <td>R$ @funcionario.salario.ToString("F2")</td>
                             
                             <td class="text-center">
-                                <a href="/Tamanho/Delete?idTamanho=@tamanho.idTamanho"  class="btn btn-sm text-danger">
+                                <a href="/Funcionario/Delete?idFuncionario=@funcionario.idPessoa"  class="btn btn-sm text-danger">
                                     <i class="fa-solid fa-trash"></i>
                                 </a>
                             </td>
+
+                            <td class="text-center">
+                                <a href="/Funcionario/Update?idFuncionario=@funcionario.idPessoa"  class="btn btn-sm text-danger">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                </a>
+                            </td>
+                         
                         </tr>
                     }
 
                 </tbody>
             </table>
+
+            <div class="my-5">
+                <div class="text-end">
+                    <a href="/Funcionario/Create" class="btn btn-dark" >Adicionar</a>
+                </div>
+            </div>
         </div>
     </div>
     

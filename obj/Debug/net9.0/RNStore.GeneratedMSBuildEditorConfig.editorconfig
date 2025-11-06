@@ -28,8 +28,24 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2F0YWxvZ29cUHJvZHV0by5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/Eduardo/Desktop/RNStorePrincipal/RNStore/Views/Cor/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29yXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/Eduardo/Desktop/RNStorePrincipal/RNStore/Views/Estoque/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRXN0b3F1ZVxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Eduardo/Desktop/RNStorePrincipal/RNStore/Views/Funcionario/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnVuY2lvbmFyaW9cQ3JlYXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Eduardo/Desktop/RNStorePrincipal/RNStore/Views/Funcionario/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnVuY2lvbmFyaW9cSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Eduardo/Desktop/RNStorePrincipal/RNStore/Views/Funcionario/Update.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnVuY2lvbmFyaW9cVXBkYXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Eduardo/Desktop/RNStorePrincipal/RNStore/Views/Shared/_Footer.cshtml]
@@ -42,10 +58,6 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/Eduardo/Desktop/RNStorePrincipal/RNStore/Views/Tamanho/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGFtYW5ob1xJbmRleC5jc2h0bWw=
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/Eduardo/Desktop/RNStorePrincipal/RNStore/Views/Tamanho/Update.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGFtYW5ob1xVcGRhdGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Eduardo/Desktop/RNStorePrincipal/RNStore/Views/User/Cadastro.cshtml]

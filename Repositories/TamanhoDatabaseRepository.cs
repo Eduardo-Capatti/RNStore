@@ -61,9 +61,4 @@ public class TamanhoDatabaseRepository : Connection, ITamanhoRepository
         }
         return tamanhos;
     }
-
-    public void Update(int idTamanho)
-    {
-        
-    }
 }

@@ -1,4 +1,4 @@
-@model List<RNStore.Models.Tamanho>;
+@model List<RNStore.Models.Cor>;
 
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -47,10 +47,10 @@
                 <div class="alert alert-danger">@ViewBag.Error</div>
             }
             <div class="my-5">
-                <form action="/Tamanho/Create" method="POST">
-                    <label class="form-label" for="tamanho">Novo Tamanho</label>
+                <form action="/Cor/Create" method="POST">
+                    <label class="form-label" for="cor">Nova Cor</label>
                     <div class="input-group">
-                        <input name="tamanho.tamanho" id="tamanho" class="form-control" type="text" placeholder="novo tamanho" />
+                        <input name="cor.nomeCor" id="cor" class="form-control" type="text" placeholder="nova cor" />
                         <button type="submit" class="btn btn-dark" >Adicionar</button>
                     </div>
                 </form>
@@ -60,20 +60,20 @@
                 <thead>
                     <tr>
                         <th scope="col" >COD</th>           
-                        <th scope="col" >Tamanho</th>         
+                        <th scope="col" >Cor</th>         
                         
                         <th scope="col" class="text-center"></th> 
                     </tr>
                 </thead>
 
                 <tbody>
-                     @foreach(var tamanho in Model){
+                     @foreach(var cor in Model){
                         <tr>
-                            <td>@tamanho.idTamanho</td>
-                            <td>@tamanho.tamanho</td>
+                            <td>@cor.idCor</td>
+                            <td>@cor.nomeCor</td>
                             
                             <td class="text-center">
-                                <a href="/Tamanho/Delete?idTamanho=@tamanho.idTamanho"  class="btn btn-sm text-danger">
+                                <a href="/Cor/Delete?idCor=@cor.idCor"  class="btn btn-sm text-danger">
                                     <i class="fa-solid fa-trash"></i>
                                 </a>
                             </td>

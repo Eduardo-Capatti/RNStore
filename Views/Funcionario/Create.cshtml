@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estoque</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    
+    <link rel="stylesheet" type="text/css" href="~/css/produto.css" asp-append-version="true">
+    
+    <script src="https://kit.fontawesome.com/4550765f78.js" crossorigin="anonymous"></script>
+
+</head>
+
+    <style>
+        .input-group-text{
+            width: 80px;
+        }
+
+        .input-group{
+            margin-top: 15px;
+        }
+    </style>
+
+    <script>
+        setTimeout(() => {
+            let alert = document.querySelector('.alert');
+            if (alert) {
+                let bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            }
+        }, 4000);
+    </script>
+<body class="d-flex flex-column vh-100">
+
+    <nav class="navbar navbar-dark navbar-expand-md bg-dark">
+        <div class="container d-flex justify-content-between align-items-center">
+            <a href="/Estoque/Index">
+                <img class="navbar-brand" src="~/img/rnstore.png" width="140px" alt="Logo RN Store">      
+            </a>
+
+            <div class="d-flex gap-5 align-items-center">   
+                <a href="#" style="font-size: 20px;">
+                    Sair
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    
+    <div class="flex-grow-1">
+        <div class="container">
+
+            @if (ViewBag.Error != null)
+            {
+                <div class="alert alert-danger">@ViewBag.Error</div>
+            }
+
+            <h1 class="text-center my-5">Cadastro de Funcionário</h1>
+            <form action="/Funcionario/Create" method="POST">
+                <div class="mt-5">
+                    <div class="row">
+                    
+                        <div class="col-6">
+                            <div class="input-group">
+                                <label class="input-group-text" for="nomePessoa">Nome</label>
+                                <input class="form-control" name="nomePessoa" id="nomePessoa" type="text" placeholder="digite o nome do funcionário"/>
+                            </div>
+                        </div>
+
+                        <div class="col-6">
+                            <div class="input-group">
+                                <label class="input-group-text" for="cpf">CPF</label>
+                                <input class="form-control" name="cpf" id="cpf" type="text" placeholder="digite o cpf"/>
+                            </div>
+                        </div>
+
+                        <div class="col-6">
+                            <div class="input-group">
+                                <label class="input-group-text" for="email">Email</label>
+                                <input class="form-control" name="email" id="email" type="text" placeholder="digite o email"/>
+                            </div>
+                        </div>
+
+
+                        <div class="col-6">
+                            <div class="input-group">
+                                <label class="input-group-text" for="senha">Senha</label>
+                                <input class="form-control" name="senha" id="senha" type="password" placeholder="digite a senha do funcionário para o sistema"/>
+                            </div>
+                        </div>
+
+                        <div class="col-6">
+                            <div class="input-group">
+                                <label class="input-group-text" for="telefone">Telefone</label>
+                                <input class="form-control" name="telefone" id="telefone" type="text" placeholder="digite o telefone do funcionário"/>
+                            </div>
+                        </div>
+
+                        <div class="col-6">
+                            <div class="input-group">
+                                <label class="input-group-text" for="salario">Salário</label>
+                                <input class="form-control" name="salario" id="salario" type="number" placeholder="digite o salário" min="0" step="0.1"/>
+                            </div>
+                        </div>
+
+                        <div class="col-12 mt-3">
+                            <div class="col-12">
+                                <a href="/Funcionario/Index" class="btn btn-primary" >Voltar</a>
+                                <button type="submit" href="/Funcionario/Create" class="btn btn-dark" >Adicionar</a>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <footer class="py-3 mt-5 bg-dark" id="rodape">
+        <div class="container text-white">
+            <div class="row justify-content-center pt-4">
+
+                <div class="col-12 align-self-center text-center">
+                    <h5 class="mt-3 mt-md-0">Copyright © 2025 Innovatech. Todos os direitos reservados.</h5>
+                </div>
+
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+</body>
+</html>
