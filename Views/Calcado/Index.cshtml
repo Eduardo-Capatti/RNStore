@@ -49,15 +49,14 @@
 
             <h1 class="text-center my-5">Listagem de Calçados</h1>
 
-            <table class="table table-striped table-bordered table-hover mt-3">
+            <table class="table table-striped table-bordered table-hover mt-3 text-center">
                 <thead>
                     <tr>
                         <th scope="col" >COD</th>           
                         <th scope="col" >Nome</th>  
                         <th scope="col" >Marca</th>         
                         
-                        <th scope="col" class="text-center"></th> 
-                        <th scope="col" class="text-center"></th> 
+                        <th scope="col" class="text-center">Opções</th> 
                     </tr>
                 </thead>
 
@@ -72,10 +71,8 @@
                                 <a href="/Calcado/Delete?idCalcado=@calcado.idCalcado"  class="btn btn-sm text-danger">
                                     <i class="fa-solid fa-trash"></i>
                                 </a>
-                            </td>
 
-                            <td class="text-center">
-                                <a href="/Calcado/Update?idCalcado=@calcado.idCalcado"  class="btn btn-sm text-danger">
+                                <a href="/Calcado/Update?idCalcado=@calcado.idCalcado"  class="btn btn-sm text-primary">
                                     <i class="fa-solid fa-pen-to-square"></i>
                                 </a>
                             </td>

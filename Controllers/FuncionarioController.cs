@@ -65,7 +65,7 @@ public class FuncionarioController: Controller
 
             return funcionario.GetType()
                 .GetProperties()
-                .Where(p => p.CanRead && p.Name != "idPessoa") // ignora idPessoa
+                .Where(p => p.CanRead && (p.Name == "email" || p.Name == "telefone" || p.Name == "salario")) 
                 .Any(p => p.GetValue(funcionario) == null);
         }
 

@@ -115,11 +115,8 @@ public class FuncionarioDatabaseRepository : Connection, IFuncionarioRepository
         SqlCommand cmd = new SqlCommand();
         cmd.Connection = conn;
         cmd.CommandText = @"
-        UPDATE Pessoas SET nomePessoa = @nomePessoa, cpf = @cpf, email = @email, senha = @senha, telefone = @telefone 
+        UPDATE Pessoas SET email = @email, telefone = @telefone 
         WHERE idPessoa = @idPessoa";
-        cmd.Parameters.AddWithValue("@nomePessoa", funcionario.nomePessoa);
-        cmd.Parameters.AddWithValue("@cpf", funcionario.cpf);
-        cmd.Parameters.AddWithValue("@senha", funcionario.senha);
         cmd.Parameters.AddWithValue("@email", funcionario.email);
         cmd.Parameters.AddWithValue("@telefone", funcionario.telefone);
         cmd.Parameters.AddWithValue("@idPessoa", funcionario.idPessoa);

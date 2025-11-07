@@ -69,21 +69,25 @@
                         </div>
 
                         <div class="col-6">
-                            <select class="form-select" name="marcaId" id="marcaId">
-                                @foreach (var select in Model.selectMarcas)
-                                {
-                                    <option value="@select.idMarca">
-                                        @select.nomeMarca
-                                    </option>
-                                }    
-                            </select>
+                            <div class="input-group">
+                                <label class="input-group-text" for="marcaId">Marca</label>
+                                <select class="form-select" name="marcaId" id="marcaId">
+                                    <option value="">-- Selecione uma marca --</option>
+                                    @foreach (var select in Model.selectMarcas)
+                                    {
+                                        <option value="@select.idMarca">
+                                            @select.nomeMarca
+                                        </option>
+                                    }    
+                                </select>
+                            </div>
                         </div>
 
 
                         <div class="col-12 mt-3">
                             <div class="col-12">
                                 <a href="/Calcado/Index" class="btn btn-primary" >Voltar</a>
-                                <button type="submit" href="/Calcado/Create" class="btn btn-dark" >Adicionar</a>
+                                <button type="submit" class="btn btn-dark" >Adicionar</a>
                             </div>
                         </div>
                         

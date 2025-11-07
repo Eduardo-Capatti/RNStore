@@ -55,8 +55,7 @@
                         <th scope="col" >Nome</th>  
                         <th scope="col" >CNPJ</th>          
                         
-                        <th scope="col" class="text-center"></th> 
-                        <th scope="col" class="text-center"></th> 
+                        <th scope="col" class="text-center">Opções</th> 
                     </tr>
                 </thead>
 
@@ -77,14 +76,11 @@
                                 <a href="/Fornecedor/Delete?idFornecedor=@fornecedor.idFornecedor"  class="btn btn-sm text-danger">
                                     <i class="fa-solid fa-trash"></i>
                                 </a>
-                            </td>
 
-                            <td class="text-center">
-                                <a href="/Fornecedor/Update?idFornecedor=@fornecedor.idFornecedor"  class="btn btn-sm text-danger">
+                                <a href="/Fornecedor/Update?idFornecedor=@fornecedor.idFornecedor"  class="btn btn-sm text-primary">
                                     <i class="fa-solid fa-pen-to-square"></i>
                                 </a>
                             </td>
-                         
                         </tr>
                         }
                     }

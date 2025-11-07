@@ -1,3 +1,4 @@
+@model List<RNStore.Models.Estoque>
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -50,6 +51,7 @@
 
             <div>
                 <div class="container mt-3">
+                    <h1 class="text-center my-5">Listagem de Produto</h1>
                     <div class="d-flex justify-content-end">
                         
                         <div class="dropdown">
@@ -188,160 +190,46 @@
                         <th scope="col" >Marca</th>         
                         <th scope="col" >Fornecedor</th>    
                         <th scope="col" >Quantidade</th>    
-                        <th scope="col" >Preco</th>         
+                        <th scope="col" >Preço</th>   
+                        <th scope="col" >Promoção</th>          
                         <th scope="col" >Tamanho</th>   
                         <th scope="col">Cor</th>       
                         
-                        <th scope="col" class="text-center"></th> <th scope="col" class="text-center"></th> </tr>
+                        <th scope="col" class="text-center">Opções</th> 
+                    </tr>
                 </thead>
 
                 <tbody>
-                    <tr>
-                        <th scope="row">001</th>
-                        <td>Nike</td>
-                        <td>Adalberto sapatos</td>
-                        <td>6</td>
-                        <td>R$299,00</td>
-                        <td>42</td>
-                        <td>Branco</td>
-                        
-                        <td class="text-center">
-                            <a asp-action="Excluir" asp-route-id="001" title="Excluir Produto" class="btn btn-sm text-danger">
-                                <i class="fa-solid fa-trash"></i>
-                            </a>
-                        </td>
-                        <td class="text-center">
-                            <a asp-action="Editar" asp-route-id="001" title="Editar Produto" class="btn btn-sm text-primary">
-                                <i class="fa-solid fa-pen-to-square"></i>
-                            </a>
-                        </td>
-                    </tr>
 
-                    <tr>
-                        <th scope="row">002</th>
-                        <td>Adidas</td>
-                        <td>Beltrano sports</td>
-                        <td>41</td>
-                        <td>R$229,00</td>
-                        <td>35</td>
-                        <td>Verde</td>
-                        <td class="text-center">
-                            <a asp-action="Excluir" asp-route-id="002" title="Excluir Produto" class="btn btn-sm text-danger">
-                                <i class="fa-solid fa-trash"></i>
-                            </a>
-                        </td>
-                        <td class="text-center">
-                            <a asp-action="Editar" asp-route-id="002" title="Editar Produto" class="btn btn-sm text-primary">
-                                <i class="fa-solid fa-pen-to-square"></i>
-                            </a>
-                        </td>
-                    </tr>
+                    @foreach(var estoque in Model){
+                        <tr>
+                            <th scope="row">@estoque.idProduto</th>
+                            <td>@estoque.nomeMarca</td>
+                            <td>@estoque.nomeFornecedor</td>
+                            <td>@estoque.qtd</td>
+                            <td>R$@estoque.preco.ToString("F2")</td>
+                            <td>R$@estoque.promocao?.ToString("F2")</td>
+                            <td>@estoque.tamanho</td>
+                            <td>@estoque.nomeCor</td>
+                            
+                            <td class="text-center">
+                                <a href="/Estoque/Delete?idEstoque=@estoque.idProduto"  class="btn btn-sm text-danger">
+                                    <i class="fa-solid fa-trash"></i>
+                                </a>
 
-                    <tr>
-                        <th scope="row">003</th>
-                        <td>Vans</td>
-                        <td>Ciclano modas</td>
-                        <td>3</td>
-                        <td>R$400,00</td>
-                        <td>40</td>
-                        <td>Preto</td>
-                        <td class="text-center">
-                            <a asp-action="Excluir" asp-route-id="003" title="Excluir Produto" class="btn btn-sm text-danger">
-                                <i class="fa-solid fa-trash"></i>
-                            </a>
-                        </td>
-                        <td class="text-center">
-                            <a asp-action="Editar" asp-route-id="003" title="Editar Produto" class="btn btn-sm text-primary">
-                                <i class="fa-solid fa-pen-to-square"></i>
-                            </a>
-                        </td>
-                    </tr>
+                                <a href="/Estoque/Update?idEstoque=@estoque.idProduto"  class="btn btn-sm text-primary">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                </a>
+                            </td>
+                        </tr>
 
-                    <tr>
-                        <th scope="row">004</th>
-                        <td>Asics</td>
-                        <td>Dunga atacado</td>
-                        <td>38</td>
-                        <td>R$179,00</td>
-                        <td>41</td>
-                        <td>Azul</td>
-                        <td class="text-center">
-                            <a asp-action="Excluir" asp-route-id="004" title="Excluir Produto" class="btn btn-sm text-danger">
-                                <i class="fa-solid fa-trash"></i>
-                            </a>
-                        </td>
-                        <td class="text-center">
-                            <a asp-action="Editar" asp-route-id="004" title="Editar Produto" class="btn btn-sm text-primary">
-                                <i class="fa-solid fa-pen-to-square"></i>
-                            </a>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <th scope="row">005</th>
-                        <td>Riot</td>
-                        <td>Erasto MoNoYaS</td>
-                        <td>32</td>
-                        <td>R$500,00</td>
-                        <td>39</td>
-                        <td>Ciano</td>
-                        <td class="text-center">
-                            <a asp-action="Excluir" asp-route-id="005" title="Excluir Produto" class="btn btn-sm text-danger">
-                                <i class="fa-solid fa-trash"></i>
-                            </a>
-                        </td>
-                        <td class="text-center">
-                            <a asp-action="Editar" asp-route-id="005" title="Editar Produto" class="btn btn-sm text-primary">
-                                <i class="fa-solid fa-pen-to-square"></i>
-                            </a>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <th scope="row">006</th>
-                        <td>Oakley</td>
-                        <td>Fulano varejo</td>
-                        <td>11</td>
-                        <td>R$349,00</td>
-                        <td>37</td>
-                        <td>Amarelo</td>
-                        <td class="text-center">
-                            <a asp-action="Excluir" asp-route-id="006" title="Excluir Produto" class="btn btn-sm text-danger">
-                                <i class="fa-solid fa-trash"></i>
-                            </a>
-                        </td>
-                        <td class="text-center">
-                            <a asp-action="Editar" asp-route-id="006" title="Editar Produto" class="btn btn-sm text-primary">
-                                <i class="fa-solid fa-pen-to-square"></i>
-                            </a>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <th scope="row">007</th>
-                        <td>Mizuno</td>
-                        <td>Gerolim marcas</td>
-                        <td>24</td>
-                        <td>R$299,00</td>
-                        <td>42</td>
-                        <td>Branco</td>
-                        <td class="text-center">
-                            <a asp-action="Excluir" asp-route-id="007" title="Excluir Produto" class="btn btn-sm text-danger">
-                                <i class="fa-solid fa-trash"></i>
-                            </a>
-                        </td>
-                        <td class="text-center">
-                            <a asp-action="Editar" asp-route-id="007" title="Editar Produto" class="btn btn-sm text-primary">
-                                <i class="fa-solid fa-pen-to-square"></i>
-                            </a>
-                        </td>
-                    </tr>
+                    }
                 </tbody>
             </table>
 
             <div class="d-flex justify-content-between">
                 <a href="#"><button type="button" class="btn btn-link">Ver mais</button></a>
-                <a asp-controller="Produto" asp-action="AddProd" class="btn btn-secondary">Adicionar</a>
+                <a href="/Estoque/Create" asp-action="AddProd" class="btn btn-secondary">Adicionar</a>
             </div>
         </div>
     </div>
@@ -350,14 +238,7 @@
         <div class="container text-white">
             <div class="row justify-content-center pt-4">
 
-                <div class="col-12 col-md-4">
-                    <a href="/Estoque/Index">
-                        <img class="img-fluid" src="~/img/rnstore.png" width="200px" alt="Logo RN Store">
-                    </a>
-                    <p class="mt-3">Você sempre na moda</p>
-                </div>
-
-                <div class="col-12 col-md-8 align-self-center text-md-end">
+                <div class="col-12 col-md-8 align-self-center text-center">
                     <h5 class="mt-3 mt-md-0">Copyright © 2025 Innovatech. Todos os direitos reservados.</h5>
                 </div>
 

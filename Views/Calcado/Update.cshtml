@@ -67,6 +67,8 @@
                         </div>
 
                         <div class="col-6">
+                            <div class="input-group">
+                            <label class="input-group-text" for="marcaId">Marca</label>
                             <select class="form-select" name="marcaId" id="marcaId">
                                 @foreach (var select in Model.selectMarcas)
                                 {
@@ -76,6 +78,7 @@
                                 }
                                 
                             </select>
+                            </div>
                         </div>
 
                         <input type="hidden" name="idCalcado" id="idCalcado" value="@Model.idCalcado" />

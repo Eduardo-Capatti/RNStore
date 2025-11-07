@@ -30,7 +30,7 @@ public class CalcadoController: Controller
     public ActionResult Create(Calcado calcado)
     {
 
-        if (calcado.nomeCalcado == null)
+        if (calcado.nomeCalcado == null || calcado.marcaId == 0)
         {
             ViewBag.Error = "Preencha todas as informações!";
             var model = repository.Create();
@@ -58,7 +58,7 @@ public class CalcadoController: Controller
 
             return calcado.GetType()
                 .GetProperties()
-                .Where(p => p.CanRead && p.Name != "idCalcado") // ignora idPessoa
+                .Where(p => p.CanRead && p.Name != "idCalcado")
                 .Any(p => p.GetValue(calcado) == null);
         }
 
@@ -85,7 +85,7 @@ public class CalcadoController: Controller
         }
         catch (SqlException)
         {
-            ViewBag.Error = "Não foi possível excluir o funcionário, contate o suporte para mais detalhes!";
+            ViewBag.Error = "Não foi possível excluir o calçado, pois ele está sendo usado!";
 
             return View("Index", repository.Read());
         }

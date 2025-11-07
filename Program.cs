@@ -30,19 +30,25 @@ builder.Services.AddTransient<IFornecedorRepository>(_ =>
     new FornecedorDatabaseRepository(
         builder.Configuration.GetConnectionString("Default")));
 
+builder.Services.AddTransient<RNStore.Repositories.IClienteRepository>(_ =>
+    new RNStore.Repositories.ClienteDatabaseRepository(
+        builder.Configuration.GetConnectionString("Default")
+    )
+);
+
 builder.Services.AddTransient<IUserRepository>(_ => 
     new UserDatabaseRepository(
         builder.Configuration.GetConnectionString("Default")));
 
-builder.Services.AddTransient<ISliderRepository>(_ => 
+builder.Services.AddTransient<ISliderRepository>(_ =>
     new SliderDatabaseRepository(
         builder.Configuration.GetConnectionString("Default")));
+        
+builder.Services.AddTransient<IEstoqueRepository>(_ => 
+    new EstoqueDatabaseRepository(
+        builder.Configuration.GetConnectionString("Default")));
 
-builder.Services.AddTransient<RNStore.Repositories.IClienteRepository>( _ => 
-    new RNStore.Repositories.ClienteDatabaseRepository(
-        builder.Configuration.GetConnectionString("Default") 
-    )
-);
+
 
 
 
