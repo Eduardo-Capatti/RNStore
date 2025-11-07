@@ -9,97 +9,117 @@ build_property.EnforceExtendedAnalyzerRules =
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = RNStore
 build_property.RootNamespace = RNStore
-build_property.ProjectDir = C:\Users\Eduardo\Desktop\RNStorePrincipal\RNStore\
+build_property.ProjectDir = C:\Users\Eduardo\Desktop\RNStore2\RNStore\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.RazorLangVersion = 9.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = C:\Users\Eduardo\Desktop\RNStorePrincipal\RNStore
+build_property.MSBuildProjectDirectory = C:\Users\Eduardo\Desktop\RNStore2\RNStore
 build_property._RazorSourceGeneratorDebug = 
 build_property.EffectiveAnalysisLevelStyle = 9.0
 build_property.EnableCodeStyleSeverity = 
 
-[C:/Users/Eduardo/Desktop/RNStorePrincipal/RNStore/Views/Calcado/Create.cshtml]
+[C:/Users/Eduardo/Desktop/RNStore2/RNStore/Views/Calcado/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FsY2Fkb1xDcmVhdGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Eduardo/Desktop/RNStorePrincipal/RNStore/Views/Calcado/Index.cshtml]
+[C:/Users/Eduardo/Desktop/RNStore2/RNStore/Views/Calcado/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FsY2Fkb1xJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Eduardo/Desktop/RNStorePrincipal/RNStore/Views/Calcado/Update.cshtml]
+[C:/Users/Eduardo/Desktop/RNStore2/RNStore/Views/Calcado/Update.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FsY2Fkb1xVcGRhdGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Eduardo/Desktop/RNStorePrincipal/RNStore/Views/Catalogo/Index.cshtml]
+[C:/Users/Eduardo/Desktop/RNStore2/RNStore/Views/Catalogo/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2F0YWxvZ29cSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Eduardo/Desktop/RNStorePrincipal/RNStore/Views/Catalogo/Produto.cshtml]
+[C:/Users/Eduardo/Desktop/RNStore2/RNStore/Views/Catalogo/Produto.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2F0YWxvZ29cUHJvZHV0by5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Eduardo/Desktop/RNStorePrincipal/RNStore/Views/Cor/Index.cshtml]
+[C:/Users/Eduardo/Desktop/RNStore2/RNStore/Views/Cliente/Cadastro.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2xpZW50ZVxDYWRhc3Ryby5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Eduardo/Desktop/RNStore2/RNStore/Views/Cor/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29yXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Eduardo/Desktop/RNStorePrincipal/RNStore/Views/Estoque/Index.cshtml]
+[C:/Users/Eduardo/Desktop/RNStore2/RNStore/Views/Estoque/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRXN0b3F1ZVxDcmVhdGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Eduardo/Desktop/RNStore2/RNStore/Views/Estoque/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRXN0b3F1ZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Eduardo/Desktop/RNStorePrincipal/RNStore/Views/Fornecedor/Create.cshtml]
+[C:/Users/Eduardo/Desktop/RNStore2/RNStore/Views/Estoque/Update.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRXN0b3F1ZVxVcGRhdGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Eduardo/Desktop/RNStore2/RNStore/Views/Fornecedor/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRm9ybmVjZWRvclxDcmVhdGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Eduardo/Desktop/RNStorePrincipal/RNStore/Views/Fornecedor/Index.cshtml]
+[C:/Users/Eduardo/Desktop/RNStore2/RNStore/Views/Fornecedor/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRm9ybmVjZWRvclxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Eduardo/Desktop/RNStorePrincipal/RNStore/Views/Fornecedor/Update.cshtml]
+[C:/Users/Eduardo/Desktop/RNStore2/RNStore/Views/Fornecedor/Update.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRm9ybmVjZWRvclxVcGRhdGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Eduardo/Desktop/RNStorePrincipal/RNStore/Views/Funcionario/Create.cshtml]
+[C:/Users/Eduardo/Desktop/RNStore2/RNStore/Views/Funcionario/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnVuY2lvbmFyaW9cQ3JlYXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Eduardo/Desktop/RNStorePrincipal/RNStore/Views/Funcionario/Index.cshtml]
+[C:/Users/Eduardo/Desktop/RNStore2/RNStore/Views/Funcionario/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnVuY2lvbmFyaW9cSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Eduardo/Desktop/RNStorePrincipal/RNStore/Views/Funcionario/Update.cshtml]
+[C:/Users/Eduardo/Desktop/RNStore2/RNStore/Views/Funcionario/Update.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnVuY2lvbmFyaW9cVXBkYXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Eduardo/Desktop/RNStorePrincipal/RNStore/Views/Marca/Index.cshtml]
+[C:/Users/Eduardo/Desktop/RNStore2/RNStore/Views/Marca/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFyY2FcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Eduardo/Desktop/RNStorePrincipal/RNStore/Views/Shared/_Footer.cshtml]
+[C:/Users/Eduardo/Desktop/RNStore2/RNStore/Views/Shared/_Footer.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9Gb290ZXIuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Eduardo/Desktop/RNStorePrincipal/RNStore/Views/Shared/_Menu.cshtml]
+[C:/Users/Eduardo/Desktop/RNStore2/RNStore/Views/Shared/_Menu.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9NZW51LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Eduardo/Desktop/RNStorePrincipal/RNStore/Views/Slider/Create.cshtml]
+[C:/Users/Eduardo/Desktop/RNStore2/RNStore/Views/Shared/_MenuEstoque.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9NZW51RXN0b3F1ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Eduardo/Desktop/RNStore2/RNStore/Views/Slider/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2xpZGVyXENyZWF0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Eduardo/Desktop/RNStorePrincipal/RNStore/Views/Slider/Index.cshtml]
+[C:/Users/Eduardo/Desktop/RNStore2/RNStore/Views/Slider/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2xpZGVyXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Eduardo/Desktop/RNStorePrincipal/RNStore/Views/Slider/Update.cshtml]
+[C:/Users/Eduardo/Desktop/RNStore2/RNStore/Views/Slider/Update.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2xpZGVyXFVwZGF0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Eduardo/Desktop/RNStorePrincipal/RNStore/Views/Tamanho/Index.cshtml]
+[C:/Users/Eduardo/Desktop/RNStore2/RNStore/Views/Tamanho/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGFtYW5ob1xJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Eduardo/Desktop/RNStorePrincipal/RNStore/Views/User/Login.cshtml]
+[C:/Users/Eduardo/Desktop/RNStore2/RNStore/Views/User/Cadastro.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlclxDYWRhc3Ryby5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Eduardo/Desktop/RNStore2/RNStore/Views/User/Login.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlclxMb2dpbi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 

@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+/*using Microsoft.AspNetCore.Mvc;
 using RNStore.Models;
 using RNStore.Repositories;
 using Microsoft.Data.SqlClient; 
@@ -73,4 +73,4 @@ public class ClienteController : Controller
             return View("Cadastro", cliente);
         }
     }
-}
+}*/

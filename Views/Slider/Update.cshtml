@@ -26,19 +26,7 @@
     </style>
 <body class="d-flex flex-column vh-100">
 
-    <nav class="navbar navbar-dark navbar-expand-md bg-dark">
-        <div class="container d-flex justify-content-between align-items-center">
-            <a href="/Estoque/Index">
-                <img class="navbar-brand" src="~/img/rnstore.png" width="140px" alt="Logo RN Store">      
-            </a>
-
-            <div class="d-flex gap-5 align-items-center">   
-                <a href="#" style="font-size: 20px;">
-                    Sair
-                </a>
-            </div>
-        </div>
-    </nav>
+    @await Html.PartialAsync("_MenuEstoque")
 
     
     <div class="flex-grow-1">

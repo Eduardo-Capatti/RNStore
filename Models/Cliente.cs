@@ -1,6 +1,6 @@
 namespace RNStore.Models;
 
-using System.ComponentModel.DataAnnotations; // Precisa disso!
+using System.ComponentModel.DataAnnotations;
 
 public class Cliente
 {

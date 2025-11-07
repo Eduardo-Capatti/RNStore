@@ -331,7 +331,7 @@ public class EstoqueDatabaseRepository : Connection, IEstoqueRepository
             cmd3.Parameters.AddWithValue("@idProduto", estoque.idProduto);
             cmd3.Parameters.AddWithValue("@idEntrada", idEntrada);
             cmd3.Parameters.AddWithValue("@valorIE", estoque.valorIE);
-            cmd3.Parameters.AddWithValue("@qtd", qtd);
+            cmd3.Parameters.AddWithValue("@qtd", estoque.qtd - qtd);
 
             Console.WriteLine(estoque.idProduto);
 
