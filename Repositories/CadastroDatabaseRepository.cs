@@ -1,0 +1,118 @@
+namespace RNStore.Repositories;
+
+using System.Collections.Generic;
+using System.Data.Common;
+using RNStore.Models; // (Onde seu model Cliente, Endereco, etc. estão)
+using Microsoft.Data.SqlClient;
+using System.Security.Cryptography;
+using System.Text;
+
+// Assumindo que sua interface chame IClienteRepository
+public class ClienteDatabaseRepository : Connection, IClienteRepository
+{
+    // Construtor (herdado da sua classe base Connection)
+    public ClienteDatabaseRepository(string conn) : base(conn)
+    {
+    }
+    public void Create(Cliente cliente)
+    {
+
+        string senhaHash = Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(cliente.Senha)));
+
+        using (conn)
+        {
+            
+
+
+            SqlTransaction transaction = conn.BeginTransaction();
+
+            try
+            {
+                int idPessoa = 0;
+
+
+                using (SqlCommand cmdPessoa = new SqlCommand())
+                {
+                    cmdPessoa.Connection = conn;
+                    cmdPessoa.Transaction = transaction; // Associa à transação
+
+                    cmdPessoa.CommandText = @"
+                        INSERT INTO Pessoas(nomePessoa, cpf, email, senha, telefone) 
+                        VALUES (@nomePessoa, @cpf, @email, @senha, @telefone);
+                        SELECT CAST(SCOPE_IDENTITY() AS int);"; // Pega o ID que acabou de ser criado
+
+                    cmdPessoa.Parameters.AddWithValue("@nomePessoa", cliente.NomePessoa);
+                    cmdPessoa.Parameters.AddWithValue("@cpf", cliente.Cpf);
+                    cmdPessoa.Parameters.AddWithValue("@email", cliente.Email);
+                    cmdPessoa.Parameters.AddWithValue("@senha", senhaHash);
+
+
+                    cmdPessoa.Parameters.AddWithValue("@telefone", (object)cliente.Telefone ?? DBNull.Value);
+
+
+                    idPessoa = (int)cmdPessoa.ExecuteScalar();
+                }
+
+
+                using (SqlCommand cmdCliente = new SqlCommand())
+                {
+                    cmdCliente.Connection = conn;
+                    cmdCliente.Transaction = transaction; // Associa à transação
+
+                    cmdCliente.CommandText = "INSERT INTO Clientes(idPessoa, status) VALUES(@idPessoa, @status)";
+
+                    cmdCliente.Parameters.AddWithValue("@idPessoa", idPessoa);
+                    cmdCliente.Parameters.AddWithValue("@status", 1); // Converte o Enum para int
+
+                    cmdCliente.ExecuteNonQuery();
+                }
+
+
+                var endereco = cliente.Enderecos.FirstOrDefault();
+
+                if (endereco != null)
+                {
+                    using (SqlCommand cmdEndereco = new SqlCommand())
+                    {
+                        cmdEndereco.Connection = conn;
+                        cmdEndereco.Transaction = transaction; // Associa à transação
+
+                        cmdEndereco.CommandText = @"
+                            INSERT INTO Enderecos(cep, rua, complemento, numero, bairro, cidade, uf, idCliente) 
+                            VALUES (@cep, @rua, @complemento, @numero, @bairro, @cidade, @uf, @idCliente)";
+
+                        cmdEndereco.Parameters.AddWithValue("@cep", endereco.Cep);
+                        cmdEndereco.Parameters.AddWithValue("@rua", endereco.Rua);
+                        cmdEndereco.Parameters.AddWithValue("@numero", endereco.Numero);
+                        cmdEndereco.Parameters.AddWithValue("@bairro", endereco.Bairro);
+                        cmdEndereco.Parameters.AddWithValue("@cidade", endereco.Cidade);
+                        cmdEndereco.Parameters.AddWithValue("@uf", endereco.Uf);
+
+                        // O 'idCliente' do endereço é o 'idPessoa' que criamos
+                        cmdEndereco.Parameters.AddWithValue("@idCliente", idPessoa);
+
+                        // Tratamento para campo opcional (complemento)
+                        cmdEndereco.Parameters.AddWithValue("@complemento", (object)endereco.Complemento ?? DBNull.Value);
+
+                        cmdEndereco.ExecuteNonQuery();
+                    }
+                }
+
+
+                transaction.Commit();
+            }
+            catch (Exception)
+            {
+
+
+                transaction.Rollback();
+                throw;
+
+            }
+
+
+        }
+
+
+    }
+}
