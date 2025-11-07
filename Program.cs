@@ -38,7 +38,11 @@ builder.Services.AddTransient<ISliderRepository>(_ =>
     new SliderDatabaseRepository(
         builder.Configuration.GetConnectionString("Default")));
 
-
+builder.Services.AddTransient<RNStore.Repositories.IClienteRepository>( _ => 
+    new RNStore.Repositories.ClienteDatabaseRepository(
+        builder.Configuration.GetConnectionString("Default") 
+    )
+);
 
 
 
