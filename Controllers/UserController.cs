@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using RNStore.Models;
 using RNStore.Repositories;
+using Microsoft.AspNetCore.Session;
+using Microsoft.AspNetCore.Http;
 namespace RNStore.Controllers;
 
 
@@ -35,5 +37,6 @@ public class UserController : Controller
 
         return RedirectToAction("Index", "Estoque");
     }
+
 
 }

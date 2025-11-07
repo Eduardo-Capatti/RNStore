@@ -64,7 +64,14 @@
 
                 <div class="ms-5 mt-5 mt-sm-0 produto-conteudo">
                     <h3>@Model.nomeCalcado</h3>
-                    <h2 class="my-4">R$ @Model.preco</h2>
+                    @if(@Model.promocao > 0){
+                        decimal novoPreco = Model.preco - (Model.promocao ?? 0);
+                        <h3 class="mt-4 mb-0"><sup><s>R$@Model.preco.ToString("F2")</s></sup></h3>
+                        <h1 class="mb-4 mt-0">R$@novoPreco.ToString("F2")</h1>
+                    }else{
+                        <h2 class="my-4"><s>R$@Model.preco.ToString("F2")</s></h2>
+                    }
+                    
                     <h4>Cor: @Model.corPrincipal</h4>
 
                     <div class="my-4">
@@ -97,7 +104,7 @@
 
                     </div>
 
-                    <button class="btn btn-dark mt-4 btn-comprar">Comprar</button>
+                    <button class="btn btn-dark mt-4 btn-comprar">Adicionar ao carrinho</button>
                 </div>
             </div>
         </div>

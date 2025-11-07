@@ -136,14 +136,14 @@ public class EstoqueController: Controller
 
             return estoque.GetType()
                     .GetProperties()
-                    .Where(p => p.CanRead && p.Name == "downloadImg" && p.Name == "idProduto")
+                    .Where(p => p.CanRead && (p.Name == "downloadImg" || p.Name == "idProduto"))
                     .Any(p => p.GetValue(estoque) == null);
         }
 
         if (TemCampoNulo(estoque))
         {
             ViewBag.Error = "Preencha todas as informações!";
-            return View(estoque);
+            return RedirectToAction("Index");
         }
 
         if (estoque.downloadImg != null && estoque.downloadImg.Length > 0)

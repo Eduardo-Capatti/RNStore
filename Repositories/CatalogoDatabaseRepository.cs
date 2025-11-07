@@ -110,7 +110,6 @@ public class CatalogoDatabaseRepository : Connection, ICatalogoRepository
         int corPrincipal = 0;
         string corPrincipalNome;
 
-        // 1) Pega cor do produto selecionado
         using (SqlCommand cmd = new SqlCommand(
             "SELECT corId, nomeCor FROM Produtos LEFT JOIN Cores on corId = idCor WHERE idProduto = @id", conn))
         {
@@ -123,7 +122,6 @@ public class CatalogoDatabaseRepository : Connection, ICatalogoRepository
             }
         }
 
-        // 2) Pega tamanhos disponíveis para essa cor
         List<Tamanho> tamanhos = new List<Tamanho>();
         using (SqlCommand cmd = new SqlCommand(@"
             SELECT DISTINCT t.idTamanho, t.tamanho
@@ -147,12 +145,11 @@ public class CatalogoDatabaseRepository : Connection, ICatalogoRepository
             }
         }
 
-        // 3) Pega todas cores do calçado
         List<Cor> cores = new List<Cor>();
         List<int> listaCores = new List<int>();
 
         using (SqlCommand cmd = new SqlCommand(
-            "SELECT idCor, nomeCor FROM Cores WHERE calcadoId = @id", conn))
+            "SELECT co.idCor, co.nomeCor FROM Cores co LEFT JOIN CoresCalcados cc on co.idCor = cc.corId WHERE cc.calcadoId = @id", conn))
         {
             cmd.Parameters.AddWithValue("@id", idCalcado);
 
@@ -160,24 +157,25 @@ public class CatalogoDatabaseRepository : Connection, ICatalogoRepository
             {
                 while (reader.Read())
                 {
-                    int c = (int)reader["idCor"];
+                    int cor = (int)reader["idCor"];
 
-                    listaCores.Add(c);
+                    listaCores.Add(cor);
                     cores.Add(new Cor
                     {
-                        idCor = c,
+                        idCor = cor,
                         nomeCor = (string)reader["nomeCor"]
                     });
                 }
             }
         }
 
-        // 4) Pega imagens da cor principal
         List<Imagem> imagens = new List<Imagem>();
         using (SqlCommand cmd = new SqlCommand(
-            "SELECT idImagem, nomeImagem FROM Imagens WHERE corId = @cor ORDER BY statusImagem DESC", conn))
+            @"SELECT i.idImagem, i.nomeImagem FROM Imagens i LEFT JOIN ImagensProdutos ip on ip.corId = i.corId
+             WHERE ip.corId = @cor AND ip.calcadoId = @calcadoId ORDER BY i.statusImagem DESC", conn))
         {
             cmd.Parameters.AddWithValue("@cor", corPrincipal);
+            cmd.Parameters.AddWithValue("@calcadoId", idCalcado);
 
             using (SqlDataReader reader = cmd.ExecuteReader())
             {
@@ -192,14 +190,16 @@ public class CatalogoDatabaseRepository : Connection, ICatalogoRepository
             }
         }
 
-        // 5) Pega imagem principal das outras cores
         List<Imagem> imagensOutrasCores = new List<Imagem>();
 
         string coresIn = string.Join(",", listaCores);
         using (SqlCommand cmd = new SqlCommand(
-            "SELECT idImagem, nomeImagem FROM Imagens WHERE corId IN (1,2) AND statusImagem = 1", conn))
+            @"SELECT idImagem, nomeImagem FROM Imagens i LEFT JOIN ImagensProdutos ip on ip.corId = i.corId 
+            WHERE ip.corId IN (@cores) AND ip.calcadoId = @calcadoId AND i.statusImagem = 1", conn))
         {
-            //cmd.Parameters.AddWithValue("cores", coresIn);
+            cmd.Parameters.AddWithValue("cores", coresIn);
+            cmd.Parameters.AddWithValue("@calcadoId", idCalcado);
+
             using (SqlDataReader reader = cmd.ExecuteReader())
             {
                 while (reader.Read())
@@ -213,9 +213,8 @@ public class CatalogoDatabaseRepository : Connection, ICatalogoRepository
             }
         }
 
-        // 6) Pega dados gerais do produto
         using (SqlCommand cmd = new SqlCommand(@"
-            SELECT TOP 1 p.idProduto, c.nomeCalcado, m.nomeMarca, p.preco, p.promocao
+            SELECT p.idProduto, c.nomeCalcado, m.nomeMarca, p.preco, p.promocao
             FROM Produtos p
             JOIN Calcados c ON p.calcadoId = c.idCalcado
             JOIN Marca m ON c.marcaId = m.idMarca
