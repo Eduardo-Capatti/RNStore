@@ -22,32 +22,42 @@ public class CatalogoDatabaseRepository : Connection, ICatalogoRepository
         cmd.Connection = conn;
         cmd.CommandText = @"
             WITH ProdEscolhido AS (
-                SELECT 
-                    p.idProduto,
-                    p.calcadoId,
-                    p.corId,
-                    p.preco,
-                    p.promocao,
-                    ROW_NUMBER() OVER (
-                        PARTITION BY p.calcadoId 
-                        ORDER BY 
-                            CASE WHEN p.promocao IS NOT NULL THEN p.promocao ELSE p.preco END ASC
-                    ) AS rn
-                FROM Produtos p
-            )
-            SELECT 
-                c.idCalcado,
-                pe.idProduto,
-                c.nomeCalcado,
-                m.nomeMarca,
-                pe.preco,
-                pe.promocao,
-                i.nomeImagem
-            FROM Calcados c
-            JOIN ProdEscolhido pe ON c.idCalcado = pe.calcadoId AND pe.rn = 1
-            JOIN Marca m ON m.idMarca = c.marcaId
-            LEFT JOIN Cores co ON co.idCor = pe.corId
-            LEFT JOIN Imagens i ON i.corId = co.idCor AND i.statusImagem = 1;";
+        SELECT 
+            p.idProduto,
+            p.calcadoId,
+            p.corId,
+            p.preco,
+            p.promocao,
+            ROW_NUMBER() OVER (
+                PARTITION BY p.calcadoId 
+                ORDER BY 
+                    CASE 
+                        WHEN p.promocao IS NOT NULL THEN p.promocao 
+                        ELSE p.preco 
+                    END ASC
+            ) AS rn
+        FROM Produtos p
+        )
+        SELECT 
+        c.idCalcado,
+        pe.idProduto,
+        c.nomeCalcado,
+        m.nomeMarca,
+        pe.preco,
+        pe.promocao,
+        i.nomeImagem
+        FROM Calcados c
+        JOIN ProdEscolhido pe 
+        ON c.idCalcado = pe.calcadoId 
+        AND pe.rn = 1
+        JOIN Marca m 
+        ON m.idMarca = c.marcaId
+        LEFT JOIN ImagensProdutos ip 
+        ON ip.calcadoId = c.idCalcado 
+        AND ip.corId = pe.corId
+        LEFT JOIN Imagens i 
+        ON i.idImagem = ip.imagemId 
+        AND i.statusImagem = 1;";
 
         SqlDataReader reader = cmd.ExecuteReader();
 
@@ -66,12 +76,33 @@ public class CatalogoDatabaseRepository : Connection, ICatalogoRepository
                     marcaCalcado = (string)reader["nomeMarca"],
                     preco = (decimal)reader["preco"],
                     promocao = reader["promocao"] != DBNull.Value ? (decimal?)reader["promocao"] : null,
-                    ApenasImagemPrincipal = img
+                    ApenasImagemPrincipal = img,
                 }
 
             );
         }
         return catalogos;
+    }
+
+    public List<Slider> ReadSlides()
+    {
+        List<Slider> sliders = new List<Slider>();
+
+        SqlCommand cmd = new SqlCommand();
+        cmd.Connection = conn;
+        cmd.CommandText = "SELECT img FROM Slider WHERE status = 1";
+        SqlDataReader reader = cmd.ExecuteReader();
+
+        while (reader.Read())
+        {
+            sliders.Add(new Slider
+            {
+                img = (string)reader["img"]
+            });
+        }
+
+        reader.Close();
+        return sliders;
     }
 
     public Catalogo Read(int idProduto, int idCalcado)

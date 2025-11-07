@@ -26,4 +26,6 @@ public class Catalogo
 
     public List<string> ApenasImagemPrincipal { get; set; }
 
+    public List<Slider> slides { get; set; }
+
 }

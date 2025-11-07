@@ -15,6 +15,10 @@ public class CatalogoController : Controller
     }
     public ActionResult Index()
     {
+        var sliders = repository.ReadSlides();
+
+        ViewBag.slides = sliders;
+        
         return View(repository.Read());
     }
 
