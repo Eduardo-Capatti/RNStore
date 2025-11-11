@@ -21,50 +21,63 @@ public class CatalogoDatabaseRepository : Connection, ICatalogoRepository
         SqlCommand cmd = new SqlCommand();
         cmd.Connection = conn;
         cmd.CommandText = @"
-            WITH ProdEscolhido AS (
-        SELECT 
-            p.idProduto,
-            p.calcadoId,
-            p.corId,
-            p.preco,
-            p.promocao,
-            ROW_NUMBER() OVER (
-                PARTITION BY p.calcadoId 
-                ORDER BY 
-                    CASE 
-                        WHEN p.promocao IS NOT NULL THEN p.promocao 
-                        ELSE p.preco 
-                    END ASC
-            ) AS rn
-        FROM Produtos p
-        )
-        SELECT 
-        c.idCalcado,
-        pe.idProduto,
-        c.nomeCalcado,
-        m.nomeMarca,
-        pe.preco,
-        pe.promocao,
-        i.nomeImagem
-        FROM Calcados c
-        JOIN ProdEscolhido pe 
-        ON c.idCalcado = pe.calcadoId 
-        AND pe.rn = 1
-        JOIN Marca m 
-        ON m.idMarca = c.marcaId
-        LEFT JOIN ImagensProdutos ip 
-        ON ip.calcadoId = c.idCalcado 
-        AND ip.corId = pe.corId
-        LEFT JOIN Imagens i 
-        ON i.idImagem = ip.imagemId 
-        AND i.statusImagem = 1;";
+            
+ WITH ProdEscolhido AS (
+    SELECT 
+        p.idProduto,
+        p.calcadoId,
+        p.corId,
+        p.preco,
+        p.promocao,
+        ROW_NUMBER() OVER (
+            PARTITION BY p.calcadoId 
+            ORDER BY 
+                CASE 
+                    WHEN p.promocao IS NOT NULL THEN p.promocao 
+                    ELSE p.preco 
+                END ASC
+        ) AS rn
+    FROM Produtos p
+        ),
+        ImagensEscolhidas AS (
+            SELECT 
+        ip.calcadoId,
+        ip.corId,
+        i.nomeImagem,
+        ROW_NUMBER() OVER (
+            PARTITION BY ip.calcadoId 
+            ORDER BY 
+                CASE WHEN i.nomeImagem IS NOT NULL THEN 0 ELSE 1 END,  -- prioriza imagens não nulas
+                i.idImagem ASC
+        ) AS rn
+            FROM ImagensProdutos ip
+        LEFT JOIN Imagens i ON i.idImagem = ip.imagemId AND i.statusImagem = 1
+    )
+SELECT 
+    c.idCalcado,
+    pe.idProduto,
+    c.nomeCalcado,
+    m.nomeMarca,
+    pe.preco,
+    pe.promocao,
+    ie.nomeImagem
+FROM Calcados c
+JOIN ProdEscolhido pe 
+    ON c.idCalcado = pe.calcadoId AND pe.rn = 1
+JOIN Marca m 
+    ON m.idMarca = c.marcaId
+LEFT JOIN ImagensEscolhidas ie 
+    ON ie.calcadoId = c.idCalcado AND ie.rn = 1;";
 
         SqlDataReader reader = cmd.ExecuteReader();
 
         while (reader.Read())
         {
             List<string> img = new List<string>();
-            img.Add((string)reader["nomeImagem"]);
+            if (reader["nomeImagem"] != DBNull.Value)
+            {
+                img.Add((string)reader["nomeImagem"]);
+            }
 
             catalogos.Add
             (
@@ -110,6 +123,7 @@ public class CatalogoDatabaseRepository : Connection, ICatalogoRepository
         int corPrincipal = 0;
         string corPrincipalNome;
 
+        // 1) Pega cor do produto selecionado
         using (SqlCommand cmd = new SqlCommand(
             "SELECT corId, nomeCor FROM Produtos LEFT JOIN Cores on corId = idCor WHERE idProduto = @id", conn))
         {
@@ -118,10 +132,11 @@ public class CatalogoDatabaseRepository : Connection, ICatalogoRepository
             {
                 if (reader.Read())
                     corPrincipal = (int)reader["corId"];
-                    corPrincipalNome = (string)reader["nomeCor"];
+                corPrincipalNome = (string)reader["nomeCor"];
             }
         }
 
+        // 2) Pega tamanhos disponíveis para essa cor
         List<Tamanho> tamanhos = new List<Tamanho>();
         using (SqlCommand cmd = new SqlCommand(@"
             SELECT DISTINCT t.idTamanho, t.tamanho
@@ -145,11 +160,16 @@ public class CatalogoDatabaseRepository : Connection, ICatalogoRepository
             }
         }
 
+        // 3) Pega todas cores do calçado
         List<Cor> cores = new List<Cor>();
         List<int> listaCores = new List<int>();
+        string sql = @"
+        SELECT c.idCor, c.nomeCor 
+        FROM Cores c
+        JOIN CoresCalcados cc ON c.idCor = cc.corId
+        WHERE cc.calcadoId = @id";
 
-        using (SqlCommand cmd = new SqlCommand(
-            "SELECT co.idCor, co.nomeCor FROM Cores co LEFT JOIN CoresCalcados cc on co.idCor = cc.corId WHERE cc.calcadoId = @id", conn))
+        using (SqlCommand cmd = new SqlCommand(sql, conn))
         {
             cmd.Parameters.AddWithValue("@id", idCalcado);
 
@@ -157,25 +177,24 @@ public class CatalogoDatabaseRepository : Connection, ICatalogoRepository
             {
                 while (reader.Read())
                 {
-                    int cor = (int)reader["idCor"];
+                    int c = (int)reader["idCor"];
 
-                    listaCores.Add(cor);
+                    listaCores.Add(c);
                     cores.Add(new Cor
                     {
-                        idCor = cor,
+                        idCor = c,
                         nomeCor = (string)reader["nomeCor"]
                     });
                 }
             }
         }
 
+        // 4) Pega imagens da cor principal
         List<Imagem> imagens = new List<Imagem>();
         using (SqlCommand cmd = new SqlCommand(
-            @"SELECT i.idImagem, i.nomeImagem FROM Imagens i LEFT JOIN ImagensProdutos ip on ip.corId = i.corId
-             WHERE ip.corId = @cor AND ip.calcadoId = @calcadoId ORDER BY i.statusImagem DESC", conn))
+            "SELECT idImagem, nomeImagem FROM Imagens WHERE corId = @cor ORDER BY statusImagem DESC", conn))
         {
             cmd.Parameters.AddWithValue("@cor", corPrincipal);
-            cmd.Parameters.AddWithValue("@calcadoId", idCalcado);
 
             using (SqlDataReader reader = cmd.ExecuteReader())
             {
@@ -190,16 +209,14 @@ public class CatalogoDatabaseRepository : Connection, ICatalogoRepository
             }
         }
 
+        // 5) Pega imagem principal das outras cores
         List<Imagem> imagensOutrasCores = new List<Imagem>();
 
         string coresIn = string.Join(",", listaCores);
         using (SqlCommand cmd = new SqlCommand(
-            @"SELECT idImagem, nomeImagem FROM Imagens i LEFT JOIN ImagensProdutos ip on ip.corId = i.corId 
-            WHERE ip.corId IN (@cores) AND ip.calcadoId = @calcadoId AND i.statusImagem = 1", conn))
+            "SELECT idImagem, nomeImagem FROM Imagens WHERE corId IN (1,2) AND statusImagem = 1", conn))
         {
-            cmd.Parameters.AddWithValue("cores", coresIn);
-            cmd.Parameters.AddWithValue("@calcadoId", idCalcado);
-
+            //cmd.Parameters.AddWithValue("cores", coresIn);
             using (SqlDataReader reader = cmd.ExecuteReader())
             {
                 while (reader.Read())
@@ -213,8 +230,9 @@ public class CatalogoDatabaseRepository : Connection, ICatalogoRepository
             }
         }
 
+        // 6) Pega dados gerais do produto
         using (SqlCommand cmd = new SqlCommand(@"
-            SELECT p.idProduto, c.nomeCalcado, m.nomeMarca, p.preco, p.promocao
+            SELECT TOP 1 p.idProduto, c.nomeCalcado, m.nomeMarca, p.preco, p.promocao
             FROM Produtos p
             JOIN Calcados c ON p.calcadoId = c.idCalcado
             JOIN Marca m ON c.marcaId = m.idMarca
@@ -244,6 +262,6 @@ public class CatalogoDatabaseRepository : Connection, ICatalogoRepository
             }
         }
 
-            return null;
-        }
+        return null;
     }
+}
