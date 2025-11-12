@@ -9,4 +9,6 @@ public interface IFornecedorRepository
     public void Create(Fornecedor fornecedor);
     public void Update(Fornecedor fornecedor);
     public void Delete(int idFornecedor);
+
+    public string Verificar(Fornecedor fornecedor);
 }

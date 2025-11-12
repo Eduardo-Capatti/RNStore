@@ -13,6 +13,10 @@
     
     <script src="https://kit.fontawesome.com/4550765f78.js" crossorigin="anonymous"></script>
 
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/inputmask@5.0.9/dist/jquery.inputmask.min.js"></script>
+
 </head>
 
     <style>
@@ -38,7 +42,7 @@
             }
 
             <h1 class="text-center my-5">Atualizando Fornecedor</h1>
-            <form action="/Fornecedor/Update" method="POST">
+            <form action="/Fornecedor/Update" method="POST" id="form-fornecedor">
                 <div class="mt-5">
                     <div class="row">
                     
@@ -87,3 +91,17 @@
 
 </body>
 </html>
+
+<script>
+    $(document).ready(()=>{
+        $('#cnpj').inputmask('99.999.999/9999-99');
+       
+        $('#form-fornecedor').on('submit', function(e) {
+                        
+        if (!$('#cnpj').inputmask("isComplete")) {
+        e.preventDefault();
+        alert('Por favor, preencha o CNPJ por completo antes de enviar.');
+        }
+    });
+    })
+</script>

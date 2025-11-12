@@ -15,6 +15,32 @@ public class FuncionarioDatabaseRepository : Connection, IFuncionarioRepository
 
     }
 
+    public string Verificar(Funcionario funcionario)
+    {
+        SqlCommand cmd = new SqlCommand();
+        
+        cmd.Connection = conn;
+
+        cmd.CommandText = @"
+            SELECT 
+                CASE 
+                    WHEN EXISTS (SELECT 1 FROM Pessoas WHERE email = @email) THEN 'email'
+                    WHEN EXISTS (SELECT 1 FROM Pessoas WHERE telefone = @telefone) THEN 'telefone'
+                    WHEN EXISTS (SELECT 1 FROM Pessoas WHERE cpf = @cpf) THEN 'cpf'
+                    ELSE 'ok'
+                END AS Resultado
+        ";;
+
+        cmd.Parameters.AddWithValue("@email", funcionario.email);
+        cmd.Parameters.AddWithValue("@telefone", funcionario.telefone);
+        cmd.Parameters.AddWithValue("@cpf", funcionario.cpf);
+
+        string resultado = cmd.ExecuteScalar()?.ToString();
+
+        return resultado;
+
+    }
+
     public void Create(Funcionario funcionario)
     {
         int idPessoa = 0;

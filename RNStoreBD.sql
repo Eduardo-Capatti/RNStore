@@ -8,7 +8,7 @@ create table Pessoas(
 	cpf          varchar(14)  not null unique,
 	email        varchar(40) not null unique,
 	senha		 varchar(255) not null,
-	telefone	 varchar(14) null 	
+	telefone	 varchar(15) null 	
 )
 
 
@@ -44,7 +44,7 @@ create table Slider(
 create table Fornecedor(
 	idFornecedor  int	      not null	  primary key identity,
 	cnpj		  varchar(18) not null	  unique,
-	nomeForn      varchar(20)  not null
+	nomeForn      varchar(100)  not null
 )
 
 create table Marca(

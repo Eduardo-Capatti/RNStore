@@ -45,8 +45,8 @@
                             <div class="input-group">
                                 <label class="input-group-text" for="status">Status</label>
                                 <select class="form-select" name="status" id="status">
-                                    <option value="1">Ativo</option>
-                                    <option value="2">Inativo</option>
+                                    <option value="1" @(Model.status == 1 ? "selected" : null)>Ativo</option>
+                                    <option value="2" @(Model.status == 2 ? "selected" : null)>Inativo</option>
                                 </select>
                             </div>
                         </div>

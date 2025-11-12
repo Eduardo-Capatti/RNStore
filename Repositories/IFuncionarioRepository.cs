@@ -9,4 +9,6 @@ public interface IFuncionarioRepository
     public void Create(Funcionario funcionario);
     public void Update(Funcionario funcionario);
     public void Delete(int idFuncionario);
+
+    public string Verificar(Funcionario funcionario);
 }

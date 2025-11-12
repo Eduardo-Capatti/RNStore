@@ -51,7 +51,7 @@
                         <div class="col-6">
                             <div class="input-group">
                                 <label class="input-group-text" for="nomeCalcado">Nome</label>
-                                <input class="form-control" name="nomeCalcado" id="nomeCalcado" type="text" placeholder="digite o nome do calçado"/>
+                                <input class="form-control" name="nomeCalcado" id="nomeCalcado" type="text" placeholder="digite o nome do calçado" value="@(ViewBag.Calcado?.nomeCalcado ?? "")"/>
                             </div>
                         </div>
 
@@ -62,7 +62,7 @@
                                     <option value="">-- Selecione uma marca --</option>
                                     @foreach (var select in Model.selectMarcas)
                                     {
-                                        <option value="@select.idMarca">
+                                        <option value="@select.idMarca" @(ViewBag.Calcado?.marcaId == select.idMarca ? "selected" : "")>
                                             @select.nomeMarca
                                         </option>
                                     }    

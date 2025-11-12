@@ -1,4 +1,6 @@
 using RNStore.Repositories;
+using System.Globalization;
+using Microsoft.AspNetCore.Localization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -49,13 +51,20 @@ builder.Services.AddTransient<IEstoqueRepository>(_ =>
         builder.Configuration.GetConnectionString("Default")));
 
 
-
+var cultura = new CultureInfo("pt-BR");
 
 
 builder.Services.AddSession();
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
+
+app.UseRequestLocalization(new RequestLocalizationOptions
+{
+    DefaultRequestCulture = new RequestCulture(cultura),
+    SupportedCultures = new[] { cultura },
+    SupportedUICultures = new[] { cultura }
+});
 
 app.UseStaticFiles();
 

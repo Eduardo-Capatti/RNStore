@@ -33,6 +33,7 @@ public class CalcadoController: Controller
         if (calcado.nomeCalcado == null || calcado.marcaId == 0)
         {
             ViewBag.Error = "Preencha todas as informações!";
+            ViewBag.Calcado = calcado;
             var model = repository.Create();
             return View("Create", model);
         }
@@ -58,7 +59,7 @@ public class CalcadoController: Controller
 
             return calcado.GetType()
                 .GetProperties()
-                .Where(p => p.CanRead && p.Name != "idCalcado")
+                .Where(p => p.CanRead && (p.Name == "nomeCalcado" || p.Name == "marcaId"))
                 .Any(p => p.GetValue(calcado) == null);
         }
 

@@ -13,6 +13,28 @@ public class FornecedorDatabaseRepository : Connection, IFornecedorRepository
 
     }
 
+    public string Verificar(Fornecedor fornecedor)
+    {
+        SqlCommand cmd = new SqlCommand();
+        
+        cmd.Connection = conn;
+
+        cmd.CommandText = @"
+            SELECT 
+                CASE 
+                    WHEN EXISTS (SELECT 1 FROM Fornecedor WHERE cnpj = @cnpj) THEN 'cnpj'
+                    ELSE 'ok'
+                END AS Resultado
+        ";;
+
+        cmd.Parameters.AddWithValue("@cnpj", fornecedor.cnpj);
+
+        string resultado = cmd.ExecuteScalar()?.ToString();
+
+        return resultado;
+
+    }
+
     public void Create(Fornecedor fornecedor)
     {
 

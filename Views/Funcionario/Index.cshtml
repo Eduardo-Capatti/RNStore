@@ -42,7 +42,8 @@
                 <thead>
                     <tr>
                         <th scope="col" >COD</th>           
-                        <th scope="col" >Nome</th>  
+                        <th scope="col" >Nome</th> 
+                        <th scope="col" >CPF</th>  
                         <th scope="col" >Email</th>  
                         <th scope="col" >Telefone</th>  
                         <th scope="col" >Salário</th>         
@@ -56,9 +57,10 @@
                         <tr>
                             <td>@funcionario.idPessoa</td>
                             <td>@funcionario.nomePessoa</td>
+                            <td>@funcionario.cpf</td>
                             <td>@funcionario.email</td>
                             <td>@funcionario.telefone</td>
-                            <td>R$ @funcionario.salario.ToString("F2")</td>
+                            <td>R$ @funcionario.salario.ToString("N2")</td>
                             
                             <td class="text-center">
                                 <a href="/Funcionario/Delete?idFuncionario=@funcionario.idPessoa"  class="btn btn-sm text-danger">

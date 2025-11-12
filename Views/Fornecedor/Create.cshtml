@@ -11,6 +11,10 @@
     
     <script src="https://kit.fontawesome.com/4550765f78.js" crossorigin="anonymous"></script>
 
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/inputmask@5.0.9/dist/jquery.inputmask.min.js"></script>
+
 </head>
 
     <style>
@@ -46,21 +50,21 @@
             }
 
             <h1 class="text-center my-5">Cadastro de Fornecedor</h1>
-            <form action="/Fornecedor/Create" method="POST">
+            <form action="/Fornecedor/Create" method="POST" id="form-fornecedor">
                 <div class="mt-5">
                     <div class="row">
                     
                         <div class="col-6">
                             <div class="input-group">
                                 <label class="input-group-text" for="nomePessoa">Nome</label>
-                                <input class="form-control" name="nomeFornecedor" id="nomeFornecedor" type="text" placeholder="digite o nome do fornecedor"/>
+                                <input class="form-control" name="nomeFornecedor" id="nomeFornecedor" type="text" placeholder="digite o nome do fornecedor" value="@(ViewBag.Fornecedor?.nomeFornecedor ?? "")"/>
                             </div>
                         </div>
 
                         <div class="col-6">
                             <div class="input-group">
                                 <label class="input-group-text" for="cnpj">CNPJ</label>
-                                <input class="form-control" name="cnpj" id="cnpj" type="text" placeholder="digite o cnpj"/>
+                                <input class="form-control" name="cnpj" id="cnpj" type="text" placeholder="digite o cnpj" value="@(ViewBag.Fornecedor?.cnpj ?? "")"/>
                             </div>
                         </div>
 
@@ -93,3 +97,18 @@
 
 </body>
 </html>
+
+
+<script>
+    $(document).ready(()=>{
+        $('#cnpj').inputmask('99.999.999/9999-99');
+       
+        $('#form-fornecedor').on('submit', function(e) {
+                        
+        if (!$('#cnpj').inputmask("isComplete")) {
+        e.preventDefault();
+        alert('Por favor, preencha o CNPJ por completo antes de enviar.');
+        }
+    });
+    })
+</script>

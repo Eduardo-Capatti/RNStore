@@ -13,6 +13,9 @@
     
     <script src="https://kit.fontawesome.com/4550765f78.js" crossorigin="anonymous"></script>
 
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/inputmask@5.0.9/dist/jquery.inputmask.min.js"></script>
 </head>
 
     <style>
@@ -37,7 +40,7 @@
             }
 
             <h1 class="text-center my-5">Atualizando Funcionário</h1>
-            <form action="/Funcionario/Update" method="POST">
+            <form action="/Funcionario/Update" method="POST" id="form-func">
                 <div class="mt-5">
                     <div class="row">
                 
@@ -92,3 +95,28 @@
 
 </body>
 </html>
+
+<script>
+    $(document).ready(()=>{
+        $('#telefone').inputmask('(99) 99999-9999');
+        $('#salario').inputmask({
+            alias: 'decimal',
+            groupSeparator: '.',
+            radixPoint: ',',
+            digits: 2,
+            autoGroup: true,
+            rightAlign: false,
+            allowMinus: false,
+            digitsOptional: false,
+            placeholder: '0'
+      });
+
+      $('#form-func').on('submit', function(e) {
+                        
+        if (!$('#telefone').inputmask("isComplete")) {
+        e.preventDefault();
+        alert('Por favor, preencha o telefone por completo antes de enviar.');
+        }
+    });
+    })
+</script>

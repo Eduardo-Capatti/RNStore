@@ -41,11 +41,34 @@ public class FuncionarioController: Controller
         if (TemCampoNulo(funcionario))
         {
             ViewBag.Error = "Preencha todas as informações!";
+            ViewBag.Func = funcionario;
             return View("Create", Create());
         }
 
-        repository.Create(funcionario);
+        string resultado = repository.Verificar(funcionario);
 
+        switch (resultado)
+        {
+            case "cpf":
+
+                ViewBag.Error = "Esse CPF já está sendo utilizado!";
+                ViewBag.Func = funcionario;
+                return View("Create", Create());
+
+            case "telefone":
+
+                ViewBag.Error = "Esse telefone já está sendo utilizado!";
+                ViewBag.Func = funcionario;
+                return View("Create", Create());
+
+            case "email":
+
+                ViewBag.Error = "Esse email já está sendo utilizado!";
+                ViewBag.Func = funcionario;
+                return View("Create", Create());
+        }
+
+        repository.Create(funcionario);
         return RedirectToAction("Index");
     }
 

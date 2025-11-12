@@ -10,6 +10,9 @@
     <link rel="stylesheet" type="text/css" href="~/css/produto.css" asp-append-version="true">
     
     <script src="https://kit.fontawesome.com/4550765f78.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/inputmask@5.0.9/dist/jquery.inputmask.min.js"></script>
 
 </head>
 
@@ -46,28 +49,28 @@
             }
 
             <h1 class="text-center my-5">Cadastro de Funcionário</h1>
-            <form action="/Funcionario/Create" method="POST">
+            <form action="/Funcionario/Create" method="POST" id="form-func">
                 <div class="mt-5">
                     <div class="row">
                     
                         <div class="col-6">
                             <div class="input-group">
                                 <label class="input-group-text" for="nomePessoa">Nome</label>
-                                <input class="form-control" name="nomePessoa" id="nomePessoa" type="text" placeholder="digite o nome do funcionário"/>
+                                <input class="form-control" name="nomePessoa" id="nomePessoa" type="text" placeholder="digite o nome do funcionário" value="@(ViewBag.Func?.nomePessoa ?? "")"/>
                             </div>
                         </div>
 
                         <div class="col-6">
                             <div class="input-group">
                                 <label class="input-group-text" for="cpf">CPF</label>
-                                <input class="form-control" name="cpf" id="cpf" type="text" placeholder="digite o cpf"/>
+                                <input class="form-control" name="cpf" id="cpf" type="text" placeholder="digite o cpf" value="@(ViewBag.Func?.cpf ?? "")"/>
                             </div>
                         </div>
 
                         <div class="col-6">
                             <div class="input-group">
                                 <label class="input-group-text" for="email">Email</label>
-                                <input class="form-control" name="email" id="email" type="text" placeholder="digite o email"/>
+                                <input class="form-control" name="email" id="email" type="text" placeholder="digite o email" value="@(ViewBag.Func?.email ?? "")"/>
                             </div>
                         </div>
 
@@ -75,21 +78,21 @@
                         <div class="col-6">
                             <div class="input-group">
                                 <label class="input-group-text" for="senha">Senha</label>
-                                <input class="form-control" name="senha" id="senha" type="password" placeholder="digite a senha do funcionário para o sistema"/>
+                                <input class="form-control" name="senha" id="senha" type="password" placeholder="digite a senha do funcionário para o sistema" value="@(ViewBag.Func?.senha ?? "")"/>
                             </div>
                         </div>
 
                         <div class="col-6">
                             <div class="input-group">
                                 <label class="input-group-text" for="telefone">Telefone</label>
-                                <input class="form-control" name="telefone" id="telefone" type="text" placeholder="digite o telefone do funcionário"/>
+                                <input class="form-control" name="telefone" id="telefone" type="text" placeholder="digite o telefone do funcionário" value="@(ViewBag.Func?.telefone ?? "")"/>
                             </div>
                         </div>
 
                         <div class="col-6">
                             <div class="input-group">
                                 <label class="input-group-text" for="salario">Salário</label>
-                                <input class="form-control" name="salario" id="salario" type="number" placeholder="digite o salário" min="0" step="0.1"/>
+                                <input class="form-control" name="salario" id="salario" type="text" placeholder="digite o salário" value="@(ViewBag.Func?.salario ?? "")"/>
                             </div>
                         </div>
 
@@ -122,3 +125,29 @@
 
 </body>
 </html>
+
+<script>
+    $(document).ready(()=>{
+        $('#cpf').inputmask('999.999.999-99');
+        $('#telefone').inputmask('(99) 99999-9999');
+        $('#salario').inputmask({
+            alias: 'decimal',
+            groupSeparator: '.',
+            radixPoint: ',',
+            digits: 2,
+            autoGroup: true,
+            rightAlign: false,
+            allowMinus: false,
+            digitsOptional: false,
+            placeholder: '0'
+        });
+
+        $('#form-func').on('submit', function(e) {
+
+            if (!$('#cpf').inputmask("isComplete") || !$('#telefone').inputmask("isComplete")) {
+            e.preventDefault();
+            alert('Por favor, preencha o CPF e o telefone por completo antes de enviar.');
+            }
+        });
+    })
+</script>

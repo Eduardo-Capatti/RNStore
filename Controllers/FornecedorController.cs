@@ -41,7 +41,19 @@ public class FornecedorController: Controller
         if (TemCampoNulo(fornecedor))
         {
             ViewBag.Error = "Preencha todas as informações!";
+            ViewBag.Fornecedor = fornecedor;
             return View("Create");
+        }
+
+        string resultado = repository.Verificar(fornecedor);
+
+        switch (resultado)
+        {
+            case "cnpj":
+
+                ViewBag.Error = "Esse CNPJ já está sendo utilizado!";
+                ViewBag.Fornecedor = fornecedor;
+                return View("Create", Create());
         }
 
         repository.Create(fornecedor);
@@ -93,7 +105,7 @@ public class FornecedorController: Controller
         }
         catch (SqlException)
         {
-            ViewBag.Error = "Não foi possível excluir o funcionário, contate o suporte para mais detalhes!";
+            ViewBag.Error = "Não foi possível excluir o funcionário, pois ele está vinculado a um produto!";
 
             return View("Index", repository.Read());
         }
