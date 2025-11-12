@@ -38,5 +38,12 @@ public class UserController : Controller
         return RedirectToAction("Index", "Estoque");
     }
 
+    public ActionResult Sair()
+    {
+        HttpContext.Session.Clear();
+
+        return RedirectToAction("Login", "User");
+    }
+
 
 }
