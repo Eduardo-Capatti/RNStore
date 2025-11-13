@@ -49,6 +49,9 @@
                 </thead>
 
                 <tbody>
+                    @if (Model.FirstOrDefault() == null){
+                       <td colspan="8" class="text-center">Nenhum registro encontrado</td>
+                    }else{
                      @foreach(var calcado in Model){
                         <tr>
                             <td>@calcado.idCalcado</td>
@@ -66,8 +69,8 @@
                             </td>
                          
                         </tr>
-                    }
-
+                    }}
+                    
                 </tbody>
             </table>
 

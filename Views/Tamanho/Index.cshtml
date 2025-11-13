@@ -53,11 +53,15 @@
                         <th scope="col" >COD</th>           
                         <th scope="col" >Tamanho</th>         
                         
-                        <th scope="col" class="text-center"></th> 
+                        <th scope="col" class="text-center">Opções</th> 
                     </tr>
                 </thead>
 
                 <tbody>
+                    @if (Model.FirstOrDefault() == null){
+                        <td colspan="3" class="text-center">Nenhum registro encontrado</td>
+                    }else{
+
                      @foreach(var tamanho in Model){
                         <tr>
                             <td>@tamanho.idTamanho</td>
@@ -69,7 +73,7 @@
                                 </a>
                             </td>
                         </tr>
-                    }
+                    }}
 
                 </tbody>
             </table>

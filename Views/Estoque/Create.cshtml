@@ -56,21 +56,21 @@
                         <div class="col-6">
                             <div class="input-group">
                                 <label class="input-group-text" for="nomeCalcado">Preço de venda</label>
-                                <input class="form-control" name="preco" id="preco" type="text" placeholder="digite o preço de venda"/>
+                                <input class="form-control" name="preco" id="preco" type="text" placeholder="digite o preço de venda" value="@(ViewBag.Produto?.preco == 0 ? "" : ViewBag.Produto?.preco)"/>
                             </div>
                         </div>
 
                         <div class="col-6">
                             <div class="input-group">
-                                <label class="input-group-text" for="nomeCalcado">Quantidade Inicial</label>
-                                <input class="form-control" name="qtd" id="qtd" type="number" placeholder="informe a quantidade do produto" min="0" step="1" value="1"/>
+                                <label class="input-group-text" for="qtd">Quantidade Inicial</label>
+                                <input class="form-control" name="qtd" id="qtd" type="number" placeholder="informe a quantidade do produto" min="0" step="1" value="@(ViewBag.Produto?.qtd ?? "1")"/>
                             </div>
                         </div>
 
                         <div class="col-6">
                             <div class="input-group">
                                 <label class="input-group-text" for="valorIE">Preço do fornecedor</label>
-                                <input class="form-control" name="valorIE" id="valorIE" type="text" placeholder="informe o preço da compra do produto"/>
+                                <input class="form-control" name="valorIE" id="valorIE" type="text" placeholder="informe o preço da compra do produto" value="@(ViewBag.Produto?.valorIE == 0 ? "" : ViewBag.Produto?.valorIE)"/>
                             </div>
                         </div>
                     
@@ -81,7 +81,7 @@
                                     <option value="">-- Selecione um calçado --</option>
                                     @foreach (var selectCalcado in Model.selectCalcado)
                                     {
-                                        <option value="@selectCalcado.idCalcado">
+                                        <option value="@selectCalcado.idCalcado" @(ViewBag.Produto?.calcadoId == selectCalcado.idCalcado ? "selected" : "")>
                                             @selectCalcado.nomeCalcado
                                         </option>
                                     }    
@@ -96,7 +96,7 @@
                                     <option value="">-- Selecione um tamanho --</option>
                                     @foreach (var selectTamanho in Model.selectTamanho)
                                     {
-                                        <option value="@selectTamanho.idTamanho">
+                                        <option value="@selectTamanho.idTamanho" @(ViewBag.Produto?.tamanhoId == selectTamanho.idTamanho ? "selected" : "")>
                                             @selectTamanho.tamanho
                                         </option>
                                     }    
@@ -107,12 +107,12 @@
                         <div class="col-6">
                             <div class="input-group">
                                 <label class="input-group-text" for="corId">Cor</label>
-                                <select class="form-select" name="corId" id="CorId">
+                                <select class="form-select" name="corId" id="corId">
                                     <option value="">-- Selecione uma cor --</option>
 
                                     @foreach (var selectCores in Model.selectCor)
                                     {
-                                        <option value="@selectCores.idCor">
+                                        <option value="@selectCores.idCor" @(ViewBag.Produto?.corId == selectCores.idCor ? "selected" : "")>
                                             @selectCores.nomeCor
                                         </option>
                                     }    
@@ -128,7 +128,7 @@
 
                                     @foreach (var selectFornecedores in Model.selectFornecedor)
                                     {
-                                        <option value="@selectFornecedores.idFornecedor">
+                                        <option value="@selectFornecedores.idFornecedor" @(ViewBag.Produto?.idFornecedor == selectFornecedores.idFornecedor ? "selected" : "")>
                                             @selectFornecedores.nomeFornecedor
                                         </option>
                                     }    

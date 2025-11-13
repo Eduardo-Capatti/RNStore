@@ -14,4 +14,10 @@ public interface IEstoqueRepository
     public void Delete(int idEstoque);
 
     public void DeleteImg(int idImagem);
+
+    public int Verificar(Estoque estoque);
+
+    public Filtro Filtros();
+
+    public List<Estoque> ReadFiltro(List<int> coresSelecionadas, List<int> tamanhosSelecionados, List<int> marcasSelecionadas, string nomeCalcado, int idProduto, decimal valorMinimo, decimal valorMaximo);
 }

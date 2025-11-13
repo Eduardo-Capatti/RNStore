@@ -60,125 +60,121 @@
                             <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
                                 Filtro
                             </button>
+                            <form action="/Estoque/Filtrar" method="POST">
+                                <ul class="dropdown-menu dropdown-menu-end p-3 dropdown-menu-custom" aria-labelledby="dropdownMenuButton">
+                                    
+                                    <li><h6 class="dropdown-header">Código</h6></li>
+                                    <li>
+                                        <div class="p-2 pt-0 pb-0">
+                                            <input type="text" class="form-control form-control-sm" name="idProduto" placeholder="Digite o código" aria-label="Código">
+                                        </div>
+                                    </li>
+                                    <li><hr class="dropdown-divider"></li> 
 
-                            <ul class="dropdown-menu dropdown-menu-end p-3 dropdown-menu-custom" aria-labelledby="dropdownMenuButton">
-                                
-                                <li><h6 class="dropdown-header">Código</h6></li>
-                                <li>
-                                    <div class="p-2 pt-0 pb-0">
-                                        <input type="text" class="form-control form-control-sm" placeholder="Digite o código" aria-label="Código">
-                                    </div>
-                                </li>
-                                <li><hr class="dropdown-divider"></li> 
+                                    <li><h6 class="dropdown-header">Nome</h6></li>
+                                    <li>
+                                        <div class="p-2 pt-0 pb-0">
+                                            <input type="text" name="nomeCalcado" class="form-control form-control-sm" placeholder="Digite o nome" aria-label="Nome">
+                                        </div>
+                                    </li>
+                                    
+                                    <li><hr class="dropdown-divider"></li> 
 
-                                <li><h6 class="dropdown-header">Nome</h6></li>
-                                <li>
-                                    <div class="p-2 pt-0 pb-0">
-                                        <input type="text" class="form-control form-control-sm" placeholder="Digite o nome" aria-label="Nome">
-                                    </div>
-                                </li>
-                                
-                                <li><hr class="dropdown-divider"></li> 
+                                    <li><h6 class="dropdown-header">Valor</h6></li>
+                                    <li>
+                                        <div class="valor-input-group p-2 pt-0">
+                                            <input type="number" name="valorMinimo" class="form-control form-control-sm" placeholder="Mínimo" aria-label="Valor Mínimo" min="0" step="0.1">
+                                            <input type="number" name="valorMaximo" class="form-control form-control-sm" placeholder="Máximo" aria-label="Valor Máximo" min="0" step="0.1">
+                                        </div>
+                                    </li>
+                                    
+                                    <li><hr class="dropdown-divider"></li> 
 
-                                <li><h6 class="dropdown-header">Valor</h6></li>
-                                <li>
-                                    <div class="valor-input-group p-2 pt-0">
-                                        <input type="number" class="form-control form-control-sm" placeholder="Mínimo" aria-label="Valor Mínimo" min="0" step="0.1">
-                                        <input type="number" class="form-control form-control-sm" placeholder="Máximo" aria-label="Valor Máximo" min="0" step="0.1">
-                                    </div>
-                                </li>
-                                
-                                <li><hr class="dropdown-divider"></li> 
-
-                                <li>
-                                    <button class="dropdown-item fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCores" aria-expanded="false" aria-controls="collapseCores">
-                                        Cores
-                                    </button>
-                                </li>
-                                
-                                <li>
-                                    <div class="collapse" id="collapseCores">
-                                        <ul class="list-unstyled p-2">
-                                            <li><div class="form-check dropdown-item-text"><input class="form-check-input" type="checkbox" value="amarelo" id="checkboxAmarelo"><label class="form-check-label" for="checkboxAmarelo">Amarelo</label></div></li>
-                                            <li><div class="form-check dropdown-item-text"><input class="form-check-input" type="checkbox" value="azul" id="checkboxAzul"><label class="form-check-label" for="checkboxAzul">Azul</label></div></li>
-                                            <li><div class="form-check dropdown-item-text"><input class="form-check-input" type="checkbox" value="bege" id="checkboxBege"><label class="form-check-label" for="checkboxBege">Bege</label></div></li>
-                                            <li><div class="form-check dropdown-item-text"><input class="form-check-input" type="checkbox" value="branco" id="checkboxBranco"><label class="form-check-label" for="checkboxBranco">Branco</label></div></li>
-                                            <li><div class="form-check dropdown-item-text"><input class="form-check-input" type="checkbox" value="cinza" id="checkboxCinza"><label class="form-check-label" for="checkboxCinza">Cinza</label></div></li>
-                                            <li><div class="form-check dropdown-item-text"><input class="form-check-input" type="checkbox" value="dourado" id="checkboxDourado"><label class="form-check-label" for="checkboxDourado">Dourado</label></div></li>
-                                            <li><div class="form-check dropdown-item-text"><input class="form-check-input" type="checkbox" value="laranja" id="checkboxLaranja"><label class="form-check-label" for="checkboxLaranja">Laranja</label></div></li>
-                                            <li><div class="form-check dropdown-item-text"><input class="form-check-input" type="checkbox" value="marrom" id="checkboxMarrom"><label class="form-check-label" for="checkboxMarrom">Marrom</label></div></li>
-                                            <li><div class="form-check dropdown-item-text"><input class="form-check-input" type="checkbox" value="preto" id="checkboxPreto"><label class="form-check-label" for="checkboxPreto">Preto</label></div></li>
-                                            <li><div class="form-check dropdown-item-text"><input class="form-check-input" type="checkbox" value="rosa" id="checkboxRosa"><label class="form-check-label" for="checkboxRosa">Rosa</label></div></li>
-                                            <li><div class="form-check dropdown-item-text"><input class="form-check-input" type="checkbox" value="verde" id="checkboxVerde"><label class="form-check-label" for="checkboxVerde">Verde</label></div></li>
-                                            <li><div class="form-check dropdown-item-text"><input class="form-check-input" type="checkbox" value="vermelho" id="checkboxVermelho"><label class="form-check-label" for="checkboxVermelho">Vermelho</label></div></li>
-                                        </ul>
-                                    </div>
-                                </li>
-                                
-                                <li><hr class="dropdown-divider"></li> 
-
-                                <li>
-                                    <button class="dropdown-item fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseMarca" aria-expanded="false" aria-controls="collapseMarca">
-                                        Marca
-                                    </button>
-                                </li>
-                                
-                                <li>
-                                    <div class="collapse" id="collapseMarca">
-                                        <ul class="list-unstyled p-2">
-                                            <li><div class="form-check dropdown-item-text"><input class="form-check-input" type="checkbox" value="adidas" id="checkboxAdidas"><label class="form-check-label" for="checkboxAdidas">Adidas</label></div></li>
-                                            <li><div class="form-check dropdown-item-text"><input class="form-check-input" type="checkbox" value="asics" id="checkboxAsics"><label class="form-check-label" for="checkboxAsics">Asics</label></div></li>
-                                            <li><div class="form-check dropdown-item-text"><input class="form-check-input" type="checkbox" value="converse" id="checkboxConverse"><label class="form-check-label" for="checkboxConverse">Converse</label></div></li>
-                                            <li><div class="form-check dropdown-item-text"><input class="form-check-input" type="checkbox" value="everlast" id="checkboxEverlast"><label class="form-check-label" for="checkboxEverlast">Everlast</label></div></li>
-                                            <li><div class="form-check dropdown-item-text"><input class="form-check-input" type="checkbox" value="fila" id="checkboxFila"><label class="form-check-label" for="checkboxFila">Fila</label></div></li>
-                                            <li><div class="form-check dropdown-item-text"><input class="form-check-input" type="checkbox" value="mizuno" id="checkboxMizuno"><label class="form-check-label" for="checkboxMizuno">Mizuno</label></div></li>
-                                            <li><div class="form-check dropdown-item-text"><input class="form-check-input" type="checkbox" value="new-balance" id="checkboxNewBalance"><label class="form-check-label" for="checkboxNewBalance">New Balance</label></div></li>
-                                            <li><div class="form-check dropdown-item-text"><input class="form-check-input" type="checkbox" value="nike" id="checkboxNike"><label class="form-check-label" for="checkboxNike">Nike</label></div></li>
-                                            <li><div class="form-check dropdown-item-text"><input class="form-check-input" type="checkbox" value="oakley" id="checkboxOakley"><label class="form-check-label" for="checkboxOakley">Oakley</label></div></li>
-                                            <li><div class="form-check dropdown-item-text"><input class="form-check-input" type="checkbox" value="olympikus" id="checkboxOlympikus"><label class="form-check-label" for="checkboxOlympikus">Olympikus</label></div></li>
-                                            <li><div class="form-check dropdown-item-text"><input class="form-check-input" type="checkbox" value="puma" id="checkboxPuma"><label class="form-check-label" for="checkboxPuma">Puma</label></div></li>
-                                            <li><div class="form-check dropdown-item-text"><input class="form-check-input" type="checkbox" value="vans" id="checkboxVans"><label class="form-check-label" for="checkboxVans">Vans</label></div></li>
-                                        </ul>
-                                    </div>
-                                </li>
-                                
-                                <li><hr class="dropdown-divider"></li> 
-
-                                <li>
-                                    <button class="dropdown-item fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTamanho" aria-expanded="false" aria-controls="collapseTamanho">
-                                        Tamanho
-                                    </button>
-                                </li>
-                                
-                                <li>
-                                    <div class="collapse" id="collapseTamanho">
-                                        <ul class="list-unstyled p-2">
-                                            <div class="row">
-                                                <div class="col-6">
-                                                    <li><div class="form-check dropdown-item-text"><input class="form-check-input" type="checkbox" value="34" id="checkboxTamanho34"><label class="form-check-label" for="checkboxTamanho34">34</label></div></li>
-                                                    <li><div class="form-check dropdown-item-text"><input class="form-check-input" type="checkbox" value="35" id="checkboxTamanho35"><label class="form-check-label" for="checkboxTamanho35">35</label></div></li>
-                                                    <li><div class="form-check dropdown-item-text"><input class="form-check-input" type="checkbox" value="36" id="checkboxTamanho36"><label class="form-check-label" for="checkboxTamanho36">36</label></div></li>
-                                                    <li><div class="form-check dropdown-item-text"><input class="form-check-input" type="checkbox" value="37" id="checkboxTamanho37"><label class="form-check-label" for="checkboxTamanho37">37</label></div></li>
-                                                    <li><div class="form-check dropdown-item-text"><input class="form-check-input" type="checkbox" value="38" id="checkboxTamanho38"><label class="form-check-label" for="checkboxTamanho38">38</label></div></li>
-                                                    <li><div class="form-check dropdown-item-text"><input class="form-check-input" type="checkbox" value="39" id="checkboxTamanho39"><label class="form-check-label" for="checkboxTamanho39">39</label></div></li>
+                                    <li>
+                                        <button class="dropdown-item fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCores" aria-expanded="false" aria-controls="collapseCores">
+                                            Cores
+                                        </button>
+                                    </li>
+                                    
+                                    <li>
+                                        <div class="collapse" id="collapseCores">
+                                            <ul class="list-unstyled p-2">
+                                                <div class="row">
+                                                    @foreach(var cores in ViewBag.Filtros.cores){
+                                                        <div class="col-6">
+                                                            <li>
+                                                                <div class="form-check dropdown-item-text">
+                                                                    <input class="form-check-input" type="checkbox" value="@cores.idCor" name="coresSelecionadas">
+                                                                    <label class="form-check-label" for="checkbox(@cores.idCor)">@cores.nomeCor</label>
+                                                                </div>
+                                                            </li>
+                                                        </div>
+                                                    }
                                                 </div>
-                                                <div class="col-6">
-                                                    <li><div class="form-check dropdown-item-text"><input class="form-check-input" type="checkbox" value="40" id="checkboxTamanho40"><label class="form-check-label" for="checkboxTamanho40">40</label></div></li>
-                                                    <li><div class="form-check dropdown-item-text"><input class="form-check-input" type="checkbox" value="41" id="checkboxTamanho41"><label class="form-check-label" for="checkboxTamanho41">41</label></div></li>
-                                                    <li><div class="form-check dropdown-item-text"><input class="form-check-input" type="checkbox" value="42" id="checkboxTamanho42"><label class="form-check-label" for="checkboxTamanho42">42</label></div></li>
-                                                    <li><div class="form-check dropdown-item-text"><input class="form-check-input" type="checkbox" value="43" id="checkboxTamanho43"><label class="form-check-label" for="checkboxTamanho43">43</label></div></li>
-                                                    <li><div class="form-check dropdown-item-text"><input class="form-check-input" type="checkbox" value="44" id="checkboxTamanho44"><label class="form-check-label" for="checkboxTamanho44">44</label></div></li>
-                                                </div>
-                                            </div>
-                                        </ul>
-                                    </div>
-                                </li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    
+                                    <li><hr class="dropdown-divider"></li> 
 
-                                <li class="dropdown-footer">
-                                    <button type="button" class="btn btn-primary btn-sm">Filtrar</button>
-                                </li>
-                                
-                            </ul>
+                                    <li>
+                                        <button class="dropdown-item fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseMarca" aria-expanded="false" aria-controls="collapseMarca">
+                                            Marca
+                                        </button>
+                                    </li>
+                                    
+                                    <li>
+                                        <div class="collapse" id="collapseMarca">
+                                            <ul class="list-unstyled p-2">
+                                                <div class="row">
+                                                    @foreach(var marcas in ViewBag.Filtros.marcas){
+                                                        <div class="col-6">
+                                                            <li>
+                                                                <div class="form-check dropdown-item-text">
+                                                                    <input class="form-check-input" type="checkbox" value="@marcas.idMarca" name="marcasSelecionadas">
+                                                                    <label class="form-check-label" for="checkbox(@marcas.idMarca)">@marcas.nomeMarca</label>
+                                                                </div>
+                                                            </li>
+                                                        </div>
+                                                    }
+                                                </div>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    
+                                    <li><hr class="dropdown-divider"></li> 
+
+                                    <li>
+                                        <button class="dropdown-item fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTamanho" aria-expanded="false" aria-controls="collapseTamanho">
+                                            Tamanho
+                                        </button>
+                                    </li>
+                                    
+                                    <li>
+                                        <div class="collapse" id="collapseTamanho">
+                                            <ul class="list-unstyled p-2">
+                                                <div class="row">
+                                                    @foreach(var tamanhos in ViewBag.Filtros.tamanhos){
+                                                        <div class="col-6">
+                                                            <li>
+                                                                <div class="form-check dropdown-item-text">
+                                                                    <input class="form-check-input" type="checkbox" value="@tamanhos.idTamanho" name="tamanhosSelecionados">
+                                                                    <label class="form-check-label" for="checkbox(@tamanhos.idTamanho)">@tamanhos.tamanho</label>
+                                                                </div>
+                                                            </li>
+                                                        </div>
+                                                    }    
+                                                </div>
+                                            </ul>
+                                        </div>
+                                    </li>
+
+                                    <li class="dropdown-footer">
+                                        <button type="submit" class="btn btn-primary btn-sm">Filtrar</button>
+                                    </li>
+                                    
+                                </ul>
+                            </form>
                         </div>
                         
                     </div>
@@ -189,7 +185,8 @@
                 <thead>
                     <tr>
                         <th scope="col" >COD</th>           
-                        <th scope="col" >Marca</th>         
+                        <th scope="col" >Marca</th>   
+                        <th scope="col" >Calçado</th>      
                         <th scope="col" >Fornecedor</th>    
                         <th scope="col" >Quantidade</th>    
                         <th scope="col" >Preço</th>   
@@ -202,11 +199,14 @@
                 </thead>
 
                 <tbody>
-
+                    @if (Model.FirstOrDefault() == null){
+                        <td colspan="10" class="text-center">Nenhum registro encontrado</td>
+                    }else{
                     @foreach(var estoque in Model){
                         <tr>
                             <th scope="row">@estoque.idProduto</th>
                             <td>@estoque.nomeMarca</td>
+                            <td>@estoque.nomeCalcado</td>
                             <td>@estoque.nomeFornecedor</td>
                             <td>@estoque.qtd</td>
                             <td>R$@estoque.preco.ToString("F2")</td>
@@ -225,7 +225,7 @@
                             </td>
                         </tr>
 
-                    }
+                    }}
                 </tbody>
             </table>
 

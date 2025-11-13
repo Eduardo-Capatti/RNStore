@@ -52,11 +52,14 @@
                         <th scope="col" >COD</th>           
                         <th scope="col" >Cor</th>         
                         
-                        <th scope="col" class="text-center"></th> 
+                        <th scope="col" class="text-center">Opções</th> 
                     </tr>
                 </thead>
 
                 <tbody>
+                    @if (Model.FirstOrDefault() == null){
+                        <td colspan="3" class="text-center">Nenhum registro encontrado</td>
+                    }else{
                      @foreach(var cor in Model){
                         <tr>
                             <td>@cor.idCor</td>
@@ -68,7 +71,7 @@
                                 </a>
                             </td>
                         </tr>
-                    }
+                    }}
 
                 </tbody>
             </table>

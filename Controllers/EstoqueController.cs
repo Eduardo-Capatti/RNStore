@@ -13,6 +13,13 @@ public class EstoqueController: Controller
     {
         this.repository = repository;
     }
+
+    public ActionResult Filtrar(List<int> coresSelecionadas, List<int> tamanhosSelecionados, List<int> marcasSelecionadas, string nomeCalcado, int idProduto, decimal valorMinimo, decimal valorMaximo)
+    {
+        var index = repository.ReadFiltro(coresSelecionadas, tamanhosSelecionados, marcasSelecionadas, nomeCalcado, idProduto, valorMinimo, valorMaximo);
+        ViewBag.Filtros = repository.Filtros();
+        return View("Index", index);
+    }
     
     public ActionResult Index()
     {
@@ -24,6 +31,7 @@ public class EstoqueController: Controller
         }
 
         ViewBag.idUsuario = idUsuario;
+        ViewBag.Filtros = repository.Filtros();
         return View(repository.Read());
     }
 
@@ -43,19 +51,33 @@ public class EstoqueController: Controller
 
             return estoque.GetType()
                 .GetProperties()
-                .Where(p => p.CanRead && (p.Name == "calcadoId" || p.Name == "corId" || p.Name == "calcadoId" || p.Name == "qtd" || p.Name == "valorIE" || p.Name == "calcadoId" || p.Name == "tamanhoId" || p.Name == "fornecedorId"))
-                .Any(p => p.GetValue(estoque) == null);
+                .Where(p => p.CanRead && (p.Name == "calcadoId" || p.Name == "corId" || p.Name == "qtd" || p.Name == "valorIE" || p.Name == "tamanhoId" || p.Name == "idFornecedor" || p.Name == "preco"))
+                .Any(p =>
+                    p.GetValue(estoque) == null ||
+                    (p.GetValue(estoque) is string s && string.IsNullOrWhiteSpace(s)) ||
+                    (p.GetValue(estoque) is int i && i == 0) ||
+                    (p.GetValue(estoque) is decimal d && d == 0) ||
+                    (p.GetValue(estoque) is double db && db == 0)
+                );
+
         }
 
         if (TemCampoNulo(estoque))
         {
             ViewBag.Error = "Preencha todas as informações!";
+            ViewBag.Produto = estoque;
             return View("Create", repository.Create());
         }
 
+        
+        if (repository.Verificar(estoque) == 1) 
+        {
+            return RedirectToAction("Index");
+        }
+       
         repository.Create(estoque);
-
         return RedirectToAction("Index");
+       
     }
 
     [HttpGet]
@@ -84,7 +106,7 @@ public class EstoqueController: Controller
             ViewBag.Error = "Preencha todas as informações!";
             var estoque_escolhido = repository.Read(estoque.idProduto);
             return View("Update", estoque_escolhido);
-        }
+        }    
 
         repository.Update(estoque);
 
@@ -153,8 +175,8 @@ public class EstoqueController: Controller
         }
 
         repository.CreateImg(estoque);
-
-        return RedirectToAction("Index");
+        var estoque_escolhido = repository.Read(estoque.idProduto);
+        return View("Update", estoque_escolhido);
     }
     
     [HttpPost]
@@ -178,8 +200,9 @@ public class EstoqueController: Controller
         }
 
         repository.UpdateImg(estoque);
+        var estoque_ = repository.Read(estoque.idProduto);
+        return View("Update", estoque_);
 
-        return RedirectToAction("Index");
     }
 
     private async Task<string> Upload(IFormFile file)

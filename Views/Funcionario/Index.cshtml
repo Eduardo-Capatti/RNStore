@@ -53,6 +53,10 @@
                 </thead>
 
                 <tbody>
+                    @if (Model.FirstOrDefault() == null){
+                        <td colspan="7" class="text-center">Nenhum registro encontrado</td>
+                    }else{
+
                      @foreach(var funcionario in Model){
                         <tr>
                             <td>@funcionario.idPessoa</td>
@@ -73,6 +77,7 @@
                             </td>
                          
                         </tr>
+                        }
                     }
 
                 </tbody>

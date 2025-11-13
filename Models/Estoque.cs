@@ -26,6 +26,8 @@ public class Estoque
     public List<Cor> cores { get; set; }
 
     public List<Calcado> calcados { get; set; }
+
+    public List<Marca> marcas { get; set; }
     
      public string nomeCalcado { get; set; }
 

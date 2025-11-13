@@ -13,8 +13,140 @@ public class EstoqueDatabaseRepository : Connection, IEstoqueRepository
 
     }
 
+
+    public int Verificar(Estoque estoque)
+    {
+        SqlCommand cmdVerificar = new SqlCommand();
+        cmdVerificar.Connection = conn;
+        cmdVerificar.CommandText = @"SELECT top 1 p.idProduto, e.idFornecedor FROM Produtos p 
+        LEFT JOIN Itens_Entradas ie on ie.idProduto = p.idProduto 
+        LEFT JOIN Entradas e on ie.idEntrada = e.idEntrada 
+        WHERE p.calcadoId = @calcadoId AND p.corId = @corId AND e.idFornecedor = @idFornecedor
+        ";
+        cmdVerificar.Parameters.AddWithValue("@calcadoId", estoque.calcadoId);
+        cmdVerificar.Parameters.AddWithValue("@corId", estoque.corId);
+        cmdVerificar.Parameters.AddWithValue("@idFornecedor", estoque.idFornecedor);
+
+        SqlDataReader readerVerificar = cmdVerificar.ExecuteReader();
+        if (readerVerificar.Read())
+        {
+
+            int idProduto = (int)readerVerificar["idProduto"];
+            readerVerificar.Close();
+
+            SqlCommand cmdUpdate = new SqlCommand();
+            cmdUpdate.Connection = conn;
+            cmdUpdate.CommandText = "UPDATE Produtos set qtd = qtd + @qtd, preco = @preco WHERE idProduto = @idProduto";
+            cmdUpdate.Parameters.AddWithValue("@qtd", estoque.qtd);
+            cmdUpdate.Parameters.AddWithValue("@preco", estoque.preco);
+            cmdUpdate.Parameters.AddWithValue("@idProduto", idProduto);
+            cmdUpdate.ExecuteNonQuery();
+
+
+            SqlCommand cmd2 = new SqlCommand();
+
+            cmd2.Connection = conn;
+
+            cmd2.CommandText = @"INSERT INTO Entradas(idFornecedor) VALUES(@idFornecedor);
+            SELECT CAST(SCOPE_IDENTITY() AS int)";
+
+            cmd2.Parameters.AddWithValue("@idFornecedor", estoque.idFornecedor);
+
+            int idEntrada = (int)cmd2.ExecuteScalar();
+
+
+            SqlCommand cmd3 = new SqlCommand();
+
+            cmd3.Connection = conn;
+
+            cmd3.CommandText = @"INSERT INTO Itens_Entradas(idProduto, idEntrada, valorIE, qtdIE) VALUES(@idProduto, @idEntrada, @valorIE, @qtdIE)";
+
+            cmd3.Parameters.AddWithValue("@idProduto", idProduto);
+            cmd3.Parameters.AddWithValue("@idEntrada", idEntrada);
+            cmd3.Parameters.AddWithValue("@valorIE", estoque.valorIE);
+            cmd3.Parameters.AddWithValue("@qtdIE", estoque.qtd);
+
+            cmd3.ExecuteNonQuery();
+
+            return 1;
+        }
+
+        readerVerificar.Close();
+
+        return 0;
+    }
+
+
+    public Filtro Filtros()
+    {
+        List<Cor> cores = new List<Cor>();
+
+        SqlCommand cmdCor = new SqlCommand();
+        cmdCor.Connection = conn;
+        cmdCor.CommandText = @"SELECT * from Cores";
+        SqlDataReader readerCor = cmdCor.ExecuteReader();
+
+        while (readerCor.Read())
+        {
+            cores.Add(
+                new Cor
+                {
+                    idCor = (int)readerCor["idCor"],
+                    nomeCor = (string)readerCor["nomeCor"]
+                }
+            );
+        }
+
+        readerCor.Close();
+
+
+        List<Tamanho> tamanhos = new List<Tamanho>();
+
+        SqlCommand cmdTamanho = new SqlCommand();
+        cmdTamanho.Connection = conn;
+        cmdTamanho.CommandText = @"SELECT * from Tamanhos";
+        SqlDataReader readerTamanho = cmdTamanho.ExecuteReader();
+
+        while (readerTamanho.Read())
+        {
+            tamanhos.Add(
+                new Tamanho
+                {
+                    idTamanho = (int)readerTamanho["idTamanho"],
+                    tamanho = (string)readerTamanho["tamanho"]
+                }
+            );
+        }
+
+        readerTamanho.Close();
+
+
+        List<Marca> marcas = new List<Marca>();
+
+        SqlCommand cmdMarca = new SqlCommand();
+        cmdMarca.Connection = conn;
+        cmdMarca.CommandText = @"SELECT * from Marca";
+        SqlDataReader readerMarca = cmdMarca.ExecuteReader();
+
+        while (readerMarca.Read())
+        {
+            marcas.Add(
+                new Marca
+                {
+                    idMarca = (int)readerMarca["idMarca"],
+                    nomeMarca = (string)readerMarca["nomeMarca"]
+                }
+            );
+        }
+
+        readerMarca.Close();
+
+        return new Filtro { cores = cores, tamanhos = tamanhos, marcas = marcas };
+    }
+
     public void Create(Estoque estoque)
     {
+
         SqlCommand cmd = new SqlCommand();
 
         cmd.Connection = conn;
@@ -227,13 +359,79 @@ public class EstoqueDatabaseRepository : Connection, IEstoqueRepository
                     preco = (decimal)reader["preco"],
                     corId = (int)reader["corId"],
                     calcadoId = (int)reader["calcadoId"],
-                    nomeFornecedor = (string)reader["nomeForn"] ,
+                    nomeFornecedor = (string)reader["nomeForn"],
                     nomeMarca = (string)reader["nomeMarca"],
                     qtd = (int)reader["qtd"],
                     promocao = reader["promocao"] is DBNull ? 0 : (decimal)reader["promocao"]
                 }
             );
         }
+        return Estoque;
+    }
+
+    public List<Estoque> ReadFiltro(List<int> coresSelecionadas, List<int> tamanhosSelecionados, List<int> marcasSelecionadas, string nomeCalcado, int idProduto, decimal valorMinimo, decimal valorMaximo)
+    {
+        List<string> condicoes = new List<string>();
+
+        if (coresSelecionadas != null && coresSelecionadas.Any())
+        {
+            condicoes.Add($"corId IN ({string.Join(",", coresSelecionadas)})");
+        }
+            
+        if (tamanhosSelecionados != null && tamanhosSelecionados.Any())
+        {
+            condicoes.Add($"p.tamanhoId IN ({string.Join(",", tamanhosSelecionados)})");
+        }
+
+        if (marcasSelecionadas != null && marcasSelecionadas.Any())
+        {
+            condicoes.Add($"c.marcaId IN ({string.Join(",", marcasSelecionadas)})");
+        }
+
+        if (nomeCalcado != null)
+        {
+            condicoes.Add($"c.nomeCalcado LIKE ('%{nomeCalcado}%')");
+        }
+
+            
+        string where = condicoes.Any() ? "WHERE " + string.Join(" AND ", condicoes) : "";
+    
+        List<Estoque> Estoque = new List<Estoque>();
+
+        SqlCommand cmd = new SqlCommand();
+        cmd.Connection = conn;
+        cmd.CommandText = $@"SELECT distinct p.idProduto, c.nomeCalcado, t.tamanho, co.nomeCor, p.preco, p.corId, p.calcadoId, f.nomeForn, m.nomeMarca, p.qtd, p.promocao 
+        FROM Produtos p LEFT JOIN Calcados c on c.idCalcado = p.calcadoId 
+        LEFT JOIN Cores co on p.corId = co.idCor 
+        LEFT JOIN Tamanhos t on p.tamanhoId = t.idTamanho
+        LEFT JOIN Marca m on m.idMarca = c.marcaId
+		LEFT JOIN Itens_Entradas ie on ie.idProduto = p.idProduto
+		LEFT JOIN Entradas e on e.idEntrada = ie.idEntrada
+		LEFT JOIN Fornecedor f on f.idFornecedor = e.idFornecedor
+        {where}";
+        SqlDataReader reader = cmd.ExecuteReader();
+
+        while (reader.Read())
+        {
+            Estoque.Add(
+                new Estoque
+                {
+                    idProduto = (int)reader["idProduto"],
+                    nomeCalcado = (string)reader["nomeCalcado"],
+                    tamanho = (string)reader["tamanho"],
+                    nomeCor = (string)reader["nomeCor"],
+                    preco = (decimal)reader["preco"],
+                    corId = (int)reader["corId"],
+                    calcadoId = (int)reader["calcadoId"],
+                    nomeFornecedor = (string)reader["nomeForn"],
+                    nomeMarca = (string)reader["nomeMarca"],
+                    qtd = (int)reader["qtd"],
+                    promocao = reader["promocao"] is DBNull ? 0 : (decimal)reader["promocao"]
+                }
+            );
+        }
+
+        reader.Close();
         return Estoque;
     }
 
