@@ -115,4 +115,27 @@ public class ClienteDatabaseRepository : Connection, IClienteRepository
 
 
     }
+    public User LoginUser(Login model)
+    {
+        string senhaHash = Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(model.senha)));
+
+        SqlCommand cmd = new SqlCommand();
+        cmd.Connection = conn;
+        cmd.CommandText = "SELECT p.nomePessoa, p.idPessoa FROM Clientes c LEFT JOIN Pessoas p on p.idPessoa = c.idPessoa WHERE email = @email AND senha = @senha";
+        cmd.Parameters.AddWithValue("@email", model.email);
+        cmd.Parameters.AddWithValue("@senha", senhaHash);
+
+        SqlDataReader reader = cmd.ExecuteReader();
+
+        if (reader.Read())
+        {
+            return new User
+            {
+                idUsuario = (int)reader["idPessoa"],
+                nomeUsuario = (string)reader["nomePessoa"]
+            };
+        }
+
+        return null;
+    }
 }
