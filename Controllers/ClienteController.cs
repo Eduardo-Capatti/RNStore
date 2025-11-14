@@ -1,76 +1,30 @@
-/*using Microsoft.AspNetCore.Mvc;
-using RNStore.Models;
+using Microsoft.AspNetCore.Mvc;
 using RNStore.Repositories;
-using Microsoft.Data.SqlClient; 
+using RNStore.Models;
 
 namespace RNStore.Controllers;
 
-public class ClienteController : Controller
+public class CatalogoController : Controller
 {
-    private IClienteRepository repository;
 
-    public ClienteController(IClienteRepository repository)
+    private ICatalogoRepository repository;
+
+    public CatalogoController (ICatalogoRepository repository)
     {
         this.repository = repository;
     }
-
-    [HttpGet]
-    public ActionResult Cadastro()
+    public ActionResult Index()
     {
-        return View(); 
+        var sliders = repository.ReadSlides();
+
+        ViewBag.slides = sliders;
+        
+        return View(repository.Read());
     }
 
-    [HttpPost]
-    public ActionResult Create(Cliente cliente)
+
+    public ActionResult Produto(int idProduto, int idCalcado)
     {
-        try
-        {
-            string confirmarSenha = Request.Form["ConfirmarSenha"];
-            if (cliente.Senha != confirmarSenha)
-            {
-                ViewBag.Error = "As senhas não conferem. Tente novamente.";
-                return View("Cadastro", cliente); 
-            }
-            
-            bool TemCampoNulo(Cliente cli)
-            {
-                if (cli == null) return true;
-
-                return cli.GetType()
-                    .GetProperties()
-                    .Where(p => p.CanRead &&
-                                p.Name != "IdPessoa" &&
-                                p.Name != "Enderecos" &&
-                                p.Name != "Telefone") 
-                    .Any(p => p.GetValue(cli) == null);
-            }
-
-            if (TemCampoNulo(cliente))
-            {
-                ViewBag.Error = "Preencha todas as informações obrigatórias!";
-                return View("Cadastro", cliente); 
-            }
-
-            repository.Create(cliente); 
-
-            return RedirectToAction("Index", "Catalogo"); 
-        }
-        catch (SqlException e)
-        {
-            if (e.Message.Contains("UNIQUE KEY"))
-            {
-                ViewBag.Error = "Este E-mail ou CPF já está em uso.";
-            }
-            else
-            {
-                ViewBag.Error = "Ocorreu um erro no banco de dados ao salvar.";
-            }
-            return View("Cadastro", cliente);
-        }
-        catch(Exception e)
-        {
-            ViewBag.Error = "Ocorreu um erro inesperado: " + e.Message;
-            return View("Cadastro", cliente);
-        }
+        return View(repository.Read(idProduto, idCalcado));
     }
-}*/
+}
