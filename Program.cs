@@ -49,6 +49,9 @@ builder.Services.AddTransient<ISliderRepository>(_ =>
 builder.Services.AddTransient<IEstoqueRepository>(_ => 
     new EstoqueDatabaseRepository(
         builder.Configuration.GetConnectionString("Default")));
+builder.Services.AddTransient<RNStore.Repositories.IClienteRepository>( _ => 
+    new RNStore.Repositories.ClienteDatabaseRepository(
+        builder.Configuration.GetConnectionString("Default")));
 
 
 var cultura = new CultureInfo("pt-BR");
