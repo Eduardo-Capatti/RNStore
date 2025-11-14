@@ -1,0 +1,47 @@
+.navbar-custom {
+    background-color: #565861; 
+    border-bottom: 1px solid #e6e6e6;
+}
+
+footer{
+    margin-top:auto;
+}
+
+
+.ml-header-top {
+    background-color: #565861; 
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.resumo-card {
+    box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
+    border: none;
+}
+
+.item-card {
+    background-color: #fff;
+    box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
+    border: none;
+    padding: 24px;
+}
+
+.text-discount {
+    color: #00a650; 
+    font-weight: 600;
+}
+
+.text-original-price {
+    text-decoration: line-through;
+    font-size: 0.85em;
+    color: #999;
+}
+
+.btn-ml-primary {
+    background-color: #3483fa; 
+    border-color: #3483fa;
+    color: #fff;
+    padding: 10px 15px;
+    font-size: 1.1em;
+    font-weight: 600;
+}

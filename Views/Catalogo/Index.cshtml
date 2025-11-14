@@ -22,7 +22,7 @@
 
 <body>
     @await Html.PartialAsync("_Menu")
-    <main>
+    <main style="flex:1">
         @if(ViewBag.slides == null){
             <div id="carouselExample" class="carousel slide">
                 <div class="carousel-inner">
@@ -72,11 +72,11 @@
                             }
                             @if (@imagem != null)
                             {
-                                <img class="card-img-top" src="~/img/produtos/@imagem" alt="">
+                                <img height="200px" class="card-img-top" src="~/img/produtos/@imagem">
                             }
                             else
                             {
-                                <img class="card-img-top" src="~/img/padrao1.png" alt="">
+                                <img height="200px" class="card-img-top" src="~/img/produtos/padrao1.png">
                             }
                             <div class="card-body">
                                 <h5 class="card-title">

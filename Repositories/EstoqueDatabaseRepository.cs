@@ -21,11 +21,12 @@ public class EstoqueDatabaseRepository : Connection, IEstoqueRepository
         cmdVerificar.CommandText = @"SELECT top 1 p.idProduto, e.idFornecedor FROM Produtos p 
         LEFT JOIN Itens_Entradas ie on ie.idProduto = p.idProduto 
         LEFT JOIN Entradas e on ie.idEntrada = e.idEntrada 
-        WHERE p.calcadoId = @calcadoId AND p.corId = @corId AND e.idFornecedor = @idFornecedor
+        WHERE p.calcadoId = @calcadoId AND p.corId = @corId AND e.idFornecedor = @idFornecedor AND p.tamanhoId = @tamanhoId
         ";
         cmdVerificar.Parameters.AddWithValue("@calcadoId", estoque.calcadoId);
         cmdVerificar.Parameters.AddWithValue("@corId", estoque.corId);
         cmdVerificar.Parameters.AddWithValue("@idFornecedor", estoque.idFornecedor);
+        cmdVerificar.Parameters.AddWithValue("@tamanhoId", estoque.tamanhoId);
 
         SqlDataReader readerVerificar = cmdVerificar.ExecuteReader();
         if (readerVerificar.Read())
@@ -391,6 +392,16 @@ public class EstoqueDatabaseRepository : Connection, IEstoqueRepository
         if (nomeCalcado != null)
         {
             condicoes.Add($"c.nomeCalcado LIKE ('%{nomeCalcado}%')");
+        }
+
+        if(idProduto != 0)
+        {
+            condicoes.Add($"p.idProduto = {idProduto}");
+        }
+
+        if(valorMaximo != 0)
+        {
+            condicoes.Add($"p.preco between {valorMinimo} AND {valorMaximo}");
         }
 
             

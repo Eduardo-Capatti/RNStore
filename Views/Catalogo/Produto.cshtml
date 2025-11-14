@@ -16,18 +16,18 @@
     @await Html.PartialAsync("_Menu")
 
     <!--Conteúdo da página-->
-    <div class="container">
+    <div class="container" style="flex:1">
 
-    @{
-        var i = 0; 
-    }
+        @{
+            var i = 0; 
+        }
 
         <div class="row" style="margin-top: 100px;">
             <div class="col-sm-5 col-md-5 col-lg-7  text-center">
                 @{foreach (var img in Model.img){
                     if(i < 1){
                         <div class="text-center d-inline-block" id="foto-principal-produto">
-                            <img class="img-fluid" src="~/img/@img.nomeImagem">
+                            <img width="300px" class="img-fluid" src="~/img/produtos/@img.nomeImagem">
                         </div>
                         i++;
                     }else{
@@ -44,12 +44,12 @@
 
                         if (i == 0){
                             <div class="mt-4 text-center d-inline-block foto-secundaria-produto" style="border: 2px solid #1E90FF;">
-                                <img class="img-fluid" src="~/img/@img.nomeImagem" >
+                                <img width="100px" class="img-fluid" src="~/img/produtos/@img.nomeImagem" >
                             </div>
                             i++;
                         }else{
                             <div class="mt-4 text-center d-inline-block foto-secundaria-produto">
-                                <img class="img-fluid" src="~/img/@img.nomeImagem" >
+                                <img class="img-fluid" src="~/img/produtos/@img.nomeImagem" >
                             </div>
                         }
                         
@@ -69,7 +69,7 @@
                         <h3 class="mt-4 mb-0"><sup><s>R$@Model.preco.ToString("F2")</s></sup></h3>
                         <h1 class="mb-4 mt-0">R$@novoPreco.ToString("F2")</h1>
                     }else{
-                        <h2 class="my-4"><s>R$@Model.preco.ToString("F2")</s></h2>
+                        <h2 class="my-4">R$@Model.preco.ToString("F2")</h2>
                     }
                     
                     <h4>Cor: @Model.corPrincipal</h4>
@@ -79,12 +79,12 @@
                             @foreach(var imgOutrasCores in Model.imgOutrasCores){
                                 if(i == 0){
                                     <div class="text-center d-inline-block escolha-cor" style="border: 2px solid #1E90FF;">
-                                        <img class="img-fluid" src="~/img/@imgOutrasCores.nomeImagem" >
+                                        <img class="img-fluid" src="~/img/produtos/@imgOutrasCores.nomeImagem" >
                                     </div>
                                     i++;
                                 }else{
                                     <div class="text-center d-inline-block escolha-cor">
-                                        <img class="img-fluid" src="~/img/@imgOutrasCores.nomeImagem" >
+                                        <img class="img-fluid" src="~/img/produtos/@imgOutrasCores.nomeImagem" >
                                     </div>
                                 }
                                
@@ -122,98 +122,65 @@
         <div class="row mt-5 d-none d-md-block">
             <div id="slide-produtos" class="carousel slide" data-bs-interval="false">
                 <div class="carousel-inner">
-                    <div class="carousel-item active">
-                        <div class="row justify-content-center">
-                            <div class="col-3">
-                                <div class="items-carousel">
-                                    <div class="text-center img-carousel">
-                                        <img class="img-fluid" src="~/img/tenis-6.png">
-                                    </div>
+                    @{
+                        int j = 0;
+                        int total = Model.catalogo.Count;
+                        string imgName = "";
+                    }
 
-                                    <div class="info-carousel">
-                                        <h5>Tênis Adidas Run Falco 3.0</h5>
-                                        <h4>R$ 269,90</h4>
-                                        <p>Adidas</p>
-                                    </div>
+                    @foreach (var catalogo in Model.catalogo)
+                    {
+                        if (j % 3 == 0)
+                        {
+                            var activeClass = (j == 0) ? "active" : "";
+                            @:<div class="carousel-item @activeClass">
+                            @:<div class="row justify-content-center">
+                        }
+
+                        <div class="col-3">
+                            <div class="items-carousel">
+                                <div class="text-center img-carousel">
+                                    @{
+                                        if (catalogo.ApenasImagemPrincipal.Any())
+                                        {
+                                            imgName = catalogo.ApenasImagemPrincipal.FirstOrDefault();
+                                        }
+                                        else
+                                        {
+                                            imgName = "padrao1.png";
+                                        }
+                                    }
+                                    <img height="200px" class="img-fluid" src="~/img/produtos/@imgName" />
                                 </div>
-                            </div>
 
-                            <div class="col-3 mx-2">
-                                <div class="items-carousel">
-                                    <div class="text-center img-carousel">
-                                        <img class="img-fluid" src="~/img/tenis-7.png">
-                                    </div>
+                                <div class="info-carousel">
+                                    <h5>@catalogo.nomeCalcado</h5>
 
-                                    <div class="info-carousel">
-                                        <h5>TÊNIS OLYMPIKUS VENUM 34</h5>
-                                        <h4>R$ 149,90</h4>
-                                        <p>OLYMPIKUS</p>
-                                    </div>
-                                </div>
-                            </div>
+                                    @if (catalogo.promocao > 0)
+                                    {
+                                        <h4 class="card-title"><s>R$@catalogo.preco.ToString("F2")</s></h4>
+                                        var valor = catalogo.preco - catalogo.promocao.Value;
+                                        <h3 class="card-subtitle">R$@valor.ToString("F2")</h3>
+                                    }
+                                    else
+                                    {
+                                        <h4 class="card-title">R$@catalogo.preco.ToString("F2")</h4>
+                                    }
 
-                            <div class="col-3">
-                                <div class="items-carousel" >
-                                    <div class="text-center img-carousel">
-                                        <img class="img-fluid" src="~/img/tenis-8.png">
-                                    </div>
-
-                                    <div class="info-carousel">
-                                        <h5>TÊNIS NIKE COURT VISION Lo</h5>
-                                        <h4>R$ 299,79</h4>
-                                        <p>NIKE</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div class="carousel-item">
-                        <div class="row justify-content-center">
-                            <div class="col-3">
-                                <div class="items-carousel" >
-                                    <div class="text-center img-carousel">
-                                        <img class="img-fluid" src="~/img/tenis-6.png">
-                                    </div>
-
-                                    <div class="info-carousel">
-                                        <h5>Tênis Adidas Run Falco 3.0</h5>
-                                        <h4>R$ 269,90</h4>
-                                        <p>Adidas</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-3 mx-3">
-                                <div class="items-carousel" >
-                                    <div class="text-center img-carousel">
-                                        <img class="img-fluid" src="~/img/tenis-7.png">
-                                    </div>
-
-                                    <div class="info-carousel">
-                                        <h5>TÊNIS OLYMPIKUS VENUM 34</h5>
-                                        <h4>R$ 149,90</h4>
-                                        <p>OLYMPIKUS</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-3">
-                               <div class="items-carousel" >
-                                    <div class="text-center img-carousel">
-                                        <img class="img-fluid" src="~/img/tenis-8.png">
-                                    </div>
-
-                                    <div class="info-carousel">
-                                        <h5>TÊNIS NIKE COURT VISION Lo</h5>
-                                        <h4>R$ 299,79</h4>
-                                        <p>NIKE</p>
-                                    </div>
+                                    <p>@catalogo.marcaCalcado</p>
                                 </div>
                             </div>
                         </div>
-                    </div>
+
+                        j++;
+
+                        if (j % 3 == 0 || j == total)
+                        {
+                            @:</div> 
+                            @:</div>
+                        }
+                    }
+                    
 
                     <button class="carousel-control-prev" type="button" data-bs-target="#slide-produtos" data-bs-slide="prev">
                         <span style="filter:invert(1)" class="carousel-control-prev-icon" aria-hidden="true"></span>

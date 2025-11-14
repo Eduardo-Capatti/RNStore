@@ -155,9 +155,7 @@ C:\Users\Eduardo\Desktop\RNStore2\RNStore\obj\Debug\net9.0\rjimswa.dswa.cache.js
 C:\Users\Eduardo\Desktop\RNStore2\RNStore\obj\Debug\net9.0\rjsmrazor.dswa.cache.json
 C:\Users\Eduardo\Desktop\RNStore2\RNStore\obj\Debug\net9.0\rjsmcshtml.dswa.cache.json
 C:\Users\Eduardo\Desktop\RNStore2\RNStore\obj\Debug\net9.0\scopedcss\bundle\RNStore.styles.css
-C:\Users\Eduardo\Desktop\RNStore2\RNStore\obj\Debug\net9.0\compressed\utdrh7odnd-vgx0c3gfr9.gz
 C:\Users\Eduardo\Desktop\RNStore2\RNStore\obj\Debug\net9.0\compressed\i9v3th65ft-p8sdrafcgr.gz
-C:\Users\Eduardo\Desktop\RNStore2\RNStore\obj\Debug\net9.0\compressed\owwwu30wga-d505515c3z.gz
 C:\Users\Eduardo\Desktop\RNStore2\RNStore\obj\Debug\net9.0\compressed\j20h03egbw-61n19gt1b8.gz
 C:\Users\Eduardo\Desktop\RNStore2\RNStore\obj\Debug\net9.0\staticwebassets.build.json
 C:\Users\Eduardo\Desktop\RNStore2\RNStore\obj\Debug\net9.0\staticwebassets.build.json.cache
@@ -166,3 +164,5 @@ C:\Users\Eduardo\Desktop\RNStore2\RNStore\obj\Debug\net9.0\staticwebassets.build
 C:\Users\Eduardo\Desktop\RNStore2\RNStore\obj\Debug\net9.0\RNStore.csproj.Up2Date
 C:\Users\Eduardo\Desktop\RNStore2\RNStore\obj\Debug\net9.0\RNStore.genruntimeconfig.cache
 C:\Users\Eduardo\Desktop\RNStore2\RNStore\obj\Debug\net9.0\ref\RNStore.dll
+C:\Users\Eduardo\Desktop\RNStore2\RNStore\obj\Debug\net9.0\compressed\utdrh7odnd-o1fyhplq69.gz
+C:\Users\Eduardo\Desktop\RNStore2\RNStore\obj\Debug\net9.0\compressed\owwwu30wga-rlxdzgu5kg.gz

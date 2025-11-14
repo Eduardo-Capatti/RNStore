@@ -9,4 +9,6 @@ public interface ICatalogoRepository
     List<Slider> ReadSlides();
     Catalogo Read(int idProduto, int idCalcado);
 
+    List<Catalogo> Buscar(string buscarProduto);
+
 }

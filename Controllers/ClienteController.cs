@@ -1,30 +1,30 @@
-using Microsoft.AspNetCore.Mvc;
-using RNStore.Repositories;
-using RNStore.Models;
+// using Microsoft.AspNetCore.Mvc;
+// using RNStore.Repositories;
+// using RNStore.Models;
 
-namespace RNStore.Controllers;
+// namespace RNStore.Controllers;
 
-public class CatalogoController : Controller
-{
+// public class CatalogoController : Controller
+// {
 
-    private ICatalogoRepository repository;
+//     private ICatalogoRepository repository;
 
-    public CatalogoController (ICatalogoRepository repository)
-    {
-        this.repository = repository;
-    }
-    public ActionResult Index()
-    {
-        var sliders = repository.ReadSlides();
+//     public CatalogoController (ICatalogoRepository repository)
+//     {
+//         this.repository = repository;
+//     }
+//     public ActionResult Index()
+//     {
+//         var sliders = repository.ReadSlides();
 
-        ViewBag.slides = sliders;
+//         ViewBag.slides = sliders;
         
-        return View(repository.Read());
-    }
+//         return View(repository.Read());
+//     }
 
 
-    public ActionResult Produto(int idProduto, int idCalcado)
-    {
-        return View(repository.Read(idProduto, idCalcado));
-    }
-}
+//     public ActionResult Produto(int idProduto, int idCalcado)
+//     {
+//         return View(repository.Read(idProduto, idCalcado));
+//     }
+// }

@@ -2,6 +2,7 @@ namespace RNStore.Models;
 
 public class Catalogo
 {
+    public List<Catalogo> catalogo {get;set;}
     public int idProduto { get; set; }
     public int calcadoId { get; set; }
     public string nomeCalcado { get; set; }
