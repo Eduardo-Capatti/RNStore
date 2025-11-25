@@ -181,9 +181,11 @@ cmd.Parameters.AddWithValue("@busca", "%" + buscarProduto + "%");
         // 4) Pega imagens da cor principal
         List<Imagem> imagens = new List<Imagem>();
         using (SqlCommand cmd = new SqlCommand(
-            "SELECT idImagem, nomeImagem FROM Imagens WHERE corId = @cor ORDER BY statusImagem DESC", conn))
+            @"SELECT i.idImagem, i.nomeImagem FROM Imagens i LEFT JOIN ImagensProdutos ip on ip.imagemId = i.idImagem WHERE ip.corId = @cor AND ip.calcadoId = @calcadoId 
+            ORDER BY statusImagem DESC", conn))
         {
             cmd.Parameters.AddWithValue("@cor", corPrincipal);
+            cmd.Parameters.AddWithValue("@calcadoId", idCalcado);
 
             using (SqlDataReader reader = cmd.ExecuteReader())
             {
@@ -220,6 +222,7 @@ cmd.Parameters.AddWithValue("@busca", "%" + buscarProduto + "%");
 					ORDER BY p.corId
                 ) AS rn
             FROM Produtos p
+            WHERE p.calcadoId = @calcadoId
                 )
             SELECT 
                 i.idImagem, i.nomeImagem, ippc.idProduto, ippc.calcadoId

@@ -1,6 +1,6 @@
-create database RNStore2
+create database RNStoreOficial
 go
-use RNStoreTeste
+use RNStoreOficial
 
 create table Pessoas(
 	idPessoa     int       not null   primary key  identity,

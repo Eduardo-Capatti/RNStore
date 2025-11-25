@@ -391,7 +391,8 @@ public class EstoqueDatabaseRepository : Connection, IEstoqueRepository
 
         SqlCommand cmd = new SqlCommand();
         cmd.Connection = conn;
-        cmd.CommandText = $@"SELECT distinct p.idProduto, c.nomeCalcado, t.tamanho, co.nomeCor, p.preco, p.corId, p.calcadoId, f.nomeForn, m.nomeMarca, p.qtd, p.promocao 
+        cmd.CommandText = $@"SELECT distinct p.idProduto, c.nomeCalcado, t.tamanho, co.nomeCor, p.preco, p.corId, p.calcadoId, f.nomeForn, m.nomeMarca, p.qtd, p.promocao, 
+        dbo.fn_ObterStatusEstoque(qtd) as statusEstoque
         FROM Produtos p LEFT JOIN Calcados c on c.idCalcado = p.calcadoId 
         LEFT JOIN Cores co on p.corId = co.idCor 
         LEFT JOIN Tamanhos t on p.tamanhoId = t.idTamanho
@@ -417,7 +418,8 @@ public class EstoqueDatabaseRepository : Connection, IEstoqueRepository
                     nomeFornecedor = (string)reader["nomeForn"],
                     nomeMarca = (string)reader["nomeMarca"],
                     qtd = (int)reader["qtd"],
-                    promocao = reader["promocao"] is DBNull ? 0 : (decimal)reader["promocao"]
+                    promocao = reader["promocao"] is DBNull ? 0 : (decimal)reader["promocao"],
+                    statusEstoque = (string)reader["statusEstoque"]
                 }
             );
         }

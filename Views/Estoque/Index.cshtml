@@ -204,7 +204,7 @@
 
                 <tbody>
                     @if (Model.FirstOrDefault() == null){
-                        <td colspan="10" class="text-center">Nenhum registro encontrado</td>
+                        <td colspan="11" class="text-center">Nenhum registro encontrado</td>
                     }else{
                     @foreach(var estoque in Model){
                         <tr>
@@ -236,7 +236,6 @@
             </table>
 
             <div class="d-flex justify-content-between">
-                <a href="#"><button type="button" class="btn btn-link">Ver mais</button></a>
                 <a href="/Estoque/Create" asp-action="AddProd" class="btn btn-secondary">Adicionar</a>
             </div>
         </div>

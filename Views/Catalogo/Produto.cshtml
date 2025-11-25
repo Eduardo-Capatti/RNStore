@@ -236,66 +236,67 @@
         <div class="row mt-5 d-block d-md-none">
             <div id="slide-produtos-sm" class="carousel slide" data-bs-interval="false">
                 <div class="carousel-inner">
-                    @{
-                        int j2 = 0;
-                        int total2 = Model.catalogo.Count;
-                        string imgName2 = "";
-                    }
+                @{
+                    int j2 = 0;
+                    int total2 = Model.catalogo.Count;
+                    string imgName2 = "";
+                }
 
-                    @foreach (var catalogo in Model.catalogo)
-                    {
-                        if (j2 % 1 == 0)
-                        {
-                            var activeClass = (j2 == 0) ? "active" : "";
-                            @:<div class="carousel-item @activeClass">
-                            @:<div class="row justify-content-center">
-                        }
+            @foreach (var catalogo in Model.catalogo)
+            {
+                
+                if (j2 % 1 == 0)
+                {
+                    var activeClass = (j2 == 0) ? "active" : "";
+                    @:<div class="carousel-item @activeClass">
+                    @:<div class="row justify-content-center">
+                }
 
-                        <div class="col-3">
-                            <div class="items-carousel">
-                                <div onclick="acessarProduto(@catalogo.idProduto, @catalogo.calcadoId)">
-                                    <div class="text-center img-carousel">
-                                        @{
-                                            if (catalogo.ApenasImagemPrincipal.Any())
-                                            {
-                                                imgName2 = catalogo.ApenasImagemPrincipal.FirstOrDefault();
-                                            }
-                                            else
-                                            {
-                                                imgName2 = "padrao1.png";
-                                            }
-                                        }
-                                        <img height="200px" class="img-fluid" src="~/img/produtos/@imgName2" />
-                                    </div>
 
-                                    <div class="info-carousel">
-                                        <h5>@catalogo.nomeCalcado</h5>
+                <div class="col-6"> 
+                    <div class="items-carousel">
+                        <div onclick="acessarProduto(@catalogo.idProduto, @catalogo.calcadoId)">
+                            <div class="text-center img-carousel">
+                                @{
+                                    if (catalogo.ApenasImagemPrincipal.Any())
+                                    {
+                                        imgName2 = catalogo.ApenasImagemPrincipal.FirstOrDefault();
+                                    }
+                                    else
+                                    {
+                                        imgName2 = "padrao1.png";
+                                    }
+                                }
+                                <img height="200px" class="img-fluid" src="~/img/produtos/@imgName2" />
+                            </div>
 
-                                        @if (catalogo.promocao > 0)
-                                        {
-                                            <h4 class="card-title"><s>R$@catalogo.preco.ToString("F2")</s></h4>
-                                            var valor = catalogo.preco - catalogo.promocao.Value;
-                                            <h3 class="card-subtitle">R$@valor.ToString("F2")</h3>
-                                        }
-                                        else
-                                        {
-                                            <h4 class="card-title">R$@catalogo.preco.ToString("F2")</h4>
-                                        }
+                            <div class="info-carousel">
+                                <h5>@catalogo.nomeCalcado</h5>
 
-                                        <p>@catalogo.marcaCalcado</p>
-                                    </div>
-                                </div>
+                                @if (catalogo.promocao > 0)
+                                {
+                                    <h4 class="card-title"><s>R$@catalogo.preco.ToString("F2")</s></h4>
+                                    var valor = catalogo.preco - catalogo.promocao.Value;
+                                    <h3 class="card-subtitle">R$@valor.ToString("F2")</h3>
+                                }
+                                else
+                                {
+                                    <h4 class="card-title">R$@catalogo.preco.ToString("F2")</h4>
+                                }
+
+                                <p>@catalogo.marcaCalcado</p>
                             </div>
                         </div>
+                    </div>
+                </div>
 
-                        j++;
-
-                        if (j % 1 == 0 || j == total2)
-                        {
-                            @:</div> 
-                            @:</div>
-                        }
-                    }
+                j2++; 
+                if (j2 % 1 == 0 || j2 == total2)
+                {
+                    @:</div> 
+                    @:</div>
+                }
+            }
                     
 
                     <button class="carousel-control-prev" type="button" data-bs-target="#slide-produtos-sm" data-bs-slide="prev">
