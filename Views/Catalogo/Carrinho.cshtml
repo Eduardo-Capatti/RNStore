@@ -1,107 +1,175 @@
+@model List<RNStore.Models.Compra>
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title></title>
-    
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <title>Carrinho</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="~/css/carrinho.css" asp-append-version="true">
     <link rel="stylesheet" type="text/css" href="~/css/produto.css" asp-append-version="true">
     <script src="https://kit.fontawesome.com/4550765f78.js" crossorigin="anonymous"></script>
 
-   
+     <script>
+        setTimeout(() => {
+            let alert = document.querySelector('.alert');
+            if (alert) {
+                let bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            }
+        }, 4000);
+    </script>
 </head>
+
+    
 <body class="bg-light">
-    
- 
+
     @await Html.PartialAsync("_Menu")
-    
+
+     @{
+        decimal totalCompra = 0;
+        int idCompra = 0;
+    }
     <div class="container my-5" style="flex:1">
+        @if (TempData["Error"] != null)
+        {
+            <div class="alert alert-danger">@TempData["Error"]</div>
+        }
         <div class="row">
+            @if(!Model.Any()){
+                <div class="text-center">
+                    <p>Não há produtos no carrinho... <a href="/Catalogo/Index">veja nossos produtos</a></p>
+                </div>
+            }else{
+                <div class="col-lg-8">
+                    <div class="item-card">
+                        
+                    
+                            <h4 class="mb-4">Produtos (@Model.Count)</h4> 
 
-            <div class="col-lg-8">
-                <div class="item-card">
-                    <h4 class="mb-4">Produtos (1)</h4> 
+                            @foreach(var compras in Model){
+                                <div class="d-flex align-items-start border-bottom pb-3 mb-3">
+                            
+                                    <div class="me-3">
 
-                    <div class="d-flex align-items-start border-bottom pb-3 mb-3">
-                        <div class="me-3 mt-1">
-                            <input class="form-check-input" type="checkbox" checked>
-                        </div>
-                        <div class="me-3">
+                                        <img src="~/img/produtos/@compras.nomeImagem" alt="" width="80" height="80" class="img-thumbnail">
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <p class="mb-1">
+                                            <strong class="text-dark">@compras.nomeCalcado @compras.nomeCor @compras.tamanho - @compras.marcaCalcado </strong>
+                                        </p>
+                                        <form action="/Catalogo/Delete" method="POST">
+                                            <input type="hidden" value="@compras.idProduto" name="idProduto"/>
+                                            <input type="hidden" value="@compras.idCompra" name="idCompra"/>
+                                            <button type="submit" class="text-danger small ps-0" title="Remover" style="border:none; background:none;">Excluir</button>
+                                        </form>
+                                        
+                                        <div class="d-flex align-items-center mt-2">
+                                            <label for="quantidade-item" class="me-2 small">Quantidade:</label>
+                                            <form action="/Catalogo/AlterarQtdCarrinho" method="POST"> 
+                                                <div class="input-group input-group-sm" style="width: 100px;">                         
+                                                        <button name="operacao" value="remover" type="submit" class="btn btn-outline-secondary" type="button">-</button>
+                                                    
+                                                        <input type="number" class="form-control text-center" value="@compras.qtdIC" style="max-width: 50px;" id="quantidade-item" disabled>
+                                                    
+                                                        <button name="operacao" value="adicionar" type="submit" class="btn btn-outline-secondary" type="button">+</button>
 
-                            <img src="" alt="Tênis Esportivo" width="80" height="80" class="img-thumbnail">
-                        </div>
-                        <div class="flex-grow-1">
-                            <p class="mb-1">
-                                <strong class="text-dark">Tênis Esportivo Masculino Delta Com Cabedal E...</strong>
-                            </p>
-                            <a href="#" class="text-danger small" title="Remover">Excluir</a>
-                            <div class="d-flex align-items-center mt-2">
-                                <label for="quantidade-item" class="me-2 small">Quantidade:</label>
-                                <div class="input-group input-group-sm" style="width: 100px;">
-                                    <button class="btn btn-outline-secondary" type="button">-</button>
-                                    <input type="number" class="form-control text-center" value="1" min="1" style="max-width: 50px;" id="quantidade-item">
-                                    <button class="btn btn-outline-secondary" type="button">+</button>
+
+                                                        <input type="hidden" value="@compras.qtdIC" name="qtdIC">
+                                                        <input type="hidden" value="@compras.valorIC" name="valorIC">
+                                                        <input type="hidden" value="@compras.qtdDisponivel" name="qtdDisponivel">
+                                                        <input type="hidden" value="@compras.idProduto" name="idProduto">
+                                                        <input type="hidden" value="@compras.idCompra" name="idCompra">
+                                                </div>
+                                            </form>
+                                            <span class="ms-3 small text-muted">@compras.qtdDisponivel disponíveis</span>
+                                        
+                                        </div>
+                                    </div>
+                                    <div class="text-end">
+                                        @if(compras.promocao != null && compras.promocao > 0){
+                                            var precoTotal = compras.preco-compras.promocao;
+                                            int descontoPorcentagem = (int)compras.promocao * 100 / (int)compras.preco;
+                                            <span class="text-original-price">R$ @compras.preco.ToString("F2")</span>
+                                            <span class="badge text-discount bg-success-subtle me-2">-@descontoPorcentagem%</span>
+                                            <h4 class="mb-0 text-dark">R$ @precoTotal?.ToString("F2")</h4>
+                                        }else{
+                                            <h4 class="mb-0 text-dark">R$ @compras.preco.ToString("F2")</h4>
+                                        }
+                                    
+                                    </div>
                                 </div>
-                                <span class="ms-3 small text-muted">+50 disponíveis</span>
-                            </div>
-                        </div>
-                        <div class="text-end">
-                            <span class="text-original-price">R$ 199,99</span>
-                            <span class="badge bg-success-subtle text-discount me-2">-27%</span>
-                            <h4 class="mb-0 text-dark">R$ 145,99</h4>
-                        </div>
-                    </div>
+                            }
+                            
                     
-                    <div class="d-flex justify-content-between pt-2">
-                        <h5 class="mb-0 text-muted">Frete</h5>
-                        <h5 class="mb-0 text-success">Grátis</h5>
-                    </div>
+                        
+                        </div>
                     
-                    </div>
-            </div>
+                </div>
+            }
 
-            <div class="col-lg-4 mt-4 mt-lg-0">
-                <div class="card resumo-card">
-                    <div class="card-body">
-                        <h4 class="card-title mb-3">Resumo da compra</h4>
-                        <hr class="my-2">
-                        
-                        <div class="d-flex justify-content-between mt-3">
-                            <span class="text-muted">Produto</span>
-                            <div class="text-end">
-                                <div class="text-original-price">R$ 199,99</div>
-                                <div class="text-dark">R$ 145,99</div>
-                            </div>
-                        </div>
+            @if(Model.Any()){   
+                <div class="col-lg-4 mt-4 mt-lg-0">
+                    <div class="card resumo-card">
+                        <div class="card-body">
+                            <h4 class="card-title mb-3">Resumo da compra</h4>
+                            <hr class="my-2">
+                            
+                            @foreach(var compras in Model){              
+                                totalCompra = compras.totalCompra;
+                                idCompra = compras.idCompra;
 
-                        <div class="d-flex justify-content-between mt-2">
-                            <span class="text-muted">Frete</span>
-                            <span class="text-success">Grátis</span>
-                        </div>
-                        
-                        <hr class="my-3">
+                                <div class="d-flex justify-content-between mt-3">
+                                    <div>
+                                        <span class="text-muted">@compras.nomeCalcado @compras.nomeCor @compras.tamanho - @compras.marcaCalcado</span>
+                                        <br />
+                                        <span class="text-muted">Quantidade: @compras.qtdIC</span>
+                                    </div>
+                                    <div class="text-end">
+                                        @if(compras.promocao != null && compras.promocao > 0){
 
-                        <div class="d-flex justify-content-between align-items-center">
-                            <h5 class="mb-0">Total</h5>
-                            <h3 class="mb-0 text-dark">R$ 145,99</h3>
-                        </div>
-                        
-                        <div class="d-grid mt-4">
-                            <button type="button" class="btn btn-ml-primary btn-lg">Continuar a compra</button>
-                        </div>
+                                            var precoTotal = compras.preco-compras.promocao;
+                                            <div class="text-original-price">R$ @compras.preco.ToString("F2")</div>
+                                            <div class="text-dark">R$  @precoTotal?.ToString("F2")</div>
+                                        }else{
+                                            <h4 class="mb-0 text-dark">R$ @compras.preco.ToString("F2")</h4>
+                                        }
+                                        
+                                    </div>
+                                </div>
 
+                                @* <div class="d-flex justify-content-between mt-2">
+                                    <span class="text-muted">Frete</span>
+                                    <span class="text-success">Grátis</span>
+                                </div> *@
+                                
+                                <hr class="my-3">
+                                }
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h5 class="mb-0">Total</h5>
+                                    <h3 class="mb-0 text-dark">R$ @totalCompra.ToString("F2")</h3>
+                                </div>
+                                
+                                <div class="d-grid mt-4">
+                                    <form action="/Catalogo/ConfirmarCompra" method="POST">
+                                        <input type="hidden" value="@idCompra" name="idCompra"/>
+                                        <button type="submit" class="btn btn-ml-primary btn-lg">Confirmar a compra</button>
+                                    </form>
+                                </div>
+                            
+                        </div>
                     </div>
                 </div>
-            </div>
+            }
         </div>
     </div>
 
+   
 
-    @await Html.PartialAsync("_Footer");
+    @await Html.PartialAsync("_Footer")
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </body>
 </html>

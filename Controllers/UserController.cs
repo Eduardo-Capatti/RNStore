@@ -20,7 +20,7 @@ public class UserController : Controller
     {
         return View(new Login());
     }
-
+    
     [HttpPost]
     public ActionResult Login(Login model)
     {

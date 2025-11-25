@@ -14,14 +14,37 @@ public class MarcaController: Controller
     {
         this.repository = repository;
     }
+
+    public bool VerificaSession()
+    {
+        int? idUsuario = HttpContext.Session.GetInt32("idUsuario");
+
+        if (idUsuario == null)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
     public ActionResult Index()
     {
+        if (VerificaSession())
+        {
+            return RedirectToAction("Login", "User");
+        }
+
         return View(repository.Read());
     }
 
     [HttpPost]
     public ActionResult Create(Marca marca)
     {
+        if (VerificaSession())
+        {
+            return RedirectToAction("Login", "User");
+        }
+
         if (marca.nomeMarca == null)
         {
             var marcas = repository.Read();
@@ -40,6 +63,11 @@ public class MarcaController: Controller
 
     public ActionResult Delete(int idMarca)
     {
+        if (VerificaSession())
+        {
+            return RedirectToAction("Login", "User");
+        }
+
         try
         {
             repository.Delete(idMarca);

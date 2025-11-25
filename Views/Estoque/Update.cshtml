@@ -102,7 +102,9 @@
                         <th scope="col" >Imagem</th>         
                         <th scope="col" >Imagem Principal</th>    
                         
-                        <th scope="col" class="text-center"></th> <th scope="col" class="text-center"></th> </tr>
+                        <th scope="col" class="text-center">Trocar Imagem Principal</th> 
+                        <th scope="col" class="text-center">Opções</th> 
+                    </tr>
                 </thead>
 
                 <tbody>
@@ -142,7 +144,7 @@
                             </td>
                             
                             <td class="text-center">
-                                <a href="/Estoque/DeleteImg?idImagem=@imagens.idImagem"  class="btn btn-sm text-danger">
+                                <a href="/Estoque/DeleteImg?idImagem=@imagens.idImagem&idEstoque=@Model.idProduto"  class="btn btn-sm text-danger">
                                     <i class="fa-solid fa-trash"></i>
                                 </a>
                             </td>

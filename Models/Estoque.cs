@@ -52,4 +52,6 @@ public class Estoque
     public int idFornecedor { get; set; }
 
     public string nomeFornecedor { get; set; }
+
+    public string statusEstoque {get;set;}
 }

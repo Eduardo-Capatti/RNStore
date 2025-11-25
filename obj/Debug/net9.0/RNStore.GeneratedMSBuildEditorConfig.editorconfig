@@ -48,6 +48,18 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2xpZW50ZVxDYWRhc3Ryby5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/Eduardo/Desktop/RNStore2/RNStore/Views/Cliente/Login.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2xpZW50ZVxMb2dpbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Eduardo/Desktop/RNStore2/RNStore/Views/Compra/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29tcHJhXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Eduardo/Desktop/RNStore2/RNStore/Views/Compra/Update.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29tcHJhXFVwZGF0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/Eduardo/Desktop/RNStore2/RNStore/Views/Cor/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29yXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
@@ -118,10 +130,6 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/Eduardo/Desktop/RNStore2/RNStore/Views/Tamanho/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGFtYW5ob1xJbmRleC5jc2h0bWw=
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/Eduardo/Desktop/RNStore2/RNStore/Views/User/Cadastro.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlclxDYWRhc3Ryby5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Eduardo/Desktop/RNStore2/RNStore/Views/User/Login.cshtml]

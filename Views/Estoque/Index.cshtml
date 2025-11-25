@@ -1,4 +1,5 @@
 @model List<RNStore.Models.Estoque>
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -44,14 +45,15 @@
 
     @await Html.PartialAsync("_MenuEstoque")
 
+    
     <div class="flex-grow-1">
         <div class="container">
 
             <div>
                 <div class="container mt-3">
-                    @if (ViewBag.Error != null)
+                    @if (TempData["Error"] != null)
                     {
-                        <div class="alert alert-danger">@ViewBag.Error</div>
+                        <div class="alert alert-danger">@TempData["Error"]</div>
                     }
                     <h1 class="text-center my-5">Listagem de Produto</h1>
                     <div class="d-flex justify-content-end">
@@ -193,7 +195,8 @@
                         <th scope="col" >Preço</th>   
                         <th scope="col" >Promoção</th>          
                         <th scope="col" >Tamanho</th>   
-                        <th scope="col">Cor</th>       
+                        <th scope="col">Cor</th>   
+                        <th scope="col">Status</th>     
                         
                         <th scope="col" class="text-center">Opções</th> 
                     </tr>
@@ -214,10 +217,12 @@
                             <td>R$@estoque.promocao?.ToString("F2")</td>
                             <td>@estoque.tamanho</td>
                             <td>@estoque.nomeCor</td>
+                            <td>@estoque.statusEstoque</td>
                             
                             <td class="text-center">
                                 <a href="/Estoque/Delete?idEstoque=@estoque.idProduto"  class="btn btn-sm text-danger">
                                     <i class="fa-solid fa-trash"></i>
+
                                 </a>
 
                                 <a href="/Estoque/Update?idEstoque=@estoque.idProduto"  class="btn btn-sm text-primary">
@@ -237,11 +242,11 @@
         </div>
     </div>
     
-    <footer class="mt-5 bg-dark" id="rodape">
+    <footer class="py-3 mt-5 bg-dark" id="rodape">
         <div class="container text-white">
             <div class="row justify-content-center pt-4">
 
-                <div class="col-12 col-md-8 align-self-center text-center">
+                <div class="col-12 align-self-center text-center">
                     <h5 class="mt-3 mt-md-0">Copyright © 2025 Innovatech. Todos os direitos reservados.</h5>
                 </div>
 

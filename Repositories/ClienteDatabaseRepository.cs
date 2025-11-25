@@ -14,16 +14,13 @@ public class ClienteDatabaseRepository : Connection, IClienteRepository
     public ClienteDatabaseRepository(string conn) : base(conn)
     {
     }
-    public void Create(Cliente cliente)
+    public User Create(Cliente cliente)
     {
 
         string senhaHash = Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(cliente.Senha)));
 
         using (conn)
         {
-            
-
-
             SqlTransaction transaction = conn.BeginTransaction();
 
             try
@@ -88,7 +85,7 @@ public class ClienteDatabaseRepository : Connection, IClienteRepository
                         cmdEndereco.Parameters.AddWithValue("@cidade", endereco.Cidade);
                         cmdEndereco.Parameters.AddWithValue("@uf", endereco.Uf);
 
-                        // O 'idCliente' do endereço é o 'idPessoa' que criamos
+                        // O 'idCliente' do endereço é o 'idPessoa'
                         cmdEndereco.Parameters.AddWithValue("@idCliente", idPessoa);
 
                         // Tratamento para campo opcional (complemento)
@@ -100,11 +97,18 @@ public class ClienteDatabaseRepository : Connection, IClienteRepository
 
 
                 transaction.Commit();
+                Login model = new Login {
+                    email = cliente.Email,
+                    senha = cliente.Senha
+                };
+
+                var retorno = LoginUser(model);
+
+                return retorno;
+
             }
             catch (Exception)
             {
-
-
                 transaction.Rollback();
                 throw;
 
@@ -129,13 +133,30 @@ public class ClienteDatabaseRepository : Connection, IClienteRepository
 
         if (reader.Read())
         {
-            return new User
+            var user = new User
             {
                 idUsuario = (int)reader["idPessoa"],
                 nomeUsuario = (string)reader["nomePessoa"]
             };
+
+            reader.Close();
+            return user;
         }
 
+        reader.Close();
         return null;
+    }
+
+    public void ColocarCarrinho(int idCliente, int idProduto)
+    {
+        SqlCommand cmd = new SqlCommand();
+        cmd.Connection = conn;
+
+        cmd.CommandText = @"exec sp_ColocarCarrinhoAposLogin @idCliente, @idProduto";
+
+        cmd.Parameters.AddWithValue("@idCliente", idCliente);
+        cmd.Parameters.AddWithValue("@idProduto", idProduto);
+
+        cmd.ExecuteNonQuery();
     }
 }

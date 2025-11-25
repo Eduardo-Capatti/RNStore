@@ -14,14 +14,36 @@ public class TamanhoController: Controller
     {
         this.repository = repository;
     }
+
+    public bool VerificaSession()
+    {
+        int? idUsuario = HttpContext.Session.GetInt32("idUsuario");
+
+        if (idUsuario == null)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
     public ActionResult Index()
     {
+        if (VerificaSession())
+        {
+            return RedirectToAction("Login", "User");
+        }
+
         return View(repository.Read());
     }
 
     [HttpPost]
     public ActionResult Create(Tamanho tamanho)
     {   
+        if (VerificaSession())
+        {
+            return RedirectToAction("Login", "User");
+        }
         if (tamanho.tamanho == null)
         {
             var tamanhos = repository.Read();
@@ -36,6 +58,11 @@ public class TamanhoController: Controller
 
     public ActionResult Delete(int idTamanho)
     {
+        if (VerificaSession())
+        {
+            return RedirectToAction("Login", "User");
+        }
+
         try
         {
             repository.Delete(idTamanho);

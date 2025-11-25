@@ -5,6 +5,9 @@ public class Catalogo
     public List<Catalogo> catalogo {get;set;}
     public int idProduto { get; set; }
     public int calcadoId { get; set; }
+
+    public int tamanhoId {get;set;}
+    
     public string nomeCalcado { get; set; }
 
     public string marcaCalcado { get; set; }
@@ -28,5 +31,7 @@ public class Catalogo
     public List<string> ApenasImagemPrincipal { get; set; }
 
     public List<Slider> slides { get; set; }
+
+    public bool isOnCart {get; set;}
 
 }

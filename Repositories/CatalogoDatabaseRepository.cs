@@ -20,54 +20,7 @@ public class CatalogoDatabaseRepository : Connection, ICatalogoRepository
 
         SqlCommand cmd = new SqlCommand();
         cmd.Connection = conn;
-        cmd.CommandText = @"
-            
- WITH ProdEscolhido AS (
-    SELECT 
-        p.idProduto,
-        p.calcadoId,
-        p.corId,
-        p.preco,
-        p.promocao,
-        ROW_NUMBER() OVER (
-            PARTITION BY p.calcadoId 
-            ORDER BY 
-                CASE 
-                    WHEN p.promocao IS NOT NULL THEN p.promocao 
-                    ELSE p.preco 
-                END ASC
-        ) AS rn
-    FROM Produtos p
-        ),
-        ImagensEscolhidas AS (
-            SELECT 
-        ip.calcadoId,
-        ip.corId,
-        i.nomeImagem,
-        ROW_NUMBER() OVER (
-            PARTITION BY ip.calcadoId 
-            ORDER BY 
-                CASE WHEN i.nomeImagem IS NOT NULL THEN 0 ELSE 1 END,  -- prioriza imagens não nulas
-                i.idImagem ASC
-        ) AS rn
-            FROM ImagensProdutos ip
-        LEFT JOIN Imagens i ON i.idImagem = ip.imagemId AND i.statusImagem = 1
-    )
-SELECT 
-    c.idCalcado,
-    pe.idProduto,
-    c.nomeCalcado,
-    m.nomeMarca,
-    pe.preco,
-    pe.promocao,
-    ie.nomeImagem
-FROM Calcados c
-JOIN ProdEscolhido pe 
-    ON c.idCalcado = pe.calcadoId AND pe.rn = 1
-JOIN Marca m 
-    ON m.idMarca = c.marcaId
-LEFT JOIN ImagensEscolhidas ie 
-    ON ie.calcadoId = c.idCalcado AND ie.rn = 1;";
+        cmd.CommandText = @"select * from v_BuscarPorProdutosCatalogo";
 
         SqlDataReader reader = cmd.ExecuteReader();
 
@@ -94,6 +47,7 @@ LEFT JOIN ImagensEscolhidas ie
 
             );
         }
+        reader.Close();
         return catalogos;
     }
 
@@ -104,56 +58,7 @@ LEFT JOIN ImagensEscolhidas ie
 
         SqlCommand cmd = new SqlCommand();
         cmd.Connection = conn;
-        cmd.CommandText = $@"
-            
- WITH ProdEscolhido AS (
-    SELECT 
-        p.idProduto,
-        p.calcadoId,
-        p.corId,
-        p.preco,
-        p.promocao,
-        ROW_NUMBER() OVER (
-            PARTITION BY p.calcadoId 
-            ORDER BY 
-                CASE 
-                    WHEN p.promocao IS NOT NULL THEN p.promocao 
-                    ELSE p.preco 
-                END ASC
-        ) AS rn
-    FROM Produtos p
-        ),
-        ImagensEscolhidas AS (
-            SELECT 
-        ip.calcadoId,
-        ip.corId,
-        i.nomeImagem,
-        ROW_NUMBER() OVER (
-            PARTITION BY ip.calcadoId 
-            ORDER BY 
-                CASE WHEN i.nomeImagem IS NOT NULL THEN 0 ELSE 1 END,  -- prioriza imagens não nulas
-                i.idImagem ASC
-        ) AS rn
-            FROM ImagensProdutos ip
-        LEFT JOIN Imagens i ON i.idImagem = ip.imagemId AND i.statusImagem = 1
-    )
-SELECT 
-    c.idCalcado,
-    pe.idProduto,
-    c.nomeCalcado,
-    m.nomeMarca,
-    pe.preco,
-    pe.promocao,
-    ie.nomeImagem
-FROM Calcados c
-JOIN ProdEscolhido pe 
-    ON c.idCalcado = pe.calcadoId AND pe.rn = 1
-JOIN Marca m 
-    ON m.idMarca = c.marcaId
-LEFT JOIN ImagensEscolhidas ie 
-    ON ie.calcadoId = c.idCalcado AND ie.rn = 1
-WHERE c.nomeCalcado like(@busca) OR m.nomeMarca like(@busca)
-;";
+        cmd.CommandText = $@"select * from fn_BuscarProdutoEspecifico(@busca);";
 
 cmd.Parameters.AddWithValue("@busca", "%" + buscarProduto + "%");
 
@@ -227,14 +132,11 @@ cmd.Parameters.AddWithValue("@busca", "%" + buscarProduto + "%");
 
         // 2) Pega tamanhos disponíveis para essa cor
         List<Tamanho> tamanhos = new List<Tamanho>();
-        using (SqlCommand cmd = new SqlCommand(@"
-            SELECT DISTINCT t.idTamanho, t.tamanho
-            FROM Produtos p
-            JOIN Tamanhos t ON p.tamanhoId = t.idTamanho
-            WHERE p.calcadoId = @calcado AND p.corId = @cor", conn))
+        using (SqlCommand cmd = new SqlCommand(@"select * from fn_TamanhoDisponivelPorCalcadoECor(@calcado, @cor)", conn))
         {
             cmd.Parameters.AddWithValue("@calcado", idCalcado);
             cmd.Parameters.AddWithValue("@cor", corPrincipal);
+            cmd.Parameters.AddWithValue("@idProduto", idProduto);
 
             using (SqlDataReader reader = cmd.ExecuteReader())
             {
@@ -243,7 +145,9 @@ cmd.Parameters.AddWithValue("@busca", "%" + buscarProduto + "%");
                     tamanhos.Add(new Tamanho
                     {
                         idTamanho = (int)reader["idTamanho"],
-                        tamanho = (string)reader["tamanho"]
+                        tamanho = (string)reader["tamanho"],
+                        idProduto = (int)reader["idProduto"],
+                        calcadoId = (int)reader["calcadoId"]
                     });
                 }
             }
@@ -252,11 +156,7 @@ cmd.Parameters.AddWithValue("@busca", "%" + buscarProduto + "%");
         // 3) Pega todas cores do calçado
         List<Cor> cores = new List<Cor>();
         List<int> listaCores = new List<int>();
-        string sql = @"
-        SELECT c.idCor, c.nomeCor 
-        FROM Cores c
-        JOIN CoresCalcados cc ON c.idCor = cc.corId
-        WHERE cc.calcadoId = @id";
+        string sql = @"select * from fn_CorDisponivelPorCalcado(@id)";
 
         using (SqlCommand cmd = new SqlCommand(sql, conn))
         {
@@ -301,19 +201,43 @@ cmd.Parameters.AddWithValue("@busca", "%" + buscarProduto + "%");
         // 5) Pega imagem principal das outras cores
         List<Imagem> imagensOutrasCores = new List<Imagem>();
 
-        var where = $"corId IN ({string.Join(",", listaCores)})";
+        var where = "";
 
+        if (listaCores.Any())
+        {
+            where = $"ip.corId IN ({string.Join(",", listaCores)}) AND";
+        }
 
         using (SqlCommand cmd = new SqlCommand(
-           $"SELECT idImagem, nomeImagem FROM Imagens WHERE {where} AND statusImagem = 1", conn))
+           @$"WITH ImagemPrincipalProdutoCor AS (
+            SELECT 
+                p.idProduto,
+                p.calcadoId,
+				p.corId,
+                p.qtd,
+                ROW_NUMBER() OVER (
+                    PARTITION BY p.corId 
+					ORDER BY p.corId
+                ) AS rn
+            FROM Produtos p
+                )
+            SELECT 
+                i.idImagem, i.nomeImagem, ippc.idProduto, ippc.calcadoId
+            FROM Imagens i 
+            LEFT JOIN ImagensProdutos ip on ip.imagemId = i.idImagem 
+            LEFT JOIN ImagemPrincipalProdutoCor ippc ON ip.corId = ippc.corId AND ippc.rn = 1
+            WHERE {where} ip.calcadoId = @calcadoId AND statusImagem = 1 AND ip.corId != @corPrincipal AND ippc.qtd > 0", conn))
         {
-
+            cmd.Parameters.AddWithValue("@calcadoId", idCalcado);
+            cmd.Parameters.AddWithValue("@corPrincipal", corPrincipal);
             using (SqlDataReader reader = cmd.ExecuteReader())
             {
                 while (reader.Read())
                 {
                     imagensOutrasCores.Add(new Imagem
                     {
+                        idProduto = (int)reader["idProduto"],
+                        calcadoId = (int)reader["calcadoId"],
                         idImagem = (int)reader["idImagem"],
                         nomeImagem = (string)reader["nomeImagem"]
                     });
@@ -326,63 +250,8 @@ cmd.Parameters.AddWithValue("@busca", "%" + buscarProduto + "%");
 
         SqlCommand cmdCatalogo = new SqlCommand();
         cmdCatalogo.Connection = conn;
-        cmdCatalogo.CommandText = @"
-        WITH ProdEscolhido AS (
-            SELECT 
-                p.idProduto,
-                p.calcadoId,
-                p.corId,
-                p.preco,
-                p.promocao,
-                ROW_NUMBER() OVER (
-                    PARTITION BY p.calcadoId 
-                    ORDER BY 
-                        CASE 
-                            WHEN p.promocao IS NOT NULL THEN p.promocao 
-                            ELSE p.preco 
-                        END ASC
-                ) AS rn
-            FROM Produtos p
-                ),
-                ImagensEscolhidas AS (
-                    SELECT 
-                ip.calcadoId,
-                ip.corId,
-                i.nomeImagem,
-                ROW_NUMBER() OVER (
-                    PARTITION BY ip.calcadoId 
-                    ORDER BY 
-                        CASE WHEN i.nomeImagem IS NOT NULL THEN 0 ELSE 1 END,  -- prioriza imagens não nulas
-                        i.idImagem ASC
-                ) AS rn
-                    FROM ImagensProdutos ip
-                LEFT JOIN Imagens i ON i.idImagem = ip.imagemId AND i.statusImagem = 1
-            )
-        SELECT top 9
-            c.idCalcado,
-            pe.idProduto,
-            c.nomeCalcado,
-            m.nomeMarca,
-            pe.preco,
-            pe.promocao,
-            ie.nomeImagem
-        FROM Calcados c
-        JOIN ProdEscolhido pe 
-            ON c.idCalcado = pe.calcadoId AND pe.rn = 1
-        JOIN Marca m 
-            ON m.idMarca = c.marcaId
-        LEFT JOIN ImagensEscolhidas ie 
-            ON ie.calcadoId = c.idCalcado AND ie.rn = 1
-        WHERE pe.idProduto != @idProduto
-        ORDER BY 
-            CASE 
-                WHEN idCalcado = @idCalcado THEN 0 
-                ELSE 1 
-            END,
-            idCalcado
-        ;";
+        cmdCatalogo.CommandText = @"select * from fn_MostrarOutrosProdutos(@idCalcado);";
 
-        cmdCatalogo.Parameters.AddWithValue("@idProduto", idProduto);
         cmdCatalogo.Parameters.AddWithValue("@idCalcado", idCalcado);
 
         SqlDataReader readerCatalogo = cmdCatalogo.ExecuteReader();
@@ -414,12 +283,7 @@ cmd.Parameters.AddWithValue("@busca", "%" + buscarProduto + "%");
         readerCatalogo.Close();
 
         // 7) Pega dados gerais do produto
-        using (SqlCommand cmd = new SqlCommand(@"
-            SELECT TOP 1 p.idProduto, c.nomeCalcado, m.nomeMarca, p.preco, p.promocao
-            FROM Produtos p
-            JOIN Calcados c ON p.calcadoId = c.idCalcado
-            JOIN Marca m ON c.marcaId = m.idMarca
-            WHERE p.idProduto = @id", conn))
+        using (SqlCommand cmd = new SqlCommand(@"select * from fn_DadosProduto(@id)", conn))
         {
             cmd.Parameters.AddWithValue("@id", idProduto);
 
@@ -432,6 +296,7 @@ cmd.Parameters.AddWithValue("@busca", "%" + buscarProduto + "%");
                         idProduto = (int)reader["idProduto"],
                         nomeCalcado = (string)reader["nomeCalcado"],
                         calcadoId = idCalcado,
+                        tamanhoId = (int)reader["tamanhoId"],
                         cor = cores,
                         corPrincipal = corPrincipalNome,
                         tamanho = tamanhos,
@@ -448,4 +313,140 @@ cmd.Parameters.AddWithValue("@busca", "%" + buscarProduto + "%");
 
         return null;
     }
+
+
+    public List<Compra> Read(int? idCliente)
+    {
+        List<Compra> compras = new List<Compra>();
+
+        SqlCommand cmd = new SqlCommand();
+        cmd.Connection = conn;
+        cmd.CommandText = @"select * from dbo.fn_BuscarCarrinhoCliente(@idCliente)";
+        cmd.Parameters.AddWithValue("@idCliente", idCliente);
+
+        SqlDataReader reader = cmd.ExecuteReader();
+
+        while (reader.Read())
+        {
+            compras.Add(
+                new Compra
+                {
+                    idCompra = (int)reader["idCompra"],
+                    totalCompra = (decimal)reader["totalCompra"],
+                    valorIC = (decimal)reader["valorIC"],
+                    qtdIC = (int)reader["qtdIC"],
+                    preco = (decimal)reader["preco"],
+                    promocao = reader["promocao"] != DBNull.Value ? (decimal)reader["promocao"] : null,
+                    idProduto = (int)reader["idProduto"],
+                    nomeCalcado = (string)reader["nomeCalcado"],
+                    nomeCor = (string)reader["nomeCor"],
+                    tamanho = (string)reader["tamanho"],
+                    nomeImagem = (string)reader["nomeImagem"],
+                    marcaCalcado = (string)reader["nomeMarca"],
+                    qtdDisponivel = (int)reader["qtd"]
+                }
+            );
+        }
+        reader.Close();
+
+        return compras;
+
+    }
+
+
+    public void RemoverQtdCarrinho(int idCompra, int idProduto, decimal valorIC)
+    {
+        SqlCommand cmd = new SqlCommand();
+        cmd.Connection = conn;
+        cmd.CommandText = @"
+        UPDATE Compras SET totalCompra = totalCompra - @valorIC WHERE idCompra = @idCompra;
+        UPDATE Itens_Compra SET qtdIC = qtdIC - 1 WHERE idCompra = @idCompra AND idProduto = @idProduto";
+        cmd.Parameters.AddWithValue("@idCompra", idCompra);
+        cmd.Parameters.AddWithValue("@idProduto", idProduto);
+        cmd.Parameters.AddWithValue("@valorIC", valorIC);
+
+        cmd.ExecuteNonQuery(); 
+    }
+
+
+    public void AdicionarQtdCarrinho(int idCompra, int idProduto, decimal valorIC)
+    {
+        SqlCommand cmd = new SqlCommand();
+        cmd.Connection = conn;
+        cmd.CommandText = @"
+        UPDATE Compras SET totalCompra = totalCompra + @valorIC WHERE idCompra = @idCompra;
+        UPDATE Itens_Compra SET qtdIC = qtdIC + 1 WHERE idCompra = @idCompra AND idProduto = @idProduto";
+        cmd.Parameters.AddWithValue("@idCompra", idCompra);
+        cmd.Parameters.AddWithValue("@idProduto", idProduto);
+        cmd.Parameters.AddWithValue("@valorIC", valorIC);
+
+        cmd.ExecuteNonQuery();
+    }
+
+    public void Delete(Compra compra)
+    {   
+
+        SqlCommand cmd = new SqlCommand();
+
+        cmd.Connection = conn;
+        cmd.CommandText = @"exec sp_CarrinhoExcluirItem @idCompra, @idProduto";
+        cmd.Parameters.AddWithValue("@idCompra", compra.idCompra);
+        cmd.Parameters.AddWithValue("@idProduto", compra.idProduto);
+
+        cmd.ExecuteNonQuery();
+
+    }
+
+
+    public void ConfirmarCompra(int idCompra)
+    {
+        SqlCommand cmd = new SqlCommand();
+
+        cmd.Connection = conn;
+        cmd.CommandText = @"UPDATE Compras SET data_entrega = dateadd(day, 7, GETDATE()), statusCompra = 1 WHERE idCompra = @idCompra";
+        cmd.Parameters.AddWithValue("@idCompra", idCompra);
+
+        cmd.ExecuteNonQuery();
+    }
+
+
+    public void Carrinho(Catalogo catalogo, int? idCliente)
+    {   
+        decimal? novoPreco = catalogo.preco - (catalogo.promocao ?? 0);
+
+        SqlCommand cmd = new SqlCommand();
+        cmd.Connection = conn;
+
+        cmd.CommandText = @"exec sp_CarrinhoAdicionarItem @idCliente, @idProduto, @valorIC;";
+
+        cmd.Parameters.AddWithValue("@idCliente", idCliente);
+        cmd.Parameters.AddWithValue("@idProduto", catalogo.idProduto);
+        cmd.Parameters.AddWithValue("@valorIC", novoPreco);
+
+        cmd.ExecuteNonQuery();
+    }
+
+    public bool IsOnCart(int idProduto, int? idCliente)
+    {
+        bool result = false;
+
+        SqlCommand cmd = new SqlCommand();
+        cmd.Connection = conn;
+
+        cmd.CommandText = @"SELECT dbo.fn_IsOnCart(@idProduto, @idCliente) as result";
+        cmd.Parameters.AddWithValue("@idProduto", idProduto);
+        cmd.Parameters.AddWithValue("@idCliente", idCliente);
+
+        SqlDataReader reader = cmd.ExecuteReader();
+
+        if (reader.Read())
+        {
+            result = (bool)reader["result"];
+        }
+
+        return result;
+
+    }
+
 }
+

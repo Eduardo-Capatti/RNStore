@@ -14,14 +14,37 @@ public class CalcadoController: Controller
     {
         this.repository = repository;
     }
+
+    public bool VerificaSession()
+    {
+        int? idUsuario = HttpContext.Session.GetInt32("idUsuario");
+
+        if (idUsuario == null)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
     public ActionResult Index()
     {
+        if (VerificaSession())
+        {
+            return RedirectToAction("Login", "User");
+        }
+
         return View(repository.Read());
     }
     
     [HttpGet]
     public ActionResult Create()
     {
+        if (VerificaSession())
+        {
+            return RedirectToAction("Login", "User");
+        }
+
         var model = repository.Create();
         return View(model);
     }
@@ -29,6 +52,11 @@ public class CalcadoController: Controller
     [HttpPost]
     public ActionResult Create(Calcado calcado)
     {
+
+        if (VerificaSession())
+        {
+            return RedirectToAction("Login", "User");
+        }
 
         if (calcado.nomeCalcado == null || calcado.marcaId == 0)
         {
@@ -46,6 +74,11 @@ public class CalcadoController: Controller
     [HttpGet]
     public ActionResult Update(int idCalcado)
     {
+        if (VerificaSession())
+        {
+            return RedirectToAction("Login", "User");
+        }
+
         var calcado = repository.Read(idCalcado);
         return View(calcado);
     }
@@ -53,6 +86,11 @@ public class CalcadoController: Controller
     [HttpPost]
     public ActionResult Update(Calcado calcado)
     {
+        if (VerificaSession())
+        {
+            return RedirectToAction("Login", "User");
+        }
+
         bool TemCampoNulo(Calcado calcado)
         {
             if (calcado == null) return true;
@@ -78,6 +116,11 @@ public class CalcadoController: Controller
 
     public ActionResult Delete(int idCalcado)
     {
+        if (VerificaSession())
+        {
+            return RedirectToAction("Login", "User");
+        }
+
         try
         {
             repository.Delete(idCalcado);

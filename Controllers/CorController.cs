@@ -14,14 +14,37 @@ public class CorController: Controller
     {
         this.repository = repository;
     }
+
+    public bool VerificaSession()
+    {
+        int? idUsuario = HttpContext.Session.GetInt32("idUsuario");
+
+        if (idUsuario == null)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
     public ActionResult Index()
     {
+        if (VerificaSession())
+        {
+            return RedirectToAction("Login", "User");
+        }
+
         return View(repository.Read());
     }
 
     [HttpPost]
     public ActionResult Create(Cor cor)
     {
+        if (VerificaSession())
+        {
+            return RedirectToAction("Login", "User");
+        }
+
         if (cor.nomeCor == null)
         {
             var cores = repository.Read();
@@ -41,6 +64,11 @@ public class CorController: Controller
 
     public ActionResult Delete(int idCor)
     {
+        if (VerificaSession())
+        {
+            return RedirectToAction("Login", "User");
+        }
+
         try
         {
             repository.Delete(idCor);

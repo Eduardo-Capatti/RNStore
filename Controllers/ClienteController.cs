@@ -51,7 +51,11 @@ public class ClienteController : Controller
                 return View("Cadastro", cliente); 
             }
 
-            repository.Create(cliente); 
+            var infos = repository.Create(cliente); 
+
+            HttpContext.Session.SetInt32("idCliente", infos.idUsuario);
+            HttpContext.Session.SetString("nomeCliente", infos.nomeUsuario);
+
 
             return RedirectToAction("Index", "Catalogo"); 
         }
@@ -73,6 +77,7 @@ public class ClienteController : Controller
             return View("Cadastro", cliente);
         }
     }
+
     public ActionResult Login()
     {
         return View(new Login());
@@ -89,8 +94,24 @@ public class ClienteController : Controller
             return View(model);
         }
 
-        HttpContext.Session.SetInt32("idUsuario", user.idUsuario);
-        HttpContext.Session.SetString("nomeUsuario", user.nomeUsuario);
+        HttpContext.Session.SetInt32("idCliente", user.idUsuario);
+        HttpContext.Session.SetString("nomeCliente", user.nomeUsuario);
+
+        if(HttpContext.Session.GetInt32("idProduto") != null)
+        {
+            var idCliente = HttpContext.Session.GetInt32("idCliente") ?? 0;
+            var idProduto = HttpContext.Session.GetInt32("idProduto") ?? 0;
+            repository.ColocarCarrinho(idCliente, idProduto);
+
+            return RedirectToAction("Carrinho", "Catalogo");
+        }
+
+        return RedirectToAction("Index", "Catalogo");
+    }
+
+    public ActionResult Sair()
+    {
+        HttpContext.Session.Clear();
 
         return RedirectToAction("Index", "Catalogo");
     }

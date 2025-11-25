@@ -17,23 +17,16 @@ public class FuncionarioDatabaseRepository : Connection, IFuncionarioRepository
 
     public string Verificar(Funcionario funcionario)
     {
+        string cpf = funcionario.cpf ?? "";
         SqlCommand cmd = new SqlCommand();
         
         cmd.Connection = conn;
 
-        cmd.CommandText = @"
-            SELECT 
-                CASE 
-                    WHEN EXISTS (SELECT 1 FROM Pessoas WHERE email = @email) THEN 'email'
-                    WHEN EXISTS (SELECT 1 FROM Pessoas WHERE telefone = @telefone) THEN 'telefone'
-                    WHEN EXISTS (SELECT 1 FROM Pessoas WHERE cpf = @cpf) THEN 'cpf'
-                    ELSE 'ok'
-                END AS Resultado
-        ";;
+        cmd.CommandText = @"select dbo.fn_VerificarDuplicataFuncionario(@email, @telefone, @cpf)";;
 
         cmd.Parameters.AddWithValue("@email", funcionario.email);
         cmd.Parameters.AddWithValue("@telefone", funcionario.telefone);
-        cmd.Parameters.AddWithValue("@cpf", funcionario.cpf);
+        cmd.Parameters.AddWithValue("@cpf", cpf);
 
         string resultado = cmd.ExecuteScalar()?.ToString();
 
@@ -51,26 +44,16 @@ public class FuncionarioDatabaseRepository : Connection, IFuncionarioRepository
 
         cmd.Connection = conn;
 
-        cmd.CommandText = @"
-        INSERT INTO Pessoas(nomePessoa, cpf, email, senha, telefone) VALUES (@nomePessoa, @cpf, @email, @senha, @telefone);
-        SELECT CAST(SCOPE_IDENTITY() AS int);";
+        cmd.CommandText = @"exec sp_InsertFuncionario @nomePessoa, @cpf, @email, @senha, @telefone, @salario ;";
 
         cmd.Parameters.AddWithValue("@nomePessoa", funcionario.nomePessoa);
         cmd.Parameters.AddWithValue("@cpf", funcionario.cpf);
         cmd.Parameters.AddWithValue("@email", funcionario.email);
         cmd.Parameters.AddWithValue("@senha", senhaHash);
         cmd.Parameters.AddWithValue("@telefone", funcionario.telefone);
+        cmd.Parameters.AddWithValue("@salario", funcionario.salario);
 
-        idPessoa = (int)cmd.ExecuteScalar();
-
-        SqlCommand cmd2 = new SqlCommand();
-
-        cmd2.Connection = conn;
-        cmd2.CommandText = "INSERT INTO Funcionarios VALUES(@idPessoa, @salario)";
-        cmd2.Parameters.AddWithValue("@idPessoa", idPessoa);
-        cmd2.Parameters.AddWithValue("@salario", funcionario.salario);
-
-        cmd2.ExecuteNonQuery();
+        cmd.ExecuteNonQuery();
     }
 
     public void Delete(int idFuncionario)
@@ -140,23 +123,13 @@ public class FuncionarioDatabaseRepository : Connection, IFuncionarioRepository
     {
         SqlCommand cmd = new SqlCommand();
         cmd.Connection = conn;
-        cmd.CommandText = @"
-        UPDATE Pessoas SET email = @email, telefone = @telefone 
-        WHERE idPessoa = @idPessoa";
+        cmd.CommandText = @"exec sp_UpdateFuncionario @idPessoa, @email, @telefone, @salario;";
         cmd.Parameters.AddWithValue("@email", funcionario.email);
         cmd.Parameters.AddWithValue("@telefone", funcionario.telefone);
         cmd.Parameters.AddWithValue("@idPessoa", funcionario.idPessoa);
+        cmd.Parameters.AddWithValue("@salario", funcionario.salario);
 
         cmd.ExecuteNonQuery();
-
-        SqlCommand cmd2 = new SqlCommand();
-        cmd2.Connection = conn;
-        cmd2.CommandText = @"
-        UPDATE Funcionarios SET salario = @salario WHERE idPessoa = @idPessoa";
-        cmd2.Parameters.AddWithValue("@salario", funcionario.salario);
-        cmd2.Parameters.AddWithValue("@idPessoa", funcionario.idPessoa);
-
-        cmd2.ExecuteNonQuery();
 
     }
 }

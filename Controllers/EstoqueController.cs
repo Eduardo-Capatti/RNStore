@@ -20,17 +20,27 @@ public class EstoqueController: Controller
         ViewBag.Filtros = repository.Filtros();
         return View("Index", index);
     }
-    
-    public ActionResult Index()
+
+    public bool VerificaSession()
     {
         int? idUsuario = HttpContext.Session.GetInt32("idUsuario");
 
         if (idUsuario == null)
         {
+            return true;
+        }
+
+        return false;
+    }
+    
+    public ActionResult Index()
+    {
+
+        if (VerificaSession())
+        {
             return RedirectToAction("Login", "User");
         }
 
-        ViewBag.idUsuario = idUsuario;
         ViewBag.Filtros = repository.Filtros();
         return View(repository.Read());
     }
@@ -39,12 +49,22 @@ public class EstoqueController: Controller
     [HttpGet]
     public ActionResult Create()
     {
+        if (VerificaSession())
+        {
+            return RedirectToAction("Login", "User");
+        }
+
         return View(repository.Create());
     }
 
     [HttpPost]
     public ActionResult Create(Estoque estoque)
     {
+        if (VerificaSession())
+        {
+            return RedirectToAction("Login", "User");
+        }
+
         bool TemCampoNulo(Estoque estoque)
         {
             if (estoque == null) return true;
@@ -83,6 +103,11 @@ public class EstoqueController: Controller
     [HttpGet]
     public ActionResult Update(int idEstoque)
     {
+        if (VerificaSession())
+        {
+            return RedirectToAction("Login", "User");
+        }
+
         var estoque = repository.Read(idEstoque);
         estoque.imagens ??= new List<Imagem>();
         return View(estoque);
@@ -91,13 +116,18 @@ public class EstoqueController: Controller
     [HttpPost]
     public ActionResult Update(Estoque estoque)
     {
+        if (VerificaSession())
+        {
+            return RedirectToAction("Login", "User");
+        }
+
         bool TemCampoNulo(Estoque estoque)
         {
             if (estoque == null) return true;
 
             return estoque.GetType()
                 .GetProperties()
-                .Where(p => p.CanRead && p.Name == "preco" && p.Name == "promocao" && p.Name == "valorIE" && p.Name == "qtd")
+                .Where(p => p.CanRead && (p.Name == "preco" || p.Name == "promocao" || p.Name == "valorIE"))
                 .Any(p => p.GetValue(estoque) == null);
         }
 
@@ -116,6 +146,11 @@ public class EstoqueController: Controller
 
     public ActionResult Delete(int idEstoque)
     {
+        if (VerificaSession())
+        {
+            return RedirectToAction("Login", "User");
+        }
+
         try
         {
             repository.Delete(idEstoque);
@@ -124,26 +159,31 @@ public class EstoqueController: Controller
         }
         catch (SqlException)
         {
-            ViewBag.Error = "Não foi possível excluir o produto, pois ele está sendo usado!";
+            TempData["Error"] = "Não foi possível excluir o produto, pois ele está sendo usado!";
 
-            return View("Index", repository.Read());
+            return RedirectToAction("Index");
         }
 
     }
 
-    public ActionResult DeleteImg(int idImagem)
+    public ActionResult DeleteImg(int idImagem, int idEstoque)
     {
+        if (VerificaSession())
+        {
+            return RedirectToAction("Login", "User");
+        }
+
         try
         {
             repository.DeleteImg(idImagem);
 
-            return RedirectToAction("Index");
+            return View("Update", repository.Read(idEstoque));
         }
         catch (SqlException)
         {
             ViewBag.Error = "Não foi possível excluir a imagem!";
 
-            return View("Index", repository.Read());
+            return View("Update", repository.Read(idEstoque));
         }
 
     }
@@ -152,6 +192,11 @@ public class EstoqueController: Controller
     [HttpPost]
     public async Task<IActionResult> CreateImg(Estoque estoque)
     {
+        if (VerificaSession())
+        {
+            return RedirectToAction("Login", "User");
+        }
+
         bool TemCampoNulo(Estoque estoque)
         {
             if (estoque == null) return true;
@@ -176,12 +221,17 @@ public class EstoqueController: Controller
 
         repository.CreateImg(estoque);
         var estoque_escolhido = repository.Read(estoque.idProduto);
-        return View("Update", estoque_escolhido);
+        return RedirectToAction("Update", new { idEstoque = estoque.idProduto });
     }
     
     [HttpPost]
     public ActionResult UpdateImg(Estoque estoque)
     {
+        if (VerificaSession())
+        {
+            return RedirectToAction("Login", "User");
+        }
+
         bool TemCampoNulo(Estoque estoque)
         {
             if (estoque == null) return true;

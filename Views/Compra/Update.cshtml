@@ -1,0 +1,138 @@
+@model RNStore.Models.Compra;
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estoque</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    
+    <link rel="stylesheet" type="text/css" href="~/css/produto.css" asp-append-version="true">
+    
+    <script src="https://kit.fontawesome.com/4550765f78.js" crossorigin="anonymous"></script>
+
+</head>
+
+    <style>
+    
+    </style>
+
+    <script>
+        setTimeout(() => {
+            let alert = document.querySelector('.alert');
+            if (alert) {
+                let bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            }
+        }, 4000);
+    </script>
+<body class="d-flex flex-column vh-100">
+
+    @await Html.PartialAsync("_MenuEstoque")
+    <div class="flex-grow-1">
+        <div class="container">
+            @if (ViewBag.Error != null)
+            {
+                <div class="alert alert-danger">@ViewBag.Error</div>
+            }
+
+            <h1 class="text-center my-5">Atualizando Produto</h1>
+            <form action="/Compra/Update" method="POST" class="my-5">
+                <div class="mt-5">
+                    <div class="row">
+                    
+                        
+                       <div class="col-6">
+                            <div class="input-group">
+                                <label class="input-group-text" for="statusCompra">Status da Venda</label>
+                                <select class="form-select" name="statusCompra" id="statusCompra">
+                                    <option value="0">-- Selecione um status --</option>
+                                   
+                                    <option value="1" @(ViewBag.statusCompra == 1 ? "selected" : "")>
+                                        Pago
+                                    </option>
+
+                                    <option value="2" @(ViewBag.statusCompra == 2 ? "selected" : "")>
+                                        Enviado
+                                    </option>
+
+                                    <option value="3" @(ViewBag.statusCompra == 3 ? "selected" : "")>
+                                        Entregue
+                                    </option>
+                                       
+                                </select>
+                            </div>
+                        </div>
+
+
+                        <input type="hidden" name="idCompra" id="idCompra" value="@Model.idCompra" />
+
+
+                        <div class="col-12 mt-3">
+                            <div class="col-6">
+                                <a href="/Compra/Index" class="btn btn-primary" >Voltar</a>
+                                <button type="submit" class="btn btn-dark" >Atualizar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <hr />
+            <h1 class="text-center my-5">Produtos da Venda</h1>
+            <table class="table table-striped table-bordered table-hover my-5">
+                <thead class="text-center">
+                    <tr>  
+                        <th scope="col" >Produto</th>         
+                        <th scope="col" >Quantidade/Item</th>    
+                        <th scope="col" >Valor/Item</th>   
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @{
+                    if(Model.compras == null || !Model.compras.Any()){
+                        <tr class="text-center">
+                           
+                            <td colspan="3">Nenhum produto encontrado</td>
+                            
+                        </tr>
+                    }else{
+
+                  
+                    @foreach(var compra in Model.compras){
+                             
+                        <tr class="text-center">
+                           
+                            <td>@compra.nomeCalcado @compra.nomeCor @compra.tamanho - @compra.marcaCalcado</td>
+                            <td>@compra.qtdIC</td>
+                            <td>@compra.valorIC.ToString("F2")</td>
+
+                        </tr>
+
+                    }
+                    } 
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <footer class="py-3 mt-5 bg-dark" id="rodape">
+        <div class="container text-white">
+            <div class="row justify-content-center pt-4">
+
+                <div class="col-12 align-self-center text-center">
+                    <h5 class="mt-3 mt-md-0">Copyright © 2025 Innovatech. Todos os direitos reservados.</h5>
+                </div>
+
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+</body>
+</html>

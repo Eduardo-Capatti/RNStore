@@ -19,13 +19,7 @@ public class FornecedorDatabaseRepository : Connection, IFornecedorRepository
         
         cmd.Connection = conn;
 
-        cmd.CommandText = @"
-            SELECT 
-                CASE 
-                    WHEN EXISTS (SELECT 1 FROM Fornecedor WHERE cnpj = @cnpj) THEN 'cnpj'
-                    ELSE 'ok'
-                END AS Resultado
-        ";;
+        cmd.CommandText = @"select dbo.fn_VerificarDuplicataFornecedor(@cnpj)";;
 
         cmd.Parameters.AddWithValue("@cnpj", fornecedor.cnpj);
 

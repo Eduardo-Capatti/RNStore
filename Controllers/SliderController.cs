@@ -14,20 +14,46 @@ public class SliderController: Controller
     {
         this.repository = repository;
     }
+    public bool VerificaSession()
+    {
+        int? idUsuario = HttpContext.Session.GetInt32("idUsuario");
+
+        if (idUsuario == null)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
     public ActionResult Index()
     {
+        if (VerificaSession())
+        {
+            return RedirectToAction("Login", "User");
+        }
+
         return View(repository.Read());
     }
     
     [HttpGet]
     public ActionResult Create()
     {
+        if (VerificaSession())
+        {
+            return RedirectToAction("Login", "User");
+        }
+
         return View();
     }
 
     [HttpPost]
     public async Task<IActionResult> Create(Slider slider)
     {
+        if (VerificaSession())
+        {
+            return RedirectToAction("Login", "User");
+        }
 
         int? idUsuario = HttpContext.Session.GetInt32("idUsuario");
 
@@ -71,6 +97,11 @@ public class SliderController: Controller
     [HttpGet]
     public ActionResult Update(int idSlider)
     {
+        if (VerificaSession())
+        {
+            return RedirectToAction("Login", "User");
+        }
+
         var Slider = repository.Read(idSlider);
         return View(Slider);
     }
@@ -78,6 +109,11 @@ public class SliderController: Controller
     [HttpPost]
     public ActionResult Update(Slider slider)
     {
+        if (VerificaSession())
+        {
+            return RedirectToAction("Login", "User");
+        }
+
         bool TemCampoNulo(Slider slider)
         {
             if (slider == null) return true;
@@ -103,6 +139,11 @@ public class SliderController: Controller
 
     public ActionResult Delete(int idSlider)
     {
+        if (VerificaSession())
+        {
+            return RedirectToAction("Login", "User");
+        }
+
         try
         {
             repository.Delete(idSlider);

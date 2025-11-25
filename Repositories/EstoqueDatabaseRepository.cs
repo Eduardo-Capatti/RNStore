@@ -288,28 +288,21 @@ public class EstoqueDatabaseRepository : Connection, IEstoqueRepository
     public void CreateImg(Estoque estoque)
     {
         SqlCommand cmd = new SqlCommand();
+
         cmd.Connection = conn;
-        cmd.CommandText = @"INSERT INTO Imagens (corId, nomeImagem, statusImagem) VALUES(@corId, @nomeImagem, 0);
-        SELECT CAST(SCOPE_IDENTITY() AS int);";
+        cmd.CommandText = @"exec sp_InsertImagem @corId, @calcadoId, @nomeImagem;";
         cmd.Parameters.AddWithValue("@corId", estoque.corId);
         cmd.Parameters.AddWithValue("@nomeImagem", estoque.img);
-        int idImagem = (int)cmd.ExecuteScalar();
+        cmd.Parameters.AddWithValue("@calcadoId", estoque.calcadoId);
 
-        SqlCommand cmd2 = new SqlCommand();
-        cmd2.Connection = conn;
-        cmd2.CommandText = @"INSERT INTO ImagensProdutos (corId, calcadoId, imagemId) VALUES(@corId, @calcadoId, @imagemId)";
-        cmd2.Parameters.AddWithValue("@corId", estoque.corId);
-        cmd2.Parameters.AddWithValue("@calcadoId", estoque.calcadoId);
-        cmd2.Parameters.AddWithValue("@imagemId", idImagem);
-
-        cmd2.ExecuteNonQuery();
+        cmd.ExecuteNonQuery();
     }
 
     public void Delete(int idProduto)
     {
         SqlCommand cmd = new SqlCommand();
         cmd.Connection = conn;
-        cmd.CommandText = "DELETE FROM Estoque WHERE idProduto = @idProduto";
+        cmd.CommandText = "DELETE FROM Produtos WHERE idProduto = @idProduto";
         cmd.Parameters.AddWithValue("idProduto", idProduto);
 
         cmd.ExecuteNonQuery();
@@ -319,17 +312,10 @@ public class EstoqueDatabaseRepository : Connection, IEstoqueRepository
     {
         SqlCommand cmd = new SqlCommand();
         cmd.Connection = conn;
-        cmd.CommandText = "DELETE FROM ImagensProdutos WHERE imagemId = @idImagem";
-        cmd.Parameters.AddWithValue("idImagem", idImagem);
+        cmd.CommandText = "exec sp_DeleteImagem @idImagem";
+        cmd.Parameters.AddWithValue("@idImagem", idImagem);
 
         cmd.ExecuteNonQuery();
-
-        SqlCommand cmd2 = new SqlCommand();
-        cmd2.Connection = conn;
-        cmd2.CommandText = "DELETE FROM Imagens WHERE idImagem = @idImagem";
-        cmd2.Parameters.AddWithValue("idImagem", idImagem);
-
-        cmd2.ExecuteNonQuery();
     }
 
     public List<Estoque> Read()
@@ -338,14 +324,7 @@ public class EstoqueDatabaseRepository : Connection, IEstoqueRepository
 
         SqlCommand cmd = new SqlCommand();
         cmd.Connection = conn;
-        cmd.CommandText = @"SELECT distinct p.idProduto, c.nomeCalcado, t.tamanho, co.nomeCor, p.preco, p.corId, p.calcadoId, f.nomeForn, m.nomeMarca, p.qtd, p.promocao 
-        FROM Produtos p LEFT JOIN Calcados c on c.idCalcado = p.calcadoId 
-        LEFT JOIN Cores co on p.corId = co.idCor 
-        LEFT JOIN Tamanhos t on p.tamanhoId = t.idTamanho
-        LEFT JOIN Marca m on m.idMarca = c.marcaId
-		LEFT JOIN Itens_Entradas ie on ie.idProduto = p.idProduto
-		LEFT JOIN Entradas e on e.idEntrada = ie.idEntrada
-		LEFT JOIN Fornecedor f on f.idFornecedor = e.idFornecedor";
+        cmd.CommandText = @"select * from v_BuscarProdutosEstoque";
         SqlDataReader reader = cmd.ExecuteReader();
 
         while (reader.Read())
@@ -363,7 +342,8 @@ public class EstoqueDatabaseRepository : Connection, IEstoqueRepository
                     nomeFornecedor = (string)reader["nomeForn"],
                     nomeMarca = (string)reader["nomeMarca"],
                     qtd = (int)reader["qtd"],
-                    promocao = reader["promocao"] is DBNull ? 0 : (decimal)reader["promocao"]
+                    promocao = reader["promocao"] is DBNull ? 0 : (decimal)reader["promocao"],
+                    statusEstoque = (string)reader["statusEstoque"]
                 }
             );
         }
@@ -504,104 +484,31 @@ public class EstoqueDatabaseRepository : Connection, IEstoqueRepository
 
     public void Update(Estoque estoque)
     {
-        int qtd = 0;
+        SqlCommand cmd = new SqlCommand();
+        cmd.Connection = conn;
+        cmd.CommandText = @"exec sp_UpdateProduto @qtd, @idFornecedor, @idProduto, @valorIE, @preco, @promocao";
+        cmd.Parameters.AddWithValue("@qtd", estoque.qtd);
+        cmd.Parameters.AddWithValue("@idFornecedor", estoque.idFornecedor);
+        cmd.Parameters.AddWithValue("@idProduto", estoque.idProduto);
+        cmd.Parameters.AddWithValue("@valorIE", estoque.valorIE);
+        cmd.Parameters.AddWithValue("@preco", estoque.preco);
+        cmd.Parameters.AddWithValue("@promocao", estoque.promocao);
 
-        SqlCommand cmd1 = new SqlCommand();
-        cmd1.Connection = conn;
-        cmd1.CommandText = @"
-        SELECT qtd FROM Produtos
-        WHERE idProduto = @idProduto";
-        cmd1.Parameters.AddWithValue("@idProduto", estoque.idProduto);
-
-        SqlDataReader reader1 = cmd1.ExecuteReader();
-
-        if (reader1.Read())
-        {
-            qtd = (int)reader1["qtd"];
-        }
-
-        reader1.Close();
-
-        if (qtd <= estoque.qtd)
-        {
-            SqlCommand cmd2 = new SqlCommand();
-            cmd2.Connection = conn;
-            cmd2.CommandText = @"
-            INSERT INTO Entradas (idFornecedor) values(@idFornecedor);
-            SELECT CAST(SCOPE_IDENTITY() AS int); ";
-            cmd2.Parameters.AddWithValue("@idFornecedor", estoque.idFornecedor);
-
-            int idEntrada = (int)cmd2.ExecuteScalar();
-
-            SqlCommand cmd3 = new SqlCommand();
-            cmd3.Connection = conn;
-            cmd3.CommandText = @"
-            INSERT INTO Itens_Entradas (idProduto, idEntrada, valorIE, qtdIE) values(@idProduto, @idEntrada, @valorIE, @qtd)";
-            cmd3.Parameters.AddWithValue("@idProduto", estoque.idProduto);
-            cmd3.Parameters.AddWithValue("@idEntrada", idEntrada);
-            cmd3.Parameters.AddWithValue("@valorIE", estoque.valorIE);
-            cmd3.Parameters.AddWithValue("@qtd", estoque.qtd - qtd);
-
-            Console.WriteLine(estoque.idProduto);
-
-            cmd3.ExecuteNonQuery();
-
-        }
-
-        SqlCommand cmd4 = new SqlCommand();
-        cmd4.Connection = conn;
-        cmd4.CommandText = @"
-        UPDATE Produtos SET qtd = @qtd, preco = @preco, promocao = @promocao
-        WHERE idProduto = @idProduto";
-        cmd4.Parameters.AddWithValue("@qtd", estoque.qtd);
-        cmd4.Parameters.AddWithValue("@preco", estoque.preco);
-        cmd4.Parameters.AddWithValue("@promocao", estoque.promocao);
-        cmd4.Parameters.AddWithValue("@idProduto", estoque.idProduto);
-        
-        cmd4.ExecuteNonQuery();
+        cmd.ExecuteNonQuery();
 
     }
 
 
     public void UpdateImg(Estoque estoque)
     {
-        int imagemPrincipalAntigo = 0;
+        SqlCommand cmd = new SqlCommand();
+        cmd.Connection = conn;
+        cmd.CommandText = @"exec sp_UpdateImagem @corId, @calcadoId, @idImagem";
+        cmd.Parameters.AddWithValue("@corId", estoque.corId);
+        cmd.Parameters.AddWithValue("@calcadoId", estoque.calcadoId);
+        cmd.Parameters.AddWithValue("@idImagem", estoque.idImagem);
 
-        SqlCommand cmd1 = new SqlCommand();
-        cmd1.Connection = conn;
-        cmd1.CommandText = @"SELECT idImagem FROM ImagensProdutos ip LEFT JOIN Imagens i on i.corId = ip.corId 
-        WHERE i.corId = @corId AND i.statusImagem = 1 AND ip.calcadoId = @calcadoId";
-        cmd1.Parameters.AddWithValue("@corId", estoque.corId);
-        cmd1.Parameters.AddWithValue("@calcadoId", estoque.calcadoId);
-
-        SqlDataReader reader1 = cmd1.ExecuteReader();
-
-        if (reader1.Read())
-        {
-            imagemPrincipalAntigo = (int)reader1["idImagem"];
-        }
-
-        reader1.Close();
-
-        SqlCommand cmd2 = new SqlCommand();
-        cmd2.Connection = conn;
-        cmd2.CommandText = @"
-        UPDATE Imagens SET statusImagem = 0
-        WHERE idImagem = @idImagem";
-        cmd2.Parameters.AddWithValue("@idImagem", imagemPrincipalAntigo);
-
-        cmd2.ExecuteNonQuery();
-
-
-
-        SqlCommand cmd3 = new SqlCommand();
-        cmd3.Connection = conn;
-        cmd3.CommandText = @"
-        UPDATE Imagens SET statusImagem = 1
-        WHERE idImagem = @idImagem ";
-        cmd3.Parameters.AddWithValue("@idImagem", estoque.idImagem);
-
-        cmd3.ExecuteNonQuery();
+        cmd.ExecuteNonQuery();
 
     }
 }

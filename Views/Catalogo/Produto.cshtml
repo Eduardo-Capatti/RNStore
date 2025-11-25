@@ -11,7 +11,15 @@
     <link rel="stylesheet" type="text/css" href="~/css/produto.css" asp-append-version="true">
     <script src="https://kit.fontawesome.com/4550765f78.js" crossorigin="anonymous"></script>
 </head>
-<body>
+
+
+<script>
+    function acessarProduto(idProduto, calcadoId) {
+        window.location.href = "/Catalogo/Produto/" + idProduto + "/" + calcadoId
+    }
+</script>
+
+<body class="bg-light">
 
     @await Html.PartialAsync("_Menu")
 
@@ -27,7 +35,7 @@
                 @{foreach (var img in Model.img){
                     if(i < 1){
                         <div class="text-center d-inline-block" id="foto-principal-produto">
-                            <img width="300px" class="img-fluid" src="~/img/produtos/@img.nomeImagem">
+                            <img id="img-principal" width="300px" class="img-fluid" src="~/img/produtos/@img.nomeImagem">
                         </div>
                         i++;
                     }else{
@@ -43,18 +51,19 @@
                         
 
                         if (i == 0){
-                            <div class="mt-4 text-center d-inline-block foto-secundaria-produto" style="border: 2px solid #1E90FF;">
+                            <div id="@img.nomeImagem" class="mt-4 text-center d-inline-block foto-secundaria-produto" style="border: 2px solid #1E90FF;" onclick="trocarImgPrincipal('@img.nomeImagem')">
                                 <img width="100px" class="img-fluid" src="~/img/produtos/@img.nomeImagem" >
                             </div>
                             i++;
                         }else{
-                            <div class="mt-4 text-center d-inline-block foto-secundaria-produto">
+                            <div id="@img.nomeImagem" class="mt-4 text-center d-inline-block foto-secundaria-produto" onclick="trocarImgPrincipal('@img.nomeImagem')">
                                 <img class="img-fluid" src="~/img/produtos/@img.nomeImagem" >
                             </div>
                         }
                         
                     }
-                     i = 0;
+
+                    i = 0;
                     }
                 </div>
 
@@ -76,18 +85,21 @@
 
                     <div class="my-4">
                         <div>
-                            @foreach(var imgOutrasCores in Model.imgOutrasCores){
-                                if(i == 0){
+                            @foreach (var img in Model.img){
+                                if(i < 1){
                                     <div class="text-center d-inline-block escolha-cor" style="border: 2px solid #1E90FF;">
-                                        <img class="img-fluid" src="~/img/produtos/@imgOutrasCores.nomeImagem" >
+                                        <img class="img-fluid" src="~/img/produtos/@img.nomeImagem" >
                                     </div>
                                     i++;
                                 }else{
-                                    <div class="text-center d-inline-block escolha-cor">
-                                        <img class="img-fluid" src="~/img/produtos/@imgOutrasCores.nomeImagem" >
-                                    </div>
+                                    break;
                                 }
-                               
+                            }
+                         
+                            @foreach(var imgOutrasCores in Model.imgOutrasCores){
+                                <div class="text-center d-inline-block escolha-cor" onclick="acessarProduto(@imgOutrasCores.idProduto, @imgOutrasCores.calcadoId)">
+                                    <img class="img-fluid" src="~/img/produtos/@imgOutrasCores.nomeImagem" >
+                                </div>                               
                             }
                         </div>
                     </div>
@@ -95,16 +107,38 @@
                     <div>
                         <h4>Tamanhos:</h4>
                         <div>
+
                             @foreach(var tamanho in Model.tamanho){
-                                <div class="text-center d-inline-block escolha-tamanho">
-                                    <span>@tamanho.tamanho</span>
-                                </div>
+                                if(tamanho.idTamanho == Model.tamanhoId){
+                                    <div id="@tamanho.tamanho-tam" class="text-center d-inline-block escolha-tamanho" onclick="acessarProduto(@tamanho.idProduto, @tamanho.calcadoId)" style="border: 1px solid #1E90FF;">
+                                        <span>@tamanho.tamanho</span>
+                                    </div>
+                                }else{
+                                    <div id="@tamanho.tamanho-tam" class="text-center d-inline-block escolha-tamanho" onclick="acessarProduto(@tamanho.idProduto, @tamanho.calcadoId)" style="border: 1px solid #000;">
+                                        <span>@tamanho.tamanho</span>
+                                    </div>
+                                }
+                                
                             }
                         </div>
 
                     </div>
-
-                    <button class="btn btn-dark mt-4 btn-comprar">Adicionar ao carrinho</button>
+                    
+                        @if(@Model.isOnCart){
+                            <a href="/Catalogo/Carrinho" class="btn btn-dark mt-4 btn-comprar">Ver carrinho</a>
+                        }else{
+                            decimal promocao = Model.promocao ?? 0;
+                            <form method="post" action="/Catalogo/Carrinho">
+                                <input type="hidden" name="idProduto" value="@Model.idProduto" />
+                                <input type="hidden" name="preco" value="@Model.preco" />
+                                <input type="hidden" name="promocao" value="@promocao" />
+                                <input type="hidden" name="idProduto" value="@Model.idProduto" />
+                                <button class="btn btn-dark mt-4 btn-comprar">Adicionar ao carrinho</button>
+                            </form>
+                        }
+                        
+                    
+                    
                 </div>
             </div>
         </div>
@@ -113,6 +147,7 @@
         <hr class="my-5" style="all: unset; display: block; height: 2px; background-color: #000;">
 
 
+        @if(Model.catalogo.Any()){
         <div>
             <h2 class="text-center">Veja mais dos nossos produtos</h2>
         </div>
@@ -139,35 +174,37 @@
 
                         <div class="col-3">
                             <div class="items-carousel">
-                                <div class="text-center img-carousel">
-                                    @{
-                                        if (catalogo.ApenasImagemPrincipal.Any())
+                                <div onclick="acessarProduto(@catalogo.idProduto, @catalogo.calcadoId)">
+                                    <div class="text-center img-carousel">
+                                        @{
+                                            if (catalogo.ApenasImagemPrincipal.Any())
+                                            {
+                                                imgName = catalogo.ApenasImagemPrincipal.FirstOrDefault();
+                                            }
+                                            else
+                                            {
+                                                imgName = "padrao1.png";
+                                            }
+                                        }
+                                        <img height="200px" class="img-fluid" src="~/img/produtos/@imgName" />
+                                    </div>
+
+                                    <div class="info-carousel">
+                                        <h5>@catalogo.nomeCalcado</h5>
+
+                                        @if (catalogo.promocao > 0)
                                         {
-                                            imgName = catalogo.ApenasImagemPrincipal.FirstOrDefault();
+                                            <h4 class="card-title"><s>R$@catalogo.preco.ToString("F2")</s></h4>
+                                            var valor = catalogo.preco - catalogo.promocao.Value;
+                                            <h3 class="card-subtitle">R$@valor.ToString("F2")</h3>
                                         }
                                         else
                                         {
-                                            imgName = "padrao1.png";
+                                            <h4 class="card-title">R$@catalogo.preco.ToString("F2")</h4>
                                         }
-                                    }
-                                    <img height="200px" class="img-fluid" src="~/img/produtos/@imgName" />
-                                </div>
 
-                                <div class="info-carousel">
-                                    <h5>@catalogo.nomeCalcado</h5>
-
-                                    @if (catalogo.promocao > 0)
-                                    {
-                                        <h4 class="card-title"><s>R$@catalogo.preco.ToString("F2")</s></h4>
-                                        var valor = catalogo.preco - catalogo.promocao.Value;
-                                        <h3 class="card-subtitle">R$@valor.ToString("F2")</h3>
-                                    }
-                                    else
-                                    {
-                                        <h4 class="card-title">R$@catalogo.preco.ToString("F2")</h4>
-                                    }
-
-                                    <p>@catalogo.marcaCalcado</p>
+                                        <p>@catalogo.marcaCalcado</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -199,42 +236,67 @@
         <div class="row mt-5 d-block d-md-none">
             <div id="slide-produtos-sm" class="carousel slide" data-bs-interval="false">
                 <div class="carousel-inner">
-                    <div class="carousel-item active">
-                        <div class="row justify-content-center">
-                            <div class="col-6">
-                                <div class="items-carousel" >
+                    @{
+                        int j2 = 0;
+                        int total2 = Model.catalogo.Count;
+                        string imgName2 = "";
+                    }
+
+                    @foreach (var catalogo in Model.catalogo)
+                    {
+                        if (j2 % 1 == 0)
+                        {
+                            var activeClass = (j2 == 0) ? "active" : "";
+                            @:<div class="carousel-item @activeClass">
+                            @:<div class="row justify-content-center">
+                        }
+
+                        <div class="col-3">
+                            <div class="items-carousel">
+                                <div onclick="acessarProduto(@catalogo.idProduto, @catalogo.calcadoId)">
                                     <div class="text-center img-carousel">
-                                        <img class="img-fluid" src="~/img/tenis-6.png">
+                                        @{
+                                            if (catalogo.ApenasImagemPrincipal.Any())
+                                            {
+                                                imgName2 = catalogo.ApenasImagemPrincipal.FirstOrDefault();
+                                            }
+                                            else
+                                            {
+                                                imgName2 = "padrao1.png";
+                                            }
+                                        }
+                                        <img height="200px" class="img-fluid" src="~/img/produtos/@imgName2" />
                                     </div>
 
                                     <div class="info-carousel">
-                                        <h5>Tênis Adidas Run Falco 3.0</h5>
-                                        <h4>R$ 269,90</h4>
-                                        <p>Adidas</p>
+                                        <h5>@catalogo.nomeCalcado</h5>
+
+                                        @if (catalogo.promocao > 0)
+                                        {
+                                            <h4 class="card-title"><s>R$@catalogo.preco.ToString("F2")</s></h4>
+                                            var valor = catalogo.preco - catalogo.promocao.Value;
+                                            <h3 class="card-subtitle">R$@valor.ToString("F2")</h3>
+                                        }
+                                        else
+                                        {
+                                            <h4 class="card-title">R$@catalogo.preco.ToString("F2")</h4>
+                                        }
+
+                                        <p>@catalogo.marcaCalcado</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
+                        j++;
 
-                    <div class="carousel-item">
-                        <div class="row justify-content-center">
-                            <div class="col-8">
-                                <div class="items-carousel" >
-                                    <div class="text-center img-carousel">
-                                        <img class="img-fluid" src="~/img/tenis-7.png">
-                                    </div>
-
-                                    <div class="info-carousel">
-                                        <h5>TÊNIS OLYMPIKUS VENUM 34</h5>
-                                        <h4>R$ 149,90</h4>
-                                        <p>OLYMPIKUS</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                        if (j % 1 == 0 || j == total2)
+                        {
+                            @:</div> 
+                            @:</div>
+                        }
+                    }
+                    
 
                     <button class="carousel-control-prev" type="button" data-bs-target="#slide-produtos-sm" data-bs-slide="prev">
                         <span style="filter:invert(1)" class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -248,8 +310,9 @@
                 </div>
             </div>
         </div>
-
+    }
     </div>
+   
 
     @await Html.PartialAsync("_Footer")
 
@@ -257,3 +320,44 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </body>
 </html>
+
+<script>
+
+    const container = document.querySelector("#foto-principal-produto");
+    const img = container.querySelector("img");
+
+    container.addEventListener("mousemove", (e) => {
+        const rect = container.getBoundingClientRect();
+        const x = e.clientX - rect.left; 
+        const y = e.clientY - rect.top;
+
+        // Define o ponto de origem do zoom
+        img.style.transformOrigin = `${x}px ${y}px`;
+        img.style.transform = "scale(2.5)";
+    });
+
+    container.addEventListener("mouseleave", () => {
+        img.style.transform = "scale(1)";
+        img.style.transformOrigin = "center center";
+    });
+
+
+    function trocarImgPrincipal(nomeImagem){
+        imgPrincipal = document.querySelector("#img-principal");
+        imgPrincipal.src = "../../../img/produtos/" + nomeImagem;
+
+        imgEscolhida = document.getElementById(nomeImagem);
+
+        todasImagens = document.querySelectorAll(".foto-secundaria-produto");
+
+        todasImagens.forEach(imagem => {
+            imagem.style = "border: 2px solid #000;"
+        })
+
+        imgEscolhida.style = "border: 2px solid #1E90FF;"
+    }
+
+    function acessarProduto(idProduto, calcadoId) {
+        window.location.href = "/Catalogo/Produto/" + idProduto + "/" + calcadoId
+    }
+</script>

@@ -9,4 +9,6 @@ public class Imagem
     public string nomeImagem { get; set; }
 
     public int statusImagem { get; set; }
+
+    public int idProduto {get; set;}
 }

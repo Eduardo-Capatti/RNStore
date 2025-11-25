@@ -48,12 +48,14 @@ builder.Services.AddTransient<IEstoqueRepository>(_ =>
     new EstoqueDatabaseRepository(
         builder.Configuration.GetConnectionString("Default")));
 
-
+builder.Services.AddTransient<ICompraRepository>(_ => 
+    new CompraDatabaseRepository(
+        builder.Configuration.GetConnectionString("Default")));
 
 
 var cultura = new CultureInfo("pt-BR");
 
-
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddSession();
 builder.Services.AddControllersWithViews();
 

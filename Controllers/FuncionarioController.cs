@@ -14,20 +14,48 @@ public class FuncionarioController: Controller
     {
         this.repository = repository;
     }
+
+    public bool VerificaSession()
+    {
+        int? idUsuario = HttpContext.Session.GetInt32("idUsuario");
+
+        if (idUsuario == null)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
     public ActionResult Index()
     {
+        if (VerificaSession())
+        {
+            return RedirectToAction("Login", "User");
+        }
+        
         return View(repository.Read());
     }
     
     [HttpGet]
     public ActionResult Create()
     {
+        if (VerificaSession())
+        {
+            return RedirectToAction("Login", "User");
+        }
+
         return View();
     }
 
     [HttpPost]
     public ActionResult Create(Funcionario funcionario)
     {
+        if (VerificaSession())
+        {
+            return RedirectToAction("Login", "User");
+        }
+
         bool TemCampoNulo(Funcionario funcionario)
         {
             if (funcionario == null) return true;
@@ -75,6 +103,11 @@ public class FuncionarioController: Controller
     [HttpGet]
     public ActionResult Update(int idFuncionario)
     {
+        if (VerificaSession())
+        {
+            return RedirectToAction("Login", "User");
+        }
+
         var funcionario = repository.Read(idFuncionario);
         return View(funcionario);
     }
@@ -82,6 +115,11 @@ public class FuncionarioController: Controller
     [HttpPost]
     public ActionResult Update(Funcionario funcionario)
     {
+        if (VerificaSession())
+        {
+            return RedirectToAction("Login", "User");
+        }
+
         bool TemCampoNulo(Funcionario funcionario)
         {
             if (funcionario == null) return true;
@@ -107,6 +145,11 @@ public class FuncionarioController: Controller
 
     public ActionResult Delete(int idFuncionario)
     {
+        if (VerificaSession())
+        {
+            return RedirectToAction("Login", "User");
+        }
+
         try
         {
             repository.Delete(idFuncionario);

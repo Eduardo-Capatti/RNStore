@@ -14,20 +14,48 @@ public class FornecedorController: Controller
     {
         this.repository = repository;
     }
+
+    public bool VerificaSession()
+    {
+        int? idUsuario = HttpContext.Session.GetInt32("idUsuario");
+
+        if (idUsuario == null)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
     public ActionResult Index()
     {
+        if (VerificaSession())
+        {
+            return RedirectToAction("Login", "User");
+        }
+
         return View(repository.Read());
     }
     
     [HttpGet]
     public ActionResult Create()
     {
+        if (VerificaSession())
+        {
+            return RedirectToAction("Login", "User");
+        }
+
         return View();
     }
 
     [HttpPost]
     public ActionResult Create(Fornecedor fornecedor)
     {
+        if (VerificaSession())
+        {
+            return RedirectToAction("Login", "User");
+        }
+
         bool TemCampoNulo(Fornecedor Fornecedor)
         {
             if (fornecedor == null) return true;
@@ -64,6 +92,11 @@ public class FornecedorController: Controller
     [HttpGet]
     public ActionResult Update(int idFornecedor)
     {
+        if (VerificaSession())
+        {
+            return RedirectToAction("Login", "User");
+        }
+
         var fornecedor = repository.Read(idFornecedor);
         return View(fornecedor);
     }
@@ -71,6 +104,10 @@ public class FornecedorController: Controller
     [HttpPost]
     public ActionResult Update(Fornecedor fornecedor)
     {
+        if (VerificaSession())
+        {
+            return RedirectToAction("Login", "User");
+        }
 
         bool TemCampoNulo(Fornecedor Fornecedor)
         {
@@ -97,6 +134,11 @@ public class FornecedorController: Controller
 
     public ActionResult Delete(int idFornecedor)
     {
+        if (VerificaSession())
+        {
+            return RedirectToAction("Login", "User");
+        }
+
         try
         {
             repository.Delete(idFornecedor);

@@ -32,8 +32,14 @@ nav a:hover{
     background-color:#F3F3F3; 
     width: 600px; 
     padding: 30px;
+    overflow: hidden;
+    position: relative;
 }
 
+#foto-principal-produto img {
+  transition: transform 0.2s ease;
+  transform-origin: center;
+}
 
 .foto-secundaria-produto{
     border: 2px solid #000;
@@ -51,7 +57,6 @@ nav a:hover{
 
 .escolha-tamanho{
     width: 40px; 
-    border: 1px solid #000; 
     line-height: 1.8; 
     margin-right: 5px;
     font-size: 20px; 
